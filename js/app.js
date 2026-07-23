@@ -82,7 +82,8 @@ async function renderInformation(el) {
   };
 
   el.innerHTML = `
-    <div class="info-section">
+    <div class="info-section welcome-section">
+      <img src="images/ROSE_FISH_SPIN.gif" alt="ROSE FISH" class="welcome-fish">
       <h2>WELCOME</h2>
       <p>Content creation community that makes content for <><</p>
       <p style="margin-top:12px"><strong>When someone joins ROSE FISH, they get access to:</strong></p>

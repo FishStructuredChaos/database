@@ -142,6 +142,20 @@ header p {
   margin-bottom: 10px;
 }
 
+.welcome-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.welcome-fish {
+  width: 80px;
+  height: 80px;
+  image-rendering: pixelated;
+  margin-bottom: 8px;
+}
+
 .info-section h2 {
   font-size: 1rem;
   color: #ff8080;
