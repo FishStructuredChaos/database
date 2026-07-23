@@ -197,7 +197,8 @@ async function renderCardsFromGist(el, arrayKey, label, mapper) {
         <span class="count" data-label="${label}">${items.length} ${label}</span>
       </div>
       <div class="search-bar">
-        <input type="text" placeholder="search ${label}..." oninput="filterCards(this, 'card-grid-${arrayKey}')">
+        <span class="search-icon">&#x1F50D;</span>
+        <input type="text" placeholder="SEARCH" oninput="filterCards(this, 'card-grid-${arrayKey}')">
       </div>
       <div class="card-grid" id="card-grid-${arrayKey}">
         ${cards.map(c => {
@@ -286,7 +287,8 @@ async function renderTable(el) {
         <span class="count" data-label="items">${data.rows.length} items</span>
       </div>
       <div class="search-bar">
-        <input type="text" placeholder="search..." oninput="filterTable(this, 'table-${tabId}')">
+        <span class="search-icon">&#x1F50D;</span>
+        <input type="text" placeholder="SEARCH" oninput="filterTable(this, 'table-${tabId}')">
       </div>
       <div class="table-container">
         <table id="table-${tabId}">

@@ -118,17 +118,30 @@ header p {
 /* SEARCH BAR */
 .search-bar {
   margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #0d0000;
+  border: 2px inset #660000;
+  padding: 4px 8px;
+  width: 100%;
+  max-width: 400px;
+}
+
+.search-icon {
+  font-size: 0.9rem;
+  line-height: 1;
+  color: #884444;
 }
 
 .search-bar input {
   font-family: "Courier Prime", "Courier New", Courier, monospace;
   font-size: 0.85rem;
-  padding: 5px 8px;
-  border: 2px inset #660000;
-  background: #0d0000;
+  border: none;
+  background: transparent;
   color: #ffcccc;
   width: 100%;
-  max-width: 400px;
+  outline: none;
 }
 
 .search-bar input:focus {
