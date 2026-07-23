@@ -209,9 +209,12 @@ fetch('/api/files').then(r => r.json()).then(files => {
 
 async function loadEntries() {
   const resp = await fetch('/api/rows?file=' + encodeURIComponent(currentFile));
-  const rows = await resp.json();
+  let rows = await resp.json();
+  // apply reorder if pending
+  const reorder = pendingChanges.find(p => p.type === 'reorder' && p.file === currentFile);
+  if (reorder) rows = reorder.rows;
   entriesList.innerHTML = rows.map((r, i) => {
-    const pending = pendingChanges.find(p => p.file === currentFile && p.index === i);
+    const pending = pendingChanges.find(p => p.type !== 'reorder' && p.file === currentFile && p.index === i);
     const display = pending ? pending.row : r;
     const preview = display.slice(0, 3).filter(Boolean).join(' | ');
     const isEditing = editIndex === i;
