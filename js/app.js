@@ -152,7 +152,7 @@ async function renderInformation(el) {
 }
 
 async function renderAvatarsCards(el) {
-  await renderCardsFromGist(el, 'community_avatars', (item) => ({
+  await renderCardsFromGist(el, 'community_avatars', 'avatars', (item) => ({
     name: item.avatar_name,
     author: item.author,
     image: item.avatar_image_url,
@@ -162,7 +162,7 @@ async function renderAvatarsCards(el) {
 }
 
 async function renderWorldsCards(el) {
-  await renderCardsFromGist(el, 'community_worlds', (item) => ({
+  await renderCardsFromGist(el, 'community_worlds', 'worlds', (item) => ({
     name: item.world_name,
     author: item.author,
     image: item.world_image_url,
@@ -171,7 +171,7 @@ async function renderWorldsCards(el) {
   }));
 }
 
-async function renderCardsFromGist(el, arrayKey, mapper) {
+async function renderCardsFromGist(el, arrayKey, label, mapper) {
   try {
     const resp = await fetch(GIST.JSON);
     const json = await resp.json();
@@ -191,17 +191,13 @@ async function renderCardsFromGist(el, arrayKey, mapper) {
     }
 
     const cards = items.map(mapper);
-    const roseCount = cards.filter(c => c.tags.includes('ROSE_FISH')).length;
-    const fishCount = cards.filter(c => !c.tags.includes('ROSE_FISH') && c.tags.includes('FISH')).length;
 
     el.innerHTML = `
       <div class="section-info">
-        <span class="count">${items.length} items</span>
-        <span class="tag-rose">rose_fish: ${roseCount}</span>
-        <span class="tag-fish">fish: ${fishCount}</span>
+        <span class="count" data-label="${label}">${items.length} ${label}</span>
       </div>
       <div class="search-bar">
-        <input type="text" placeholder="search..." oninput="filterCards(this, 'card-grid-${arrayKey}')">
+        <input type="text" placeholder="search ${label}..." oninput="filterCards(this, 'card-grid-${arrayKey}')">
       </div>
       <div class="card-grid" id="card-grid-${arrayKey}">
         ${cards.map(c => {
@@ -253,7 +249,7 @@ function filterCards(input, gridId) {
   const info = input.parentElement.previousElementSibling;
   if (info && info.classList.contains('section-info')) {
     const countEl = info.querySelector('.count');
-    if (countEl) countEl.textContent = `${count} items`;
+    if (countEl) countEl.textContent = `${count} ${countEl.dataset.label || ''}`;
   }
 }
 
@@ -287,7 +283,7 @@ async function renderTable(el) {
     el.innerHTML = `
       ${extraHtml}
       <div class="section-info">
-        <span class="count">${data.rows.length} items</span>
+        <span class="count" data-label="items">${data.rows.length} items</span>
       </div>
       <div class="search-bar">
         <input type="text" placeholder="search..." oninput="filterTable(this, 'table-${tabId}')">
@@ -340,7 +336,7 @@ function filterTable(input, tableId) {
   const info = input.parentElement.previousElementSibling;
   if (info && info.classList.contains('section-info')) {
     const countEl = info.querySelector('.count');
-    if (countEl) countEl.textContent = `${count} items`;
+    if (countEl) countEl.textContent = `${count} ${countEl.dataset.label || ''}`;
   }
 }
 
