@@ -1,0 +1,29 @@
+{
+  "title": "\ud83d\udc96USEFUL-THINGS",
+  "headers": ["Useful Thing", "Author", "Description", "Link", "Picture"],
+  "rows": [
+    ["Database of Free Assets", "Fionna", "VRChat community that focuses on helping and sharing assets with others", "https://vrcprefabs.com/browse", ""],
+    ["Matcap Pack Free", "AnimefanPostUP", "70 matcaps, partially generated with stable diffusion and partially made with blender", "https://booth.pm/en/items/5231503", ""],
+    ["Julio Sillet 3D Art", "Julio Sillet", "free PBR texture packs", "https://juliosillet.gumroad.com/", ""],
+    ["FakeBloomShader", "hhotatea", "fake bloom shader", "https://booth.pm/en/items/1382159", ""],
+    ["Fake Spotlight", "Temporal", "fake spotlight shader", "https://booth.pm/en/items/2722759", ""],
+    ["UdonNameDisplay", "nanase_vr", "world asset for showing a list of players in the instance", "https://booth.pm/en/items/1953525", ""],
+    ["Global FPS Debug Tool", "BobyStar", "world asset for showing every player's fps and physics tps.", "https://booth.pm/en/items/4825743", ""],
+    ["VRCQuestTools", "kurotu", "tool for converting your PC avatar to Android in a few steps.", "https://github.com/kurotu/VRCQuestTools", ""],
+    ["Timezone Sync Hologram", "Vistanz", "world asset which shows timezones on a hologram earth", "https://booth.pm/en/items/3148154", ""],
+    ["VRC\u7528 \u300e\u30e1\u30ab\u5f3e\u30a8\u30d5\u30a7\u30af\u30c8\u300f", "\u30e1\u30ab\u9b42", "gun effect particles + 3D guns", "https://booth.pm/en/items/3562410", ""],
+    ["Laser Particle 3\u8272\u30bb\u30c3\u30c8\uff08\u7121\u6599\uff09", "sumi", "Laser Particles", "https://booth.pm/en/items/3305134", ""],
+    ["Standard\u8abf\u30dc\u30af\u30bb\u30eb\u98a8\u30b7\u30a7\u30fc\u30c0\u30fc", "momoma/\u30ca\u30eb", "voxel shader", "https://booth.pm/en/items/1441418", ""],
+    ["Fake Water Quest", "VarYU", "optimized water shader", "https://booth.pm/en/items/3031851", ""],
+    ["Psychedelic Glitch Shader", "MetaMonkeys", "digital psychedelic cancer shader", "https://booth.pm/en/items/3554219", ""],
+    ["VRC-Cancerspace", "AkaiMage", "screenspace shader with a heavy focus on configurability", "https://github.com/AkaiMage/VRC-Cancerspace", ""],
+    ["Retro 3D Shader Pack for Unity", "leakyfingers", "collection of shaders used to replicate the distinct visual style of early 3D games", "https://leakyfingers.itch.io/retro-3d-shader-pack-for-unity", ""],
+    ["yea", "pee pee", "Anime 3D characters", "https://emptyskk.gumroad.com/", ""],
+    ["Pet Rock Follower FREE (AVATAR/SDK3)", "Liindy", "pet rock for vrchat avatar", "https://liindy.gumroad.com/l/PetRock", ""],
+    ["Fishy Neko Daggers", "kirihima32", "fish bone knife", "https://booth.pm/ja/items/1799642", ""],
+    ["Warren's Fast Fur Shader", "Warren", "optimized fur shader, good for carpets", "https://warrenwolfy.gumroad.com/l/atntv", ""],
+    ["VRCMarker", "z3y", "best vrchat pens", "https://github.com/z3y/VRCMarker", ""],
+    ["Mochies-Unity-Shaders", "Mochie", "unity standard shader alternative, comes with LED, water, glass shaders", "https://github.com/MochiesCode/Mochies-Unity-Shaders/releases", ""],
+    ["d4rkAvatarOptimizer", "d4rkc0d3r", "automatically optimize vrchat avatar", "https://github.com/d4rkc0d3r/d4rkAvatarOptimizer?tab=readme-ov-file", ""]
+  ]
+}
