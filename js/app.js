@@ -86,12 +86,14 @@ async function renderInformation(el) {
       <img src="images/ROSE_FISH_SPIN.gif" alt="ROSE FISH" class="welcome-fish">
       <h2>WELCOME</h2>
       <p>Content creation community that makes content for <><</p>
-      <p style="margin-top:12px"><strong>When someone joins ROSE FISH, they get access to:</strong></p>
-      <ul>
+      <p style="margin-top:10px"><strong>When someone joins ROSE FISH, they get access to:</strong></p>
+      <ul class="perks-list">
         ${info.perks.map(p => `<li>${p}</li>`).join('')}
       </ul>
-      <p style="margin-top:12px">ROSE FISH VRChat group: <a href="${info.groupLink}" target="_blank">${info.groupLink}</a></p>
-      <p>More info at: theziver.com discord server</p>
+      <div class="welcome-links">
+        ROSE FISH VRChat group: <a href="${info.groupLink}" target="_blank">${info.groupLink}</a><br>
+        More info at: theziver.com discord server
+      </div>
     </div>
 
     <div class="info-section">
