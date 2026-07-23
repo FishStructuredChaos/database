@@ -556,14 +556,23 @@ const server = http.createServer((req, res) => {
     const targetUrl = url.searchParams.get('url');
     if (!targetUrl) { res.writeHead(400); res.end('{"error":"missing url"}'); return; }
     const base = new URL(targetUrl).origin;
-    fetch(targetUrl, { signal: AbortSignal.timeout(8000), headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36' } })
+    const UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
+    fetch(targetUrl, { signal: AbortSignal.timeout(8000), headers: { 'User-Agent': UA } })
       .then(r => r.text())
-      .then(html => {
+      .then(async (html) => {
         let img = (html.match(/<meta[^>]+property="og:image"[^>]+content="([^"]+)"/)
           || html.match(/<meta[^>]+content="([^"]+)"[^>]+property="og:image"/)
           || html.match(/<link[^>]+rel="apple-touch-icon"[^>]+href="([^"]+)"/)
           || html.match(/<link[^>]+rel="(?:shortcut )?icon"[^>]+href="([^"]+)"/))?.[1];
         if (img && !img.startsWith('http')) img = new URL(img, base).href;
+        // last resort: try /favicon.ico
+        if (!img) {
+          try {
+            const ico = base + '/favicon.ico';
+            const icoresp = await fetch(ico, { method: 'HEAD', signal: AbortSignal.timeout(3000), headers: { 'User-Agent': UA } });
+            if (icoresp.ok) img = ico;
+          } catch {}
+        }
         res.writeHead(200, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({ image: img || '' }));
       })
