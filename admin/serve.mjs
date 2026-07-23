@@ -555,13 +555,17 @@ const server = http.createServer((req, res) => {
   if (pathname === '/api/fetch-image') {
     const targetUrl = url.searchParams.get('url');
     if (!targetUrl) { res.writeHead(400); res.end('{"error":"missing url"}'); return; }
+    const base = new URL(targetUrl).origin;
     fetch(targetUrl, { signal: AbortSignal.timeout(8000), headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36' } })
       .then(r => r.text())
       .then(html => {
-        const m = html.match(/<meta[^>]+property="og:image"[^>]+content="([^"]+)"/)
-          || html.match(/<meta[^>]+content="([^"]+)"[^>]+property="og:image"/);
+        let img = (html.match(/<meta[^>]+property="og:image"[^>]+content="([^"]+)"/)
+          || html.match(/<meta[^>]+content="([^"]+)"[^>]+property="og:image"/)
+          || html.match(/<link[^>]+rel="apple-touch-icon"[^>]+href="([^"]+)"/)
+          || html.match(/<link[^>]+rel="(?:shortcut )?icon"[^>]+href="([^"]+)"/))?.[1];
+        if (img && !img.startsWith('http')) img = new URL(img, base).href;
         res.writeHead(200, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ image: m ? m[1] : '' }));
+        res.end(JSON.stringify({ image: img || '' }));
       })
       .catch(() => {
         res.writeHead(200, { 'Content-Type': 'application/json' });
