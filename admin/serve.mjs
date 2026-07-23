@@ -560,21 +560,31 @@ const server = http.createServer((req, res) => {
     fetch(targetUrl, { signal: AbortSignal.timeout(8000), headers: { 'User-Agent': UA } })
       .then(r => r.text())
       .then(async (html) => {
+        // og:image
         let img = (html.match(/<meta[^>]+property="og:image"[^>]+content="([^"]+)"/)
-          || html.match(/<meta[^>]+content="([^"]+)"[^>]+property="og:image"/)
-          || html.match(/<link[^>]+rel="apple-touch-icon"[^>]+href="([^"]+)"/)
-          || html.match(/<link[^>]+rel="(?:shortcut )?icon"[^>]+href="([^"]+)"/))?.[1];
-        if (img && !img.startsWith('http')) img = new URL(img, base).href;
-        // last resort: try /favicon.ico
-        if (!img) {
-          try {
-            const ico = base + '/favicon.ico';
-            const icoresp = await fetch(ico, { method: 'HEAD', signal: AbortSignal.timeout(3000), headers: { 'User-Agent': UA } });
-            if (icoresp.ok) img = ico;
-          } catch {}
+          || html.match(/<meta[^>]+content="([^"]+)"[^>]+property="og:image"/))?.[1];
+        if (img) { resolveImg(); return; }
+        // apple-touch-icon (PNG)
+        const apple = html.match(/<link[^>]+rel="apple-touch-icon"[^>]+href="([^"]+)"/);
+        if (apple) { img = apple[1]; resolveImg(); return; }
+        // favicon - prefer .png
+        const icons = [...html.matchAll(/<link[^>]+rel="(?:shortcut )?icon"[^>]+href="([^"]+)"/g)];
+        const pngIcon = icons.find(i => i[1].includes('.png'));
+        if (pngIcon) { img = pngIcon[1]; resolveImg(); return; }
+        if (icons.length) { img = icons[0][1]; resolveImg(); return; }
+        // last resort: /favicon.ico
+        try {
+          const ico = base + '/favicon.ico';
+          const icoresp = await fetch(ico, { method: 'HEAD', signal: AbortSignal.timeout(3000), headers: { 'User-Agent': UA } });
+          if (icoresp.ok) img = ico;
+        } catch {}
+        resolveImg();
+
+        function resolveImg() {
+          if (img && !img.startsWith('http')) img = new URL(img, base).href;
+          res.writeHead(200, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ image: img || '' }));
         }
-        res.writeHead(200, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ image: img || '' }));
       })
       .catch(() => {
         res.writeHead(200, { 'Content-Type': 'application/json' });
