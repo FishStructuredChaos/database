@@ -1,13 +1,61 @@
 {
-  "title": "\ud83d\udce6AVATAR-PREFABS",
-  "headers": ["Prefab", "Picture", "Link", "Info", "Author"],
+  "title": "📦AVATAR-PREFABS",
+  "headers": [
+    "Prefab",
+    "Picture",
+    "Link",
+    "Info",
+    "Author"
+  ],
   "rows": [
-    ["PS1 Magic Prefab", "", "https://booth.pm/en/items/5302367", "", "Cunks_Feet"],
-    ["Gamble < > < Magic Cards Prefab", "", "https://booth.pm/en/items/6239594", "", "Cunks_Feet"],
-    ["Talk Hand Prefab", "", "https://drive.google.com/uc?export=download&id=1W2bbxpAuIA58qu75IfzLGwSd-ZVlKXVr", "", "Cunks_Feet"],
-    ["Green Beer Prefab", "", "https://drive.google.com/uc?export=download&id=1mhIIO2ukjnsq2oroGhDQRFcdiv7RankH", "", "Cunks_Feet"],
-    ["Cancer Stick Smoking System Prefab", "", "https://drive.google.com/uc?export=download&id=1sig0o4axWQnX3c-kBXIqQ5rvVRI0Er9D", "", "Cunks_Feet"],
-    ["Force Dashing System(Slow)", "", "https://drive.google.com/uc?export=download&id=1wbLgOnj1aBxygkSubE5ff1ByOY1IY4v1", "", "Cunks_Feet"],
-    ["Car Dashing System(Fast)", "", "https://drive.google.com/uc?export=download&id=1OtmM2DHTEP-ub_yTgX9GFQRsDG9qUe8V", "", "Cunks_Feet"]
+    [
+      "PS1 Magic Prefab",
+      "https://booth.pximg.net/c/620x620/b4e15b34-e4cb-45ad-8044-12aca1c003f3/i/5302367/c4a1fa10-f15d-4430-aab3-54bdce979860_base_resized.jpg",
+      "https://booth.pm/en/items/5302367",
+      "",
+      "Cunks_Feet"
+    ],
+    [
+      "Gamble < > < Magic Cards Prefab",
+      "https://booth.pximg.net/c/620x620/b4e15b34-e4cb-45ad-8044-12aca1c003f3/i/6239594/e3af1fac-d8f6-466a-a855-78709129ebcf_base_resized.jpg",
+      "https://booth.pm/en/items/6239594",
+      "",
+      "Cunks_Feet"
+    ],
+    [
+      "Talk Hand Prefab",
+      "https://drive.google.com/thumbnail?id=1W2bbxpAuIA58qu75IfzLGwSd-ZVlKXVr&sz=s200",
+      "https://drive.google.com/uc?export=download&id=1W2bbxpAuIA58qu75IfzLGwSd-ZVlKXVr",
+      "",
+      "Cunks_Feet"
+    ],
+    [
+      "Green Beer Prefab",
+      "https://drive.google.com/thumbnail?id=1mhIIO2ukjnsq2oroGhDQRFcdiv7RankH&sz=s200",
+      "https://drive.google.com/uc?export=download&id=1mhIIO2ukjnsq2oroGhDQRFcdiv7RankH",
+      "",
+      "Cunks_Feet"
+    ],
+    [
+      "Cancer Stick Smoking System Prefab",
+      "https://drive.google.com/thumbnail?id=1sig0o4axWQnX3c-kBXIqQ5rvVRI0Er9D&sz=s200",
+      "https://drive.google.com/uc?export=download&id=1sig0o4axWQnX3c-kBXIqQ5rvVRI0Er9D",
+      "",
+      "Cunks_Feet"
+    ],
+    [
+      "Force Dashing System(Slow)",
+      "https://drive.google.com/thumbnail?id=1wbLgOnj1aBxygkSubE5ff1ByOY1IY4v1&sz=s200",
+      "https://drive.google.com/uc?export=download&id=1wbLgOnj1aBxygkSubE5ff1ByOY1IY4v1",
+      "",
+      "Cunks_Feet"
+    ],
+    [
+      "Car Dashing System(Fast)",
+      "https://drive.google.com/thumbnail?id=1OtmM2DHTEP-ub_yTgX9GFQRsDG9qUe8V&sz=s200",
+      "https://drive.google.com/uc?export=download&id=1OtmM2DHTEP-ub_yTgX9GFQRsDG9qUe8V",
+      "",
+      "Cunks_Feet"
+    ]
   ]
 }

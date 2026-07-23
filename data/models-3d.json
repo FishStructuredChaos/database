@@ -1,19 +1,103 @@
 {
-  "title": "\ud83d\udcbe3D-MODELS",
-  "headers": ["Model", "Picture", "Download Link", "Info", "Author"],
+  "title": "💾3D-MODELS",
+  "headers": [
+    "Model",
+    "Picture",
+    "Download Link",
+    "Info",
+    "Author"
+  ],
   "rows": [
-    ["OFFICIAL FISH COMMUNITY 3D MODELS", "", "https://sketchfab.com/TheZiver/collections/official-fish-community-assets-af4f0d2f01fd4878b21e9b8a7fd378d1", "official stuff", "\uff1c\uff1e\uff1c"],
-    ["RANDOM FISH COMMUNITY 3D MODELS", "", "https://sketchfab.com/TheZiver/collections/fish-community-assets-de78937ccc9c486ba5b2e74a8f1684a5", "random fish community 3d models", "\uff1c\uff1e\uff1c"],
-    ["FISH_FAMILY_PACK", "", "https://drive.google.com/uc?export=download&id=10EaX4BIXon_F2sUuEBnuT7IFaiOKpzk0", "1 material each, below 2000 triangles", "Luiswillich"],
-    ["FISH RIFLE", "", "https://drive.google.com/uc?export=download&id=1JGN-oyzR5rjePt1hk6GiaxVI498p1dMl", "4 materials, 4830 triangles", "AnimefanPostUP"],
-    ["FISH UZI", "", "https://drive.google.com/uc?export=download&id=1_8L9CNz01295zvF9QvBjF8CBuntiONdM", "2 materials, 4034 triangles", "AnimefanPostUP"],
-    ["FISH SWORD", "", "https://drive.google.com/uc?export=download&id=1prjzPa8cpntst_-o85ChozFDDAHBpSpu", "2 materials, 10960 triangles", "AnimefanPostUP"],
-    ["FISHZOOKA", "", "https://drive.google.com/uc?export=download&id=1X_bAYEjwTf8UnOsFvs63voZvbKGNU84B", "2 materials, 68232 triangles", "AnimefanPostUP"],
-    ["FISH SHOTGUN", "", "https://drive.google.com/uc?export=download&id=1wTnN95d9sMB9uqq5cuX1mKzrat4Io3f5", "2 materials, 3200 triangles", "AnimefanPostUP"],
-    ["FISH SHIELD", "", "https://drive.google.com/uc?export=download&id=1n5m_lLRv9YWcEmI_DKhjuvAzAJL5qjWL", "2 materials, 6000 triangles", "AnimefanPostUP"],
-    ["FISH BOW", "", "https://drive.google.com/uc?export=download&id=1m3Snuaje13maFapfVkybGWlHxpXf1c_f", "2 materials, 2716 triangles + arrows", "AnimefanPostUP"],
-    ["FISH SCYTHE", "", "https://drive.google.com/uc?export=download&id=1XXlCu8zC13PsSRhbmfk1xDIl21mYzM1x", "2 materials, 3092 triangles", "AnimefanPostUP"],
-    ["FISH SABER", "", "https://drive.google.com/uc?export=download&id=1aDs0pHq7vtZ1p8t6hWUp8bPNppPUpSKu", "2 materials, 2902 triangles", "AnimefanPostUP"],
-    ["FISH GATLING", "", "https://drive.google.com/uc?export=download&id=135X1eHdcp52AE6YWZUX96-9QCAuJvpzP", "2 materials, 9217 triangles", "AnimefanPostUP"]
+    [
+      "OFFICIAL FISH COMMUNITY 3D MODELS",
+      "",
+      "https://sketchfab.com/TheZiver/collections/official-fish-community-assets-af4f0d2f01fd4878b21e9b8a7fd378d1",
+      "official stuff",
+      "＜＞＜"
+    ],
+    [
+      "RANDOM FISH COMMUNITY 3D MODELS",
+      "",
+      "https://sketchfab.com/TheZiver/collections/fish-community-assets-de78937ccc9c486ba5b2e74a8f1684a5",
+      "random fish community 3d models",
+      "＜＞＜"
+    ],
+    [
+      "FISH_FAMILY_PACK",
+      "https://drive.google.com/thumbnail?id=10EaX4BIXon_F2sUuEBnuT7IFaiOKpzk0&sz=s200",
+      "https://drive.google.com/uc?export=download&id=10EaX4BIXon_F2sUuEBnuT7IFaiOKpzk0",
+      "1 material each, below 2000 triangles",
+      "Luiswillich"
+    ],
+    [
+      "FISH RIFLE",
+      "https://drive.google.com/thumbnail?id=1JGN-oyzR5rjePt1hk6GiaxVI498p1dMl&sz=s200",
+      "https://drive.google.com/uc?export=download&id=1JGN-oyzR5rjePt1hk6GiaxVI498p1dMl",
+      "4 materials, 4830 triangles",
+      "AnimefanPostUP"
+    ],
+    [
+      "FISH UZI",
+      "https://drive.google.com/thumbnail?id=1_8L9CNz01295zvF9QvBjF8CBuntiONdM&sz=s200",
+      "https://drive.google.com/uc?export=download&id=1_8L9CNz01295zvF9QvBjF8CBuntiONdM",
+      "2 materials, 4034 triangles",
+      "AnimefanPostUP"
+    ],
+    [
+      "FISH SWORD",
+      "https://drive.google.com/thumbnail?id=1prjzPa8cpntst_-o85ChozFDDAHBpSpu&sz=s200",
+      "https://drive.google.com/uc?export=download&id=1prjzPa8cpntst_-o85ChozFDDAHBpSpu",
+      "2 materials, 10960 triangles",
+      "AnimefanPostUP"
+    ],
+    [
+      "FISHZOOKA",
+      "https://drive.google.com/thumbnail?id=1X_bAYEjwTf8UnOsFvs63voZvbKGNU84B&sz=s200",
+      "https://drive.google.com/uc?export=download&id=1X_bAYEjwTf8UnOsFvs63voZvbKGNU84B",
+      "2 materials, 68232 triangles",
+      "AnimefanPostUP"
+    ],
+    [
+      "FISH SHOTGUN",
+      "https://drive.google.com/thumbnail?id=1wTnN95d9sMB9uqq5cuX1mKzrat4Io3f5&sz=s200",
+      "https://drive.google.com/uc?export=download&id=1wTnN95d9sMB9uqq5cuX1mKzrat4Io3f5",
+      "2 materials, 3200 triangles",
+      "AnimefanPostUP"
+    ],
+    [
+      "FISH SHIELD",
+      "https://drive.google.com/thumbnail?id=1n5m_lLRv9YWcEmI_DKhjuvAzAJL5qjWL&sz=s200",
+      "https://drive.google.com/uc?export=download&id=1n5m_lLRv9YWcEmI_DKhjuvAzAJL5qjWL",
+      "2 materials, 6000 triangles",
+      "AnimefanPostUP"
+    ],
+    [
+      "FISH BOW",
+      "https://drive.google.com/thumbnail?id=1m3Snuaje13maFapfVkybGWlHxpXf1c_f&sz=s200",
+      "https://drive.google.com/uc?export=download&id=1m3Snuaje13maFapfVkybGWlHxpXf1c_f",
+      "2 materials, 2716 triangles + arrows",
+      "AnimefanPostUP"
+    ],
+    [
+      "FISH SCYTHE",
+      "https://drive.google.com/thumbnail?id=1XXlCu8zC13PsSRhbmfk1xDIl21mYzM1x&sz=s200",
+      "https://drive.google.com/uc?export=download&id=1XXlCu8zC13PsSRhbmfk1xDIl21mYzM1x",
+      "2 materials, 3092 triangles",
+      "AnimefanPostUP"
+    ],
+    [
+      "FISH SABER",
+      "https://drive.google.com/thumbnail?id=1aDs0pHq7vtZ1p8t6hWUp8bPNppPUpSKu&sz=s200",
+      "https://drive.google.com/uc?export=download&id=1aDs0pHq7vtZ1p8t6hWUp8bPNppPUpSKu",
+      "2 materials, 2902 triangles",
+      "AnimefanPostUP"
+    ],
+    [
+      "FISH GATLING",
+      "https://drive.google.com/thumbnail?id=135X1eHdcp52AE6YWZUX96-9QCAuJvpzP&sz=s200",
+      "https://drive.google.com/uc?export=download&id=135X1eHdcp52AE6YWZUX96-9QCAuJvpzP",
+      "2 materials, 9217 triangles",
+      "AnimefanPostUP"
+    ]
   ]
 }

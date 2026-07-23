@@ -1,19 +1,84 @@
 {
-  "title": "\ud83d\udcb0LUXURY TRASH",
-  "headers": ["Product", "Link", "Picture", "Price"],
+  "title": "💰LUXURY TRASH",
+  "headers": [
+    "Product",
+    "Link",
+    "Picture",
+    "Price"
+  ],
   "worldLink": "https://vrchat.com/home/world/wrld_7acbb9c3-612a-4143-9561-f51531c70f23",
   "rows": [
-    ["LUXURY FISH", "https://theziver.booth.pm/items/4131078", "", "FREE"],
-    ["FISH HAIRCLIP", "https://theziver.booth.pm/items/5106312", "", "FREE"],
-    ["LUXURY CUBE", "https://theziver.booth.pm/items/5980910", "", "1337\u00a5"],
-    ["FISHING FLAG (VRCHAT/SDK3)", "https://theziver.booth.pm/items/5399404", "", "777\u00a5"],
-    ["EEEndicator (AVATAR PREFAB)", "https://theziver.booth.pm/items/8406875", "", "777\u00a5"],
-    ["LUXURY TURRET (WORLD PREFAB)", "https://theziver.booth.pm/items/6610771", "", "777\u00a5"],
-    ["LUXURY PIPE", "https://theziver.booth.pm/items/4993637", "", "222\u00a5"],
-    ["LUXURY PRE-CRACKED EGG", "https://theziver.booth.pm/items/4678138", "", "222\u00a5"],
-    ["LUXURY NEON SIGN", "https://theziver.booth.pm/items/8234763", "", "111\u00a5"],
-    ["LUXURY POLYGON", "https://theziver.booth.pm/items/7732732", "", "369\u00a5"],
-    ["LUXURY STAR", "https://theziver.booth.pm/items/4234569", "", "111\u00a5"],
-    ["LUXURY EGG", "https://theziver.booth.pm/items/3780803", "", "111\u00a5"]
+    [
+      "LUXURY FISH",
+      "https://theziver.booth.pm/items/4131078",
+      "https://booth.pximg.net/c/620x620/2ce5aeeb-4a8b-435a-9fe0-ca63ec23e42a/i/4131078/bbad7d33-5eb6-407d-92e6-0c9e86b2a8bb_base_resized.jpg",
+      "FREE"
+    ],
+    [
+      "FISH HAIRCLIP",
+      "https://theziver.booth.pm/items/5106312",
+      "https://booth.pximg.net/c/620x620/2ce5aeeb-4a8b-435a-9fe0-ca63ec23e42a/i/5106312/a92dce99-7184-44b4-b8f9-47f745a1887b_base_resized.jpg",
+      "FREE"
+    ],
+    [
+      "LUXURY CUBE",
+      "https://theziver.booth.pm/items/5980910",
+      "https://booth.pximg.net/c/620x620/2ce5aeeb-4a8b-435a-9fe0-ca63ec23e42a/i/5980910/36fe9ec4-0bed-452c-9d11-ac3c0afaf97c_base_resized.jpg",
+      "1337¥"
+    ],
+    [
+      "FISHING FLAG (VRCHAT/SDK3)",
+      "https://theziver.booth.pm/items/5399404",
+      "https://booth.pximg.net/c/620x620/2ce5aeeb-4a8b-435a-9fe0-ca63ec23e42a/i/5399404/d03ab3b1-833f-47db-970c-5a3383e14359_base_resized.jpg",
+      "777¥"
+    ],
+    [
+      "EEEndicator (AVATAR PREFAB)",
+      "https://theziver.booth.pm/items/8406875",
+      "https://booth.pximg.net/c/620x620/2ce5aeeb-4a8b-435a-9fe0-ca63ec23e42a/i/8406875/34e21ff9-89dd-48e7-abb2-e900d8e66e03_base_resized.jpg",
+      "777¥"
+    ],
+    [
+      "LUXURY TURRET (WORLD PREFAB)",
+      "https://theziver.booth.pm/items/6610771",
+      "https://booth.pximg.net/c/620x620/2ce5aeeb-4a8b-435a-9fe0-ca63ec23e42a/i/6610771/a16db946-2700-423a-b342-8bed13994aed_base_resized.jpg",
+      "777¥"
+    ],
+    [
+      "LUXURY PIPE",
+      "https://theziver.booth.pm/items/4993637",
+      "https://booth.pximg.net/c/620x620/2ce5aeeb-4a8b-435a-9fe0-ca63ec23e42a/i/4993637/7f3ae503-9bdd-499c-828b-b68e9f0e66cc_base_resized.jpg",
+      "222¥"
+    ],
+    [
+      "LUXURY PRE-CRACKED EGG",
+      "https://theziver.booth.pm/items/4678138",
+      "https://booth.pximg.net/c/620x620/2ce5aeeb-4a8b-435a-9fe0-ca63ec23e42a/i/4678138/2fc88ea8-59a4-417b-be7c-b7969335bfda_base_resized.jpg",
+      "222¥"
+    ],
+    [
+      "LUXURY NEON SIGN",
+      "https://theziver.booth.pm/items/8234763",
+      "https://booth.pximg.net/c/620x620/2ce5aeeb-4a8b-435a-9fe0-ca63ec23e42a/i/8234763/d2a364a5-211a-4a5e-96c7-b1b3c6917340_base_resized.jpg",
+      "111¥"
+    ],
+    [
+      "LUXURY POLYGON",
+      "https://theziver.booth.pm/items/7732732",
+      "https://booth.pximg.net/c/620x620/2ce5aeeb-4a8b-435a-9fe0-ca63ec23e42a/i/7732732/1e914541-9da1-41c7-b48e-3f37f40e063c_base_resized.jpg",
+      "369¥"
+    ],
+    [
+      "LUXURY STAR",
+      "https://theziver.booth.pm/items/4234569",
+      "https://booth.pximg.net/c/620x620/2ce5aeeb-4a8b-435a-9fe0-ca63ec23e42a/i/4234569/86f7e890-53f8-468d-8ab3-5e1f90ffc854_base_resized.jpg",
+      "111¥"
+    ],
+    [
+      "LUXURY EGG",
+      "https://theziver.booth.pm/items/3780803",
+      "https://booth.pximg.net/c/620x620/2ce5aeeb-4a8b-435a-9fe0-ca63ec23e42a/i/3780803/c2620d1e-2185-4743-a4b8-5912e1829573_base_resized.jpg",
+      "111¥"
+    ]
   ]
 }

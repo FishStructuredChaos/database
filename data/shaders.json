@@ -1,7 +1,19 @@
 {
-  "title": "\ud83d\uddbc\ufe0fSHADERS",
-  "headers": ["Shader", "Author", "Description", "Link", "Picture"],
+  "title": "🖼️SHADERS",
+  "headers": [
+    "Shader",
+    "Author",
+    "Description",
+    "Link",
+    "Picture"
+  ],
   "rows": [
-    ["FISH SHADER", "z3y", "no mesh or textures required, just fish created out of thin air :3. you can adjust sliders and even toggle on rtx if you want to make your gpus suffer", "https://drive.google.com/uc?export=download&id=1AoldwDoZFTJ54Myhna_3EmdLK3uPvyu3", ""]
+    [
+      "FISH SHADER",
+      "z3y",
+      "no mesh or textures required, just fish created out of thin air :3. you can adjust sliders and even toggle on rtx if you want to make your gpus suffer",
+      "https://drive.google.com/uc?export=download&id=1AoldwDoZFTJ54Myhna_3EmdLK3uPvyu3",
+      "https://drive.google.com/thumbnail?id=1AoldwDoZFTJ54Myhna_3EmdLK3uPvyu3&sz=s200"
+    ]
   ]
 }
