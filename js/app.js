@@ -10,15 +10,15 @@ const tabs = [
   { id: 'public-avatars', label: '\ud83c\udf39PUBLIC-AVATARS', render: renderAvatarsCards },
   { id: 'worlds', label: '\ud83c\udf0eWORLDS', render: renderWorldsCards },
   { id: 'art-graphics', label: '\ud83c\udfb4ART-GRAPHICS', render: (el) => renderEmbed(el, 'https://fishstructuredchaos.github.io/gallery/') },
-  { id: 'models-3d', label: '\ud83d\udcbe3D-MODELS', render: renderTable },
+  { id: 'models-3d', label: '\ud83d\udcbe3D-MODELS', render: renderCards },
   { id: 'sounds', label: '\ud83d\udd0aSOUNDS', render: (el) => renderEmbed(el, 'https://fishstructuredchaos.github.io/sounds/') },
-  { id: 'avatar-prefabs', label: '\ud83d\udce6AVATAR-PREFABS', render: renderTable },
-  { id: 'world-prefabs', label: '\ud83d\udce6WORLD-PREFABS', render: renderTable },
-  { id: 'shaders', label: '\ud83d\uddbc\ufe0fSHADERS', render: renderTable },
-  { id: 'tools', label: '\ud83d\udee0\ufe0fTOOLS', render: renderTable },
-  { id: 'luxury-trash', label: '\ud83d\udcb0LUXURY TRASH', render: renderTable },
-  { id: 'useful-things', label: '\ud83d\udc96USEFUL-THINGS', render: renderTable },
-  { id: 'asset-websites', label: '\ud83c\udf10ASSET-WEBSITES', render: renderTable },
+  { id: 'avatar-prefabs', label: '\ud83d\udce6AVATAR-PREFABS', render: renderCards },
+  { id: 'world-prefabs', label: '\ud83d\udce6WORLD-PREFABS', render: renderCards },
+  { id: 'shaders', label: '\ud83d\uddbc\ufe0fSHADERS', render: renderCards },
+  { id: 'tools', label: '\ud83d\udee0\ufe0fTOOLS', render: renderCards },
+  { id: 'luxury-trash', label: '\ud83d\udcb0LUXURY TRASH', render: renderCards },
+  { id: 'useful-things', label: '\ud83d\udc96USEFUL-THINGS', render: renderCards },
+  { id: 'asset-websites', label: '\ud83c\udf10ASSET-WEBSITES', render: renderCards },
 ];
 
 function $(sel) { return document.querySelector(sel); }
@@ -254,7 +254,7 @@ function filterCards(input, gridId) {
   }
 }
 
-async function renderTable(el) {
+async function renderCards(el) {
   const tabId = el.id.replace('tab-', '');
   try {
     const resp = await fetch(`data/${tabId}.json`);
@@ -276,6 +276,11 @@ async function renderTable(el) {
       return;
     }
 
+    const nameIdx = 0;
+    const picIdx = data.headers.findIndex(h => /picture|preview|image/i.test(h));
+    const linkIdx = data.headers.findIndex(h => /link|website|download/i.test(h));
+    const priceIdx = data.headers.findIndex(h => /price/i.test(h));
+
     let extraHtml = '';
     if (data.worldLink) {
       extraHtml = `<a class="world-badge" href="${escapeHtml(data.worldLink)}" target="_blank">view world: luxury trash</a>`;
@@ -288,37 +293,38 @@ async function renderTable(el) {
       </div>
       <div class="search-bar">
         <span class="search-icon">&#x1F50D;</span>
-        <input type="text" placeholder="SEARCH" oninput="filterTable(this, 'table-${tabId}')">
+        <input type="text" placeholder="SEARCH" oninput="filterDataCards(this, 'card-grid-${tabId}')">
       </div>
-      <div class="table-container">
-        <table id="table-${tabId}">
-          <thead>
-            <tr>${data.headers.map(h => `<th>${escapeHtml(h)}</th>`).join('')}</tr>
-          </thead>
-          <tbody>
-            ${data.rows.map(row => `
-              <tr>
-                ${row.map((cell, ci) => {
-                  const header = data.headers[ci] || '';
-                  const isLink = header.match(/link|website|download/i);
-                  const isImage = header.match(/picture|preview|image/i);
-                  const isPrice = header.match(/price/i);
-
-                  if (cell && isLink && cell.startsWith('http')) {
-                    return `<td><a href="${escapeHtml(cell)}" target="_blank">${escapeHtml(cell)}</a></td>`;
-                  }
-                  if (cell && isImage && cell.startsWith('http')) {
-                    return `<td><img src="${escapeHtml(cell)}" class="table-img" loading="lazy"></td>`;
-                  }
-                  if (cell && isPrice) {
-                    return `<td class="price${cell.toLowerCase() === 'free' ? ' free' : ''}">${escapeHtml(cell)}</td>`;
-                  }
-                  return `<td>${escapeHtml(cell || '')}</td>`;
-                }).join('')}
-              </tr>
-            `).join('')}
-          </tbody>
-        </table>
+      <div class="data-card-grid" id="card-grid-${tabId}">
+        ${data.rows.map(row => {
+          const name = row[nameIdx] || '';
+          const img = (picIdx >= 0 && row[picIdx]) || '';
+          const isDrive = img.includes('drive.google.com');
+          const fields = row.map((cell, ci) => {
+            if (ci === nameIdx || ci === picIdx) return '';
+            const header = data.headers[ci] || '';
+            if (cell && (ci === linkIdx || (header.match(/link|website|download/i) && cell.startsWith('http')))) {
+              return `<div class="dc-field"><span class="dc-label">${escapeHtml(header)}:</span> <a href="${escapeHtml(cell)}" target="_blank">${escapeHtml(cell)}</a></div>`;
+            }
+            if (cell && ci === priceIdx && header.match(/price/i)) {
+              return `<div class="dc-field"><span class="dc-label">${escapeHtml(header)}:</span><span class="price${cell.toLowerCase() === 'free' ? ' free' : ''}">${escapeHtml(cell)}</span></div>`;
+            }
+            if (cell) {
+              return `<div class="dc-field"><span class="dc-label">${escapeHtml(header)}:</span> <span class="dc-value">${escapeHtml(cell)}</span></div>`;
+            }
+            return '';
+          }).filter(Boolean).join('');
+          const link = (linkIdx >= 0 && row[linkIdx]) || '';
+          return `
+          <div class="data-card">
+            ${img ? `<div class="dc-img-wrap"><img class="table-img" src="${escapeHtml(img)}" alt="${escapeHtml(name)}" loading="lazy"></div>` : ''}
+            <div class="dc-body">
+              <div class="dc-name">${escapeHtml(name)}</div>
+              ${fields}
+              ${link ? `<div class="dc-link-out"><a href="${escapeHtml(link)}" target="_blank">OPEN</a></div>` : ''}
+            </div>
+          </div>`;
+        }).join('')}
       </div>
     `;
   } catch (e) {
@@ -326,13 +332,13 @@ async function renderTable(el) {
   }
 }
 
-function filterTable(input, tableId) {
+function filterDataCards(input, gridId) {
   const q = input.value.toLowerCase();
-  const rows = document.querySelectorAll(`#${tableId} tbody tr`);
+  const cards = document.querySelectorAll(`#${gridId} .data-card`);
   let count = 0;
-  rows.forEach(row => {
-    const match = row.textContent.toLowerCase().includes(q);
-    row.style.display = match ? '' : 'none';
+  cards.forEach(card => {
+    const match = card.textContent.toLowerCase().includes(q);
+    card.style.display = match ? '' : 'none';
     if (match) count++;
   });
   const info = input.parentElement.previousElementSibling;
