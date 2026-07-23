@@ -127,11 +127,21 @@ textarea { min-height: 60px; resize: vertical; }
 .btn-fetch { font-size: 0.85rem; padding: 6px 10px; margin-left: 4px; background: #222200; border: 2px outset #666600; color: #ddcc88; cursor: pointer; vertical-align: middle; line-height: 1; }
 .btn-fetch:hover { background: #333300; border-style: inset; }
 .btn-fetch:disabled { opacity: 0.4; cursor: default; border-style: inset; }
+.admin-layout { display: flex; gap: 20px; align-items: flex-start; }
+.admin-left { flex: 1; min-width: 0; max-width: 480px; position: sticky; top: 16px; }
+.admin-right { flex: 1; min-width: 0; max-height: calc(100vh - 120px); overflow-y: auto; }
+@media (max-width: 700px) {
+  .admin-layout { flex-direction: column; }
+  .admin-left { position: static; max-width: none; }
+  .admin-right { max-height: none; }
+}
 </style>
 </head>
 <body>
 <h1>&#x1F339; ROSE DATABASE <span>&#x2699;&#xFE0F; ADMIN</span></h1>
 
+<div class="admin-layout">
+<div class="admin-left">
 <div class="form-group">
   <label for="fileSelect">&#x1F4C1; FILE</label>
   <select id="fileSelect">
@@ -151,10 +161,14 @@ textarea { min-height: 60px; resize: vertical; }
     <button class="btn btn-disc" id="btnDiscard">&#x1F5D1;&#xFE0F; DISCARD</button>
   </div>
   <div id="status"></div>
+</div>
+<div class="admin-right">
   <div class="entries" id="entries">
     <h3>&#x1F4CB; EXISTING ENTRIES</h3>
     <div id="entriesList"></div>
   </div>
+</div>
+</div>
   <p style="margin-top:20px;color:#664444;font-size:0.7rem"><a href="/" target="_blank" style="color:#885555">&#x1F339; &#x2190; back to site</a></p>
 </div>
 
