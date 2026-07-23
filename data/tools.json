@@ -1,5 +1,10 @@
 {
-  "title": "\ud83d\udee0\ufe0fTOOLS",
-  "headers": ["Tool", "Author", "Description", "Link"],
+  "title": "🛠️TOOLS",
+  "headers": [
+    "Tool",
+    "Author",
+    "Description",
+    "Link"
+  ],
   "rows": []
 }
