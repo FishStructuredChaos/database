@@ -572,12 +572,13 @@ const server = http.createServer((req, res) => {
         const pngIcon = icons.find(i => i[1].includes('.png'));
         if (pngIcon) { img = pngIcon[1]; resolveImg(); return; }
         if (icons.length) { img = icons[0][1]; resolveImg(); return; }
-        // last resort: /favicon.ico
+        // last resort: Google favicon service or /favicon.ico
         try {
           const ico = base + '/favicon.ico';
           const icoresp = await fetch(ico, { method: 'HEAD', signal: AbortSignal.timeout(3000), headers: { 'User-Agent': UA } });
-          if (icoresp.ok) img = ico;
+          if (icoresp.ok) { const ct = icoresp.headers.get('content-type') || ''; if (ct.includes('image')) img = ico; }
         } catch {}
+        if (!img) img = 'https://www.google.com/s2/favicons?domain=' + base.replace(/https?:\/\//, '') + '&sz=64';
         resolveImg();
 
         function resolveImg() {
