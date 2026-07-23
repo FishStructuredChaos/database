@@ -1,9 +1,11 @@
+@import url('https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&display=swap');
+
 * { box-sizing: border-box; }
 
 body {
   margin: 0;
   padding: 0;
-  font-family: "Courier New", Courier, monospace;
+  font-family: "Courier Prime", "Courier New", Courier, monospace;
   background: #1a0000;
   color: #e0c0c0;
   font-size: 14px;
@@ -52,7 +54,7 @@ header p {
 }
 
 .tab-btn {
-  font-family: "Courier New", Courier, monospace;
+  font-family: "Courier Prime", "Courier New", Courier, monospace;
   font-size: 0.75rem;
   background: #330000;
   border: 1px solid #552222;
@@ -119,7 +121,7 @@ header p {
 }
 
 .search-bar input {
-  font-family: "Courier New", Courier, monospace;
+  font-family: "Courier Prime", "Courier New", Courier, monospace;
   font-size: 0.85rem;
   padding: 5px 8px;
   border: 2px inset #660000;
