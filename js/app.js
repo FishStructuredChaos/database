@@ -286,6 +286,9 @@ async function renderCards(el) {
       extraHtml = `<a class="world-badge" href="${escapeHtml(data.worldLink)}" target="_blank">view world: luxury trash</a>`;
     }
 
+    const downloadTabs = ['models-3d', 'avatar-prefabs', 'shaders'];
+    const btnLabel = downloadTabs.includes(tabId) ? 'DOWNLOAD' : 'OPEN';
+
     el.innerHTML = `
       ${extraHtml}
       <div class="section-info">
@@ -299,13 +302,9 @@ async function renderCards(el) {
         ${data.rows.map(row => {
           const name = row[nameIdx] || '';
           const img = (picIdx >= 0 && row[picIdx]) || '';
-          const isDrive = img.includes('drive.google.com');
           const fields = row.map((cell, ci) => {
-            if (ci === nameIdx || ci === picIdx) return '';
+            if (ci === nameIdx || ci === picIdx || ci === linkIdx) return '';
             const header = data.headers[ci] || '';
-            if (cell && (ci === linkIdx || (header.match(/link|website|download/i) && cell.startsWith('http')))) {
-              return `<div class="dc-field"><span class="dc-label">${escapeHtml(header)}:</span> <a href="${escapeHtml(cell)}" target="_blank">${escapeHtml(cell)}</a></div>`;
-            }
             if (cell && ci === priceIdx && header.match(/price/i)) {
               return `<div class="dc-field"><span class="dc-label">${escapeHtml(header)}:</span><span class="price${cell.toLowerCase() === 'free' ? ' free' : ''}">${escapeHtml(cell)}</span></div>`;
             }
@@ -321,7 +320,7 @@ async function renderCards(el) {
             <div class="dc-body">
               <div class="dc-name">${escapeHtml(name)}</div>
               ${fields}
-              ${link ? `<div class="dc-link-out"><a href="${escapeHtml(link)}" target="_blank">OPEN</a></div>` : ''}
+              ${link ? `<div class="dc-link-out"><a href="${escapeHtml(link)}" target="_blank">${btnLabel}</a></div>` : ''}
             </div>
           </div>`;
         }).join('')}
