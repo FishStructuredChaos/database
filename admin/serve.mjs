@@ -127,17 +127,18 @@ textarea { min-height: 60px; resize: vertical; }
 .btn-fetch { font-size: 0.85rem; padding: 6px 10px; margin-left: 4px; background: #222200; border: 2px outset #666600; color: #ddcc88; cursor: pointer; vertical-align: middle; line-height: 1; }
 .btn-fetch:hover { background: #333300; border-style: inset; }
 .btn-fetch:disabled { opacity: 0.4; cursor: default; border-style: inset; }
-.admin-layout { display: flex; gap: 20px; align-items: flex-start; }
+.admin-layout { display: flex; gap: 20px; align-items: flex-start; width: 100%; }
 .admin-left { flex: 1; min-width: 0; max-width: 480px; position: sticky; top: 16px; }
 .admin-right { flex: 1; min-width: 0; max-height: calc(100vh - 120px); overflow-y: auto; }
-@media (max-width: 700px) {
+@media (max-width: 800px) {
   .admin-layout { flex-direction: column; }
   .admin-left { position: static; max-width: none; }
   .admin-right { max-height: none; }
 }
+body.admin-page { max-width: 960px; }
 </style>
 </head>
-<body>
+<body class="admin-page">
 <h1>&#x1F339; ROSE DATABASE <span>&#x2699;&#xFE0F; ADMIN</span></h1>
 
 <div class="admin-layout">
@@ -161,6 +162,7 @@ textarea { min-height: 60px; resize: vertical; }
     <button class="btn btn-disc" id="btnDiscard">&#x1F5D1;&#xFE0F; DISCARD</button>
   </div>
   <div id="status"></div>
+</div>
 </div>
 <div class="admin-right">
   <div class="entries" id="entries">
