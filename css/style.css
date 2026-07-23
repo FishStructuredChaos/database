@@ -51,18 +51,6 @@ header p {
   gap: 2px;
 }
 
-.nav-sep {
-  font-size: 0.65rem;
-  font-weight: bold;
-  color: #884444;
-  letter-spacing: 1px;
-  padding: 2px 6px 2px 2px;
-  margin-right: 2px;
-  border-right: 1px solid #442222;
-}
-
-.nav-sep:last-child { border-right: none; }
-
 .tab-btn {
   font-family: "Courier New", Courier, monospace;
   font-size: 0.75rem;
@@ -457,7 +445,6 @@ td a:hover {
 @media (max-width: 768px) {
   header h1 { font-size: 1.2rem; }
   .tab-btn { font-size: 0.7rem; padding: 2px 5px; }
-  .nav-sep { font-size: 0.6rem; padding: 2px 3px; }
   .card-grid { grid-template-columns: 1fr 1fr; }
   .contributions-list { grid-template-columns: 1fr; }
 }

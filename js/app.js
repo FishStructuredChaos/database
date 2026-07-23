@@ -5,30 +5,20 @@ const GIST = {
 
 const ALLOWED_TAGS = ['ROSE_FISH', 'FISH'];
 
-const tabGroups = [
-  { label: 'INFO', tabs: [
-    { id: 'information', label: 'INFORMATION', render: renderInformation },
-  ]},
-  { label: 'VISUAL', tabs: [
-    { id: 'public-avatars', label: 'PUBLIC-AVATARS', render: renderAvatarsCards },
-    { id: 'worlds', label: 'WORLDS', render: renderWorldsCards },
-    { id: 'art-graphics', label: 'ART-GRAPHICS', render: renderSimpleExternal },
-  ]},
-  { label: 'ASSETS', tabs: [
-    { id: 'models-3d', label: '3D-MODELS', render: renderTable },
-    { id: 'avatar-prefabs', label: 'AVATAR-PREFABS', render: renderTable },
-    { id: 'world-prefabs', label: 'WORLD-PREFABS', render: renderTable },
-    { id: 'shaders', label: 'SHADERS', render: renderTable },
-    { id: 'sounds', label: 'SOUNDS', render: renderSimpleExternal },
-  ]},
-  { label: 'RESOURCES', tabs: [
-    { id: 'tools', label: 'TOOLS', render: renderTable },
-    { id: 'useful-things', label: 'USEFUL-THINGS', render: renderTable },
-    { id: 'asset-websites', label: 'ASSET-WEBSITES', render: renderTable },
-  ]},
-  { label: 'SHOP', tabs: [
-    { id: 'luxury-trash', label: 'LUXURY-TRASH', render: renderTable },
-  ]},
+const tabs = [
+  { id: 'information', label: '\u2753INFORMATION', render: renderInformation },
+  { id: 'public-avatars', label: '\ud83c\udf39PUBLIC-AVATARS', render: renderAvatarsCards },
+  { id: 'worlds', label: '\ud83c\udf0eWORLDS', render: renderWorldsCards },
+  { id: 'art-graphics', label: '\ud83c\udfb4ART-GRAPHICS', render: renderSimpleExternal },
+  { id: 'models-3d', label: '\ud83d\udcbe3D-MODELS', render: renderTable },
+  { id: 'sounds', label: '\ud83d\udd0aSOUNDS', render: renderSimpleExternal },
+  { id: 'avatar-prefabs', label: '\ud83d\udce6AVATAR-PREFABS', render: renderTable },
+  { id: 'world-prefabs', label: '\ud83d\udce6WORLD-PREFABS', render: renderTable },
+  { id: 'shaders', label: '\ud83d\uddbc\ufe0fSHADERS', render: renderTable },
+  { id: 'tools', label: '\ud83d\udee0\ufe0fTOOLS', render: renderTable },
+  { id: 'luxury-trash', label: '\ud83d\udcb0LUXURY TRASH', render: renderTable },
+  { id: 'useful-things', label: '\ud83d\udc96USEFUL-THINGS', render: renderTable },
+  { id: 'asset-websites', label: '\ud83c\udf10ASSET-WEBSITES', render: renderTable },
 ];
 
 function $(sel) { return document.querySelector(sel); }
@@ -38,29 +28,20 @@ async function init() {
   const tabNav = $('#tab-nav');
   const tabContainer = $('#tab-container');
 
-  tabGroups.forEach(group => {
-    const sep = document.createElement('span');
-    sep.className = 'nav-sep';
-    sep.textContent = group.label;
-    tabNav.appendChild(sep);
-
-    group.tabs.forEach(t => {
-      const btn = document.createElement('button');
-      btn.className = 'tab-btn';
-      btn.textContent = t.label;
-      btn.dataset.tab = t.id;
-      btn.addEventListener('click', () => switchTab(t.id));
-      tabNav.appendChild(btn);
-    });
+  tabs.forEach(t => {
+    const btn = document.createElement('button');
+    btn.className = 'tab-btn';
+    btn.textContent = t.label;
+    btn.dataset.tab = t.id;
+    btn.addEventListener('click', () => switchTab(t.id));
+    tabNav.appendChild(btn);
   });
 
-  tabGroups.forEach(group => {
-    group.tabs.forEach(t => {
-      const div = document.createElement('div');
-      div.id = `tab-${t.id}`;
-      div.className = 'tab-content';
-      tabContainer.appendChild(div);
-    });
+  tabs.forEach(t => {
+    const div = document.createElement('div');
+    div.id = `tab-${t.id}`;
+    div.className = 'tab-content';
+    tabContainer.appendChild(div);
   });
 
   switchTab('information');
@@ -73,14 +54,10 @@ function switchTab(id) {
   const content = $(`#tab-${id}`);
   content.classList.add('active');
 
-  for (const group of tabGroups) {
-    for (const tab of group.tabs) {
-      if (tab.id === id && tab.render) {
-        content.innerHTML = '<div class="loader">loading...</div>';
-        tab.render(content);
-        return;
-      }
-    }
+  const tab = tabs.find(t => t.id === id);
+  if (tab && tab.render) {
+    content.innerHTML = '<div class="loader">loading...</div>';
+    tab.render(content);
   }
 }
 
