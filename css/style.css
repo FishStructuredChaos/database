@@ -423,6 +423,20 @@ td a:hover {
   margin-top: 12px;
 }
 
+/* EMBED */
+.embed-container {
+  border: 2px ridge #660000;
+  background: #0d0000;
+  height: calc(100vh - 200px);
+  min-height: 400px;
+}
+
+.embed-frame {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
 /* WORLD BADGE */
 .world-badge {
   display: inline-block;

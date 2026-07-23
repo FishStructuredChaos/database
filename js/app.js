@@ -9,9 +9,9 @@ const tabs = [
   { id: 'information', label: '\u2753INFORMATION', render: renderInformation },
   { id: 'public-avatars', label: '\ud83c\udf39PUBLIC-AVATARS', render: renderAvatarsCards },
   { id: 'worlds', label: '\ud83c\udf0eWORLDS', render: renderWorldsCards },
-  { id: 'art-graphics', label: '\ud83c\udfb4ART-GRAPHICS', render: renderSimpleExternal },
+  { id: 'art-graphics', label: '\ud83c\udfb4ART-GRAPHICS', render: (el) => renderEmbed(el, 'https://fishstructuredchaos.github.io/gallery/') },
   { id: 'models-3d', label: '\ud83d\udcbe3D-MODELS', render: renderTable },
-  { id: 'sounds', label: '\ud83d\udd0aSOUNDS', render: renderSimpleExternal },
+  { id: 'sounds', label: '\ud83d\udd0aSOUNDS', render: (el) => renderEmbed(el, 'https://fishstructuredchaos.github.io/sounds/') },
   { id: 'avatar-prefabs', label: '\ud83d\udce6AVATAR-PREFABS', render: renderTable },
   { id: 'world-prefabs', label: '\ud83d\udce6WORLD-PREFABS', render: renderTable },
   { id: 'shaders', label: '\ud83d\uddbc\ufe0fSHADERS', render: renderTable },
@@ -365,6 +365,14 @@ function renderSimpleExternal(el) {
     .catch(() => {
       el.innerHTML = '<div class="empty-state">No data available.</div>';
     });
+}
+
+function renderEmbed(el, url) {
+  el.innerHTML = `
+    <div class="embed-container">
+      <iframe src="${escapeHtml(url)}" class="embed-frame" frameborder="0" allowfullscreen></iframe>
+    </div>
+  `;
 }
 
 function escapeHtml(str) {
