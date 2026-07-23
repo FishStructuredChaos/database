@@ -2,8 +2,8 @@ body {
   margin: 0;
   padding: 0;
   font-family: "Courier New", Courier, monospace;
-  background: #c0c0c0;
-  color: #000;
+  background: #1a0000;
+  color: #ffcccc;
 }
 
 .container {
@@ -14,10 +14,10 @@ body {
 
 header {
   text-align: center;
-  background: linear-gradient(#000080, #0000a0);
-  color: #fff;
+  background: linear-gradient(#4a0000, #660000);
+  color: #ff9999;
   padding: 12px 8px;
-  border: 3px ridge #808080;
+  border: 3px ridge #880000;
   margin-bottom: 8px;
 }
 
@@ -27,18 +27,19 @@ header h1 {
   font-family: "Courier New", Courier, monospace;
   text-shadow: 2px 2px 0 #000;
   letter-spacing: 2px;
+  color: #ff6666;
 }
 
 header p {
   margin: 4px 0 0;
   font-size: 0.85rem;
-  color: #ffff00;
+  color: #ff9999;
 }
 
 /* Navigation */
 .tab-nav {
-  background: #d4d0c8;
-  border: 2px outset #fff;
+  background: #2a0000;
+  border: 2px outset #660000;
   padding: 4px;
   margin-bottom: 8px;
   display: flex;
@@ -49,22 +50,22 @@ header p {
 .tab-btn {
   font-family: "Courier New", Courier, monospace;
   font-size: 0.8rem;
-  background: #d4d0c8;
-  border: 2px outset #fff;
+  background: #330000;
+  border: 2px outset #550000;
   padding: 4px 10px;
   cursor: pointer;
-  color: #000;
+  color: #ff9999;
   text-decoration: none;
 }
 
 .tab-btn:hover {
-  background: #e0dcd4;
+  background: #440000;
 }
 
 .tab-btn.active {
-  background: #000080;
+  background: #cc0000;
   color: #fff;
-  border: 2px inset #808080;
+  border: 2px inset #880000;
   font-weight: bold;
 }
 
@@ -83,30 +84,30 @@ header p {
   font-weight: bold;
   margin-bottom: 8px;
   padding: 4px 8px;
-  background: #000080;
-  color: #fff;
-  border: 2px ridge #808080;
+  background: #660000;
+  color: #ff9999;
+  border: 2px ridge #880000;
 }
 
 hr {
-  border: 1px solid #808080;
+  border: 1px solid #660000;
   margin: 12px 0;
 }
 
 /* Information page */
 .info-section {
-  background: #fff;
-  border: 2px ridge #808080;
+  background: #2a0000;
+  border: 2px ridge #660000;
   padding: 12px;
   margin-bottom: 12px;
 }
 
 .info-section h2 {
   font-size: 1.1rem;
-  color: #000080;
+  color: #ff6666;
   margin: 0 0 8px;
   padding-bottom: 4px;
-  border-bottom: 2px solid #808080;
+  border-bottom: 2px solid #660000;
 }
 
 .info-section p {
@@ -124,28 +125,24 @@ hr {
 }
 
 .info-section a {
-  color: #0000ff;
-}
-
-.info-section a:visited {
-  color: #800080;
+  color: #ff8888;
 }
 
 .contributions-list .member {
   margin-bottom: 12px;
   padding: 6px 8px;
-  background: #fffff0;
-  border: 1px solid #c0c0c0;
+  background: #1a0000;
+  border: 1px solid #550000;
 }
 
 .contributions-list .member .name {
   font-weight: bold;
-  color: #000080;
+  color: #ff6666;
   font-size: 0.9rem;
 }
 
 .contributions-list .member .contribution {
-  color: #333;
+  color: #cc9999;
   font-size: 0.8rem;
   margin-top: 2px;
 }
@@ -158,19 +155,19 @@ hr {
 }
 
 .card {
-  background: #fff;
-  border: 2px ridge #808080;
+  background: #2a0000;
+  border: 2px ridge #660000;
 }
 
 .card.dimmed {
-  opacity: 0.75;
+  opacity: 0.7;
 }
 
 .card .card-img-wrap {
   width: 100%;
   height: 160px;
-  background: #e0e0e0;
-  border-bottom: 1px solid #c0c0c0;
+  background: #1a0000;
+  border-bottom: 1px solid #550000;
 }
 
 .card .card-img {
@@ -186,9 +183,9 @@ hr {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #808080;
+  color: #660000;
   font-size: 2rem;
-  background: #e0e0e0;
+  background: #1a0000;
 }
 
 .card .card-body {
@@ -198,38 +195,34 @@ hr {
 .card .card-body h3 {
   font-size: 0.85rem;
   margin: 0 0 2px;
-  color: #000;
+  color: #ffcccc;
 }
 
 .card .card-body .author {
   font-size: 0.75rem;
-  color: #800080;
+  color: #ff8888;
   margin-bottom: 6px;
 }
 
 .card .card-body .card-link {
   display: inline-block;
-  background: #000080;
+  background: #cc0000;
   color: #fff;
   padding: 3px 8px;
   text-decoration: none;
   font-size: 0.75rem;
-  border: 2px outset #808080;
+  border: 2px outset #880000;
 }
 
 .card .card-body .card-link:hover {
-  background: #0000a0;
-}
-
-.card .card-body .card-link:visited {
-  color: #fff;
+  background: #ff0000;
 }
 
 /* Tables */
 .table-container {
   overflow-x: auto;
-  border: 2px ridge #808080;
-  background: #fff;
+  border: 2px ridge #660000;
+  background: #2a0000;
 }
 
 table {
@@ -238,67 +231,64 @@ table {
 }
 
 th {
-  background: #000080;
-  color: #fff;
+  background: #660000;
+  color: #ff9999;
   font-weight: bold;
   font-size: 0.8rem;
   text-align: left;
   padding: 6px 8px;
-  border: 1px solid #808080;
+  border: 1px solid #880000;
 }
 
 td {
   padding: 4px 8px;
-  border: 1px solid #c0c0c0;
+  border: 1px solid #440000;
   font-size: 0.8rem;
   vertical-align: top;
+  color: #ffcccc;
 }
 
 tr:nth-child(even) td {
-  background: #f0f0f0;
+  background: #220000;
 }
 
 tr:hover td {
-  background: #ffffcc;
+  background: #3a0000;
 }
 
 td a {
-  color: #0000ff;
-}
-
-td a:visited {
-  color: #800080;
+  color: #ff8888;
 }
 
 td img {
-  border: 1px solid #808080;
+  border: 1px solid #660000;
 }
 
 /* External link card */
 .external-link-card {
-  background: #fff;
-  border: 2px ridge #808080;
+  background: #2a0000;
+  border: 2px ridge #660000;
   padding: 24px;
   text-align: center;
 }
 
 .external-link-card a {
   display: inline-block;
-  background: #000080;
+  background: #cc0000;
   color: #fff;
   padding: 8px 20px;
   text-decoration: none;
   font-weight: bold;
   font-size: 1rem;
-  border: 2px outset #808080;
+  border: 2px outset #880000;
 }
 
 .external-link-card a:hover {
-  background: #0000a0;
+  background: #ff0000;
 }
 
 .external-link-card p {
-  color: #666;
+  color: #aa6666;
   font-size: 0.85rem;
   margin-top: 12px;
 }
@@ -307,8 +297,7 @@ td img {
 .loader {
   text-align: center;
   padding: 32px;
-  color: #666;
-  font-family: "Courier New", Courier, monospace;
+  color: #aa6666;
 }
 
 .loader::after {
@@ -316,8 +305,8 @@ td img {
   display: inline-block;
   width: 16px;
   height: 16px;
-  border: 2px solid #808080;
-  border-top-color: #000080;
+  border: 2px solid #660000;
+  border-top-color: #ff0000;
   border-radius: 50%;
   margin-left: 8px;
   animation: spin 0.8s linear infinite;
@@ -331,17 +320,17 @@ td img {
 .empty-state {
   text-align: center;
   padding: 32px;
-  color: #666;
-  background: #fff;
-  border: 2px ridge #808080;
+  color: #aa6666;
+  background: #2a0000;
+  border: 2px ridge #660000;
 }
 
 /* World badge */
 .world-badge {
   display: inline-block;
-  background: #000080;
-  color: #ffff00;
-  border: 2px ridge #808080;
+  background: #660000;
+  color: #ff9999;
+  border: 2px ridge #880000;
   padding: 6px 12px;
   margin-bottom: 8px;
   text-decoration: none;
@@ -349,18 +338,18 @@ td img {
 }
 
 .world-badge:hover {
-  background: #0000a0;
+  background: #880000;
 }
 
 /* Price */
 .price {
   font-family: "Courier New", Courier, monospace;
   font-weight: bold;
-  color: #000080;
+  color: #ff6666;
 }
 
 .price.free {
-  color: #008000;
+  color: #66ff66;
 }
 
 /* Search */
@@ -372,15 +361,17 @@ td img {
   font-family: "Courier New", Courier, monospace;
   font-size: 0.85rem;
   padding: 4px 8px;
-  border: 2px inset #808080;
-  background: #fff;
+  border: 2px inset #660000;
+  background: #1a0000;
+  color: #ffcccc;
   width: 100%;
   max-width: 400px;
   box-sizing: border-box;
 }
 
 .search-bar input:focus {
-  background: #fffff0;
+  background: #2a0000;
+  outline: none;
 }
 
 /* Scrollbar */
@@ -389,12 +380,12 @@ td img {
 }
 
 ::-webkit-scrollbar-track {
-  background: #c0c0c0;
+  background: #1a0000;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #808080;
-  border: 2px outset #fff;
+  background: #660000;
+  border: 2px outset #880000;
 }
 
 /* Responsive */
