@@ -207,8 +207,11 @@ async function renderCardsFromGist(el, arrayKey, type, mapper) {
         <input type="text" placeholder="Search ${type}..." oninput="filterCards(this, 'card-grid-${type}')">
       </div>
       <div class="card-grid" id="card-grid-${type}">
-        ${cards.map(c => `
+        ${cards.map(c => {
+          const link = c.link ? escapeHtml(c.link) : null;
+          return `
           <div class="card${c.isRose ? '' : ' dimmed'}">
+            ${link ? `<a href="${link}" target="_blank" style="text-decoration:none;color:inherit;display:block">` : ''}
             <div class="card-img-wrap">
               ${c.image
                 ? `<img class="card-img" src="${escapeHtml(c.image)}" alt="${escapeHtml(c.name)}" loading="lazy">`
@@ -218,10 +221,10 @@ async function renderCardsFromGist(el, arrayKey, type, mapper) {
             <div class="card-body">
               <h3>${escapeHtml(c.name)}</h3>
               <div class="author">${escapeHtml(c.author)}</div>
-              ${c.link ? `<a class="card-link" href="${escapeHtml(c.link)}" target="_blank">Open in VRChat</a>` : ''}
             </div>
-          </div>
-        `).join('')}
+            ${link ? `</a>` : ''}
+          </div>`;
+        }).join('')}
       </div>
     `;
 
