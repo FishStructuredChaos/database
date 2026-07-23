@@ -1,25 +1,125 @@
 {
-  "title": "\ud83c\udf10ASSET-WEBSITES",
-  "headers": ["Name", "Description", "Website"],
+  "title": "🌐ASSET-WEBSITES",
+  "headers": [
+    "Name",
+    "Description",
+    "Website",
+    "Picture"
+  ],
   "rows": [
-    ["Sketchfab", "3D models", "https://sketchfab.com/feed"],
-    ["3D TEXTURES", "PBR textures", "https://3dtextures.me/"],
-    ["TextureCan", "PBR textures", "https://www.texturecan.com/"],
-    ["ambientCG", "PBR textures, HDRIs, 3D models", "https://ambientcg.com/list"],
-    ["texture ninja", "non seamless textures", "https://texture.ninja/category/Metal/41"],
-    ["VRCMods", "3D models, shaders, vrchat cringe", "https://vrcmods.com/"],
-    ["quaternius", "3D model packs", "https://quaternius.com/"],
-    ["Kenney", "3D model packs", "https://www.kenney.nl/assets"],
-    ["100 avatars", "3D models for default vrchat avatars", "https://www.100avatars.com/"],
-    ["THE BASE MESH", "basic 3D models with no textures", "https://thebasemesh.com/model-library"],
-    ["BowlRoll", "3D models, anime MMD", "https://bowlroll.net/"],
-    ["MMDArchive", "3D models, anime MMD", "https://mmda.booru.org/index.php"],
-    ["all3dfree", "3D models", "https://www.all3dfree.net/"],
-    ["Free 3D models", "3D vehicle models", "https://done3d.com/category/vehicle/"],
-    ["OpenGameArt", "3D models, textures, sound effects", "https://opengameart.org/"],
-    ["the models resource", "3D models from console games", "https://www.models-resource.com/"],
-    ["CadNav", "3D models, textures", "https://www.cadnav.com/"],
-    ["nicovideo", "3D MMD model avatars", "https://3d.nicovideo.jp/"],
-    ["Pack 3d models", "3D models, characters", "https://p3dm.ru/files/"]
+    [
+      "Sketchfab",
+      "3D models",
+      "https://sketchfab.com/feed",
+      ""
+    ],
+    [
+      "3D TEXTURES",
+      "PBR textures",
+      "https://3dtextures.me/",
+      ""
+    ],
+    [
+      "TextureCan",
+      "PBR textures",
+      "https://www.texturecan.com/",
+      "https://www.texturecan.com/img/textures_1200.jpg"
+    ],
+    [
+      "ambientCG",
+      "PBR textures, HDRIs, 3D models",
+      "https://ambientcg.com/list",
+      "https://ambientcg.com/api/metaimage-list?sort=popular"
+    ],
+    [
+      "texture ninja",
+      "non seamless textures",
+      "https://texture.ninja/category/Metal/41",
+      ""
+    ],
+    [
+      "VRCMods",
+      "3D models, shaders, vrchat cringe",
+      "https://vrcmods.com/",
+      "https://vrcmods.com/img/logo_share.png"
+    ],
+    [
+      "quaternius",
+      "3D model packs",
+      "https://quaternius.com/",
+      "/assets/images/fullres/metadata.jpg"
+    ],
+    [
+      "Kenney",
+      "3D model packs",
+      "https://www.kenney.nl/assets",
+      ""
+    ],
+    [
+      "100 avatars",
+      "3D models for default vrchat avatars",
+      "https://www.100avatars.com/",
+      ""
+    ],
+    [
+      "THE BASE MESH",
+      "basic 3D models with no textures",
+      "https://thebasemesh.com/model-library",
+      "https://static.wixstatic.com/media/b36d2d_080f2dd3e7cc497cba4f0152b7fefcf5%7Emv2.png/v1/fit/w_2500,h_1330,al_c/b36d2d_080f2dd3e7cc497cba4f0152b7fefcf5%7Emv2.png"
+    ],
+    [
+      "BowlRoll",
+      "3D models, anime MMD",
+      "https://bowlroll.net/",
+      "https://bowlroll.net/ogp.png"
+    ],
+    [
+      "MMDArchive",
+      "3D models, anime MMD",
+      "https://mmda.booru.org/index.php",
+      ""
+    ],
+    [
+      "all3dfree",
+      "3D models",
+      "https://www.all3dfree.net/",
+      "https://www.all3dfree.net/uploads/5/1/9/6/51967249/equipments-3d-models-collection-2020_orig.webp"
+    ],
+    [
+      "Free 3D models",
+      "3D vehicle models",
+      "https://done3d.com/category/vehicle/",
+      ""
+    ],
+    [
+      "OpenGameArt",
+      "3D models, textures, sound effects",
+      "https://opengameart.org/",
+      ""
+    ],
+    [
+      "the models resource",
+      "3D models from console games",
+      "https://www.models-resource.com/",
+      "/images/icons/models.png"
+    ],
+    [
+      "CadNav",
+      "3D models, textures",
+      "https://www.cadnav.com/",
+      ""
+    ],
+    [
+      "nicovideo",
+      "3D MMD model avatars",
+      "https://3d.nicovideo.jp/",
+      "https://3d.nicovideo.jp/images/ogp.png"
+    ],
+    [
+      "Pack 3d models",
+      "3D models, characters",
+      "https://p3dm.ru/files/",
+      ""
+    ]
   ]
 }

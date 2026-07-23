@@ -105,13 +105,35 @@ textarea { min-height: 60px; resize: vertical; }
 .entry .text { flex: 1; color: #cc9999; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .entry .btn-del { font-family: inherit; font-size: 0.7rem; padding: 2px 8px; background: #330000; border: 1px outset #662222; color: #aa6666; cursor: pointer; }
 .entry .btn-del:hover { background: #550000; color: #ff8888; }
+.entry { cursor: grab; }
+.entry:active { cursor: grabbing; }
+.entry.drag-over { border-top: 2px solid #ff8844; }
+.entry.dragging { opacity: 0.4; }
+.entry.pending { background: #221100; border-left: 3px solid #ccaa44; }
+.entry.pending .text { color: #ddcc88; }
+.entry.editing { background: #330000; border-left: 3px solid #ff6666; }
+.entry.editing .text { color: #ffcccc; font-weight: bold; }
+.pending-mark { color: #ccaa44; margin-right: 4px; font-size: 0.7rem; }
+.editing-mark { color: #ff6666; margin-right: 4px; font-size: 0.7rem; }
+.pending-bar { margin-top: 16px; display: none; gap: 10px; align-items: center; flex-wrap: wrap; }
+.pending-bar.active { display: flex; }
+.pending-count { font-size: 0.75rem; color: #ccaa44; }
+.btn-save { background: #224400; border-color: #448800; }
+.btn-save:hover { background: #336600; }
+.btn-disc { background: #442200; border-color: #885500; }
+.btn-disc:hover { background: #663300; }
+.pic-preview { display: none; margin-top: 4px; max-width: 120px; max-height: 90px; border: 1px solid #442222; background: #0a0000; object-fit: contain; border-radius: 2px; }
+.field-row.pic-row { background: #110505; padding: 8px; border: 1px dashed #442222; border-radius: 3px; }
+.btn-fetch { font-size: 0.85rem; padding: 6px 10px; margin-left: 4px; background: #222200; border: 2px outset #666600; color: #ddcc88; cursor: pointer; vertical-align: middle; line-height: 1; }
+.btn-fetch:hover { background: #333300; border-style: inset; }
+.btn-fetch:disabled { opacity: 0.4; cursor: default; border-style: inset; }
 </style>
 </head>
 <body>
-<h1>&#x1F339; ROSE DATABASE <span>— ADMIN</span></h1>
+<h1>&#x1F339; ROSE DATABASE <span>&#x2699;&#xFE0F; ADMIN</span></h1>
 
 <div class="form-group">
-  <label for="fileSelect">FILE</label>
+  <label for="fileSelect">&#x1F4C1; FILE</label>
   <select id="fileSelect">
     <option value="">— select a file —</option>
   </select>
@@ -120,15 +142,20 @@ textarea { min-height: 60px; resize: vertical; }
 <div class="fields" id="fields">
   <div id="fieldContainer"></div>
   <div class="btn-row">
-    <button class="btn" id="btnAdd">ADD ENTRY</button>
-    <button class="btn btn-sub" id="btnClear">CLEAR</button>
+    <button class="btn" id="btnAdd">&#x2795; ADD ENTRY</button>
+    <button class="btn btn-sub" id="btnClear">&#x1F5D1;&#xFE0F; CLEAR</button>
+  </div>
+  <div class="pending-bar" id="pendingBar">
+    <span class="pending-count" id="pendingCount"></span>
+    <button class="btn btn-save" id="btnSaveAll">&#x1F4BE; SAVE ALL</button>
+    <button class="btn btn-disc" id="btnDiscard">&#x1F5D1;&#xFE0F; DISCARD</button>
   </div>
   <div id="status"></div>
   <div class="entries" id="entries">
-    <h3>EXISTING ENTRIES</h3>
+    <h3>&#x1F4CB; EXISTING ENTRIES</h3>
     <div id="entriesList"></div>
   </div>
-  <p style="margin-top:20px;color:#664444;font-size:0.7rem"><a href="/" target="_blank" style="color:#885555">&#x2190; back to site</a></p>
+  <p style="margin-top:20px;color:#664444;font-size:0.7rem"><a href="/" target="_blank" style="color:#885555">&#x1F339; &#x2190; back to site</a></p>
 </div>
 
 <script>
@@ -144,30 +171,85 @@ const btnClear = document.getElementById('btnClear');
 let currentFile = '';
 let currentHeaders = [];
 let editIndex = -1;
+let pendingChanges = [];
+let suppressingQueue = false;
+
+const FILE_EMOJIS = {
+  'models-3d.json': '\ud83d\udcbe', 'avatar-prefabs.json': '\ud83d\udce6',
+  'world-prefabs.json': '\ud83d\udce6', 'shaders.json': '\ud83d\uddbc\ufe0f',
+  'tools.json': '\ud83d\udee0\ufe0f', 'luxury-trash.json': '\ud83d\udcb0',
+  'useful-things.json': '\ud83d\udc96', 'asset-websites.json': '\ud83c\udf10',
+};
 
 fetch('/api/files').then(r => r.json()).then(files => {
-  const fragment = document.createDocumentFragment();
   files.forEach(f => {
     const opt = document.createElement('option');
     opt.value = f;
-    opt.textContent = f.replace('.json', '');
-    fragment.appendChild(opt);
+    const emoji = FILE_EMOJIS[f] || '';
+    opt.textContent = (emoji ? emoji + ' ' : '') + f.replace('.json', '').replace(/-/g, ' ').toUpperCase();
+    sel.appendChild(opt);
   });
-  sel.appendChild(fragment);
 });
 
 async function loadEntries() {
   const resp = await fetch('/api/rows?file=' + encodeURIComponent(currentFile));
   const rows = await resp.json();
   entriesList.innerHTML = rows.map((r, i) => {
-    const preview = r.slice(0, 3).filter(Boolean).join(' | ');
-    return '<div class="entry" data-index="' + i + '">' +
+    const pending = pendingChanges.find(p => p.file === currentFile && p.index === i);
+    const display = pending ? pending.row : r;
+    const preview = display.slice(0, 3).filter(Boolean).join(' | ');
+    const isEditing = editIndex === i;
+    let cls = '';
+    if (isEditing) cls = ' editing';
+    else if (pending) cls = ' pending';
+    return '<div class="entry' + cls + '" draggable="true" data-index="' + i + '">' +
       '<span class="idx">' + (i + 1) + '</span>' +
-      '<span class="text">' + escapeHtml(preview || r[0] || '') + '</span>' +
-      '<button class="btn-del" data-index="' + i + '">DELETE</button>' +
-      '</div>';
+      (isEditing ? '<span class="editing-mark">&#x25B6;&#xFE0F;</span>' : '') +
+      (pending && !isEditing ? '<span class="pending-mark">&#x270F;&#xFE0F;</span>' : '') +
+      '<span class="text">' + escapeHtml(preview || '') + '</span>' +
+      '<button class="btn-del" data-index="' + i + '">&#x274C;</button></div>';
   }).join('');
   entriesDiv.classList.add('active');
+
+  // drag and drop
+  let dragSrcIdx = null;
+  entriesList.querySelectorAll('.entry').forEach(e => {
+    e.addEventListener('dragstart', (ev) => {
+      dragSrcIdx = parseInt(e.dataset.index, 10);
+      e.classList.add('dragging');
+      ev.dataTransfer.effectAllowed = 'move';
+    });
+    e.addEventListener('dragend', () => { e.classList.remove('dragging'); dragSrcIdx = null; });
+    e.addEventListener('dragover', (ev) => {
+      ev.preventDefault();
+      ev.dataTransfer.dropEffect = 'move';
+      entriesList.querySelectorAll('.entry').forEach(x => x.classList.remove('drag-over'));
+      e.classList.add('drag-over');
+    });
+    e.addEventListener('dragleave', () => { e.classList.remove('drag-over'); });
+    e.addEventListener('drop', async (ev) => {
+      ev.preventDefault();
+      entriesList.querySelectorAll('.entry').forEach(x => x.classList.remove('drag-over', 'dragging'));
+      if (dragSrcIdx === null || dragSrcIdx === parseInt(e.dataset.index, 10)) return;
+      const toIdx = parseInt(e.dataset.index, 10);
+      // fetch current rows, reorder, store as pending reorder
+      const resp = await fetch('/api/rows?file=' + encodeURIComponent(currentFile));
+      const allRows = await resp.json();
+      const [moved] = allRows.splice(dragSrcIdx, 1);
+      allRows.splice(toIdx, 0, moved);
+      // queue reorder as pending: shift all indexes
+      const file = currentFile;
+      // remove any existing pending edits for this file (they'll be stale after reorder)
+      pendingChanges = pendingChanges.filter(p => p.file !== file);
+      // store the full reordered rows
+      pendingChanges.push({ type: 'reorder', file, rows: allRows });
+      // reset edit mode
+      editIndex = -1;
+      btnAdd.innerHTML = '&#x2795; ADD ENTRY';
+      container.querySelectorAll('input').forEach(inp => inp.value = '');
+      updatePendingUI();
+    });
+  });
 }
 
 function escapeHtml(str) {
@@ -178,27 +260,110 @@ function escapeHtml(str) {
 }
 
 function fillForm(row) {
-  const inputs = container.querySelectorAll('input');
-  inputs.forEach((inp, i) => { inp.value = row[i] || ''; });
+  suppressingQueue = true;
+  container.querySelectorAll('input').forEach((inp, i) => {
+    inp.value = row[i] || '';
+    if (inp.dataset.isPic) {
+      const evt = new Event('input');
+      inp.dispatchEvent(evt);
+    }
+  });
+  suppressingQueue = false;
+}
+
+function getFormRow() {
+  return Array.from(container.querySelectorAll('input')).map(inp => inp.value.trim());
+}
+
+function queueEdit() {
+  if (suppressingQueue || editIndex < 0) return;
+  const row = getFormRow();
+  if (!row[0]) return;
+  const idx = pendingChanges.findIndex(p => p.file === currentFile && p.index === editIndex);
+  const change = { file: currentFile, index: editIndex, row, name: row[0] };
+  if (idx >= 0) pendingChanges[idx] = change;
+  else pendingChanges.push(change);
+  updatePendingUI();
+}
+
+function updatePendingUI() {
+  const n = pendingChanges.length;
+  document.getElementById('pendingBar').classList.toggle('active', n > 0);
+  document.getElementById('pendingCount').innerHTML = '&#x270F;&#xFE0F; ' + n + ' pending change' + (n > 1 ? 's' : '');
+  loadEntries();
 }
 
 sel.addEventListener('change', async () => {
   if (!sel.value) { fields.classList.remove('active'); entriesDiv.classList.remove('active'); return; }
   currentFile = sel.value;
   editIndex = -1;
-  btnAdd.textContent = 'ADD ENTRY';
-  const resp = await fetch('/api/headers?file=' + encodeURIComponent(currentFile));
-  const h = await resp.json();
+  btnAdd.innerHTML = '&#x2795; ADD ENTRY';
+  const h = await (await fetch('/api/headers?file=' + encodeURIComponent(currentFile))).json();
   currentHeaders = h;
   container.innerHTML = '';
+  const isPic = (h) => /picture|preview|image/i.test(h);
+  const isLink = (h) => /link|website|download/i.test(h);
+  const inputs = [];
   h.forEach((header, i) => {
     const div = document.createElement('div');
-    div.className = 'field-row';
+    div.className = 'field-row' + (isPic(header) ? ' pic-row' : '');
     const label = document.createElement('label');
     label.textContent = header;
     const input = document.createElement('input');
-    input.dataset.index = i;
     input.placeholder = header;
+    input.addEventListener('input', queueEdit);
+    if (isPic(header)) {
+      input.dataset.isPic = '1';
+      input.style.marginBottom = '4px';
+      const preview = document.createElement('img');
+      preview.className = 'pic-preview';
+      preview.alt = 'preview';
+      input.addEventListener('input', () => {
+        const val = input.value.trim();
+        if (val.startsWith('http')) {
+          preview.src = val;
+          preview.style.display = 'block';
+        } else {
+          preview.style.display = 'none';
+        }
+      });
+      preview.addEventListener('error', () => { preview.style.display = 'none'; });
+      div.appendChild(preview);
+    }
+    if (isLink(header)) {
+      const fetchBtn = document.createElement('button');
+      fetchBtn.className = 'btn-fetch';
+      fetchBtn.innerHTML = '&#x1F50D;';
+      fetchBtn.title = 'Fetch og:image from this URL';
+      fetchBtn.type = 'button';
+      fetchBtn.addEventListener('click', async () => {
+        const val = input.value.trim();
+        if (!val.startsWith('http')) { alert('Enter a URL first'); return; }
+        fetchBtn.disabled = true;
+        try {
+          const r = await fetch('/api/fetch-image?url=' + encodeURIComponent(val));
+          const d = await r.json();
+          if (d.image) {
+            const picInp = container.querySelector('[data-is-pic]');
+            if (picInp) {
+              picInp.value = d.image;
+              picInp.dispatchEvent(new Event('input'));
+              queueEdit();
+            }
+          } else {
+            alert('No image found at that URL');
+          }
+        } catch {
+          alert('Failed to fetch');
+        }
+        fetchBtn.disabled = false;
+      });
+      div.appendChild(fetchBtn);
+      // inline style to put button next to input
+      input.style.width = 'calc(100% - 40px)';
+      input.style.display = 'inline-block';
+      input.style.verticalAlign = 'middle';
+    }
     if (i === 0) input.autofocus = true;
     div.appendChild(label);
     div.appendChild(input);
@@ -216,28 +381,22 @@ entriesList.addEventListener('click', async (e) => {
   if (!entry) return;
   const index = parseInt(entry.dataset.index, 10);
   if (delBtn) {
-    if (!confirm('Delete entry ' + (index + 1) + '?')) return;
-    const resp = await fetch('/api/delete', {
-      method: 'POST',
+    if (!confirm('&#x274C; Delete entry ' + (index + 1) + '?')) return;
+    pendingChanges = pendingChanges.filter(p => !(p.file === currentFile && p.index === index));
+    const resp = await fetch('/api/delete', { method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ file: currentFile, index }),
-    });
-    if (resp.ok) {
-      alert('deleted');
-      loadEntries();
-    } else {
-      const r = await resp.json();
-      alert('Error: ' + (r.error || 'unknown'));
-    }
+      body: JSON.stringify({ file: currentFile, index }) });
+    if (resp.ok) { alert('&#x2705; deleted'); updatePendingUI(); }
+    else { const r = await resp.json(); alert('&#x274C; Error: ' + (r.error || 'unknown')); }
     return;
   }
-  // Click on entry → pre-fill for editing
-  const resp = await fetch('/api/rows?file=' + encodeURIComponent(currentFile));
-  const rows = await resp.json();
+  const rows = await (await fetch('/api/rows?file=' + encodeURIComponent(currentFile))).json();
   if (rows[index]) {
     editIndex = index;
-    btnAdd.textContent = 'UPDATE ENTRY';
-    fillForm(rows[index]);
+    btnAdd.innerHTML = '&#x270F;&#xFE0F; EDITING...';
+    const pending = pendingChanges.find(p => p.file === currentFile && p.index === index);
+    fillForm(pending ? pending.row : rows[index]);
+    loadEntries();
   }
 });
 
@@ -245,38 +404,64 @@ btnClear.addEventListener('click', () => {
   container.querySelectorAll('input').forEach(inp => inp.value = '');
   container.querySelector('input')?.focus();
   editIndex = -1;
-  btnAdd.textContent = 'ADD ENTRY';
+  btnAdd.innerHTML = '&#x2795; ADD ENTRY';
+  loadEntries();
 });
 
 btnAdd.addEventListener('click', async () => {
-  const inputs = container.querySelectorAll('input');
-  const row = Array.from(inputs).map(inp => inp.value.trim());
-  if (!row[0]) { alert('Name is required'); return; }
-  let resp;
-  if (editIndex >= 0) {
-    resp = await fetch('/api/update', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ file: currentFile, index: editIndex, row }),
-    });
-  } else {
-    resp = await fetch('/api/add', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ file: currentFile, row }),
-    });
-  }
+  if (editIndex >= 0) return;
+  const row = getFormRow();
+  if (!row[0]) { alert('&#x26A0;&#xFE0F; Name is required'); return; }
+  const resp = await fetch('/api/add', { method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ file: currentFile, row }) });
   const result = await resp.json();
   if (resp.ok) {
-    alert('added: ' + result.name);
-    inputs.forEach(inp => inp.value = '');
-    inputs[0]?.focus();
-    editIndex = -1;
-    btnAdd.textContent = 'ADD ENTRY';
+    alert('&#x2705; added: ' + result.name);
+    container.querySelectorAll('input').forEach(inp => inp.value = '');
     loadEntries();
   } else {
-    alert('Error: ' + (result.error || 'unknown'));
+    alert('&#x274C; Error: ' + (result.error || 'unknown'));
   }
+});
+
+document.getElementById('btnSaveAll').addEventListener('click', async () => {
+  if (pendingChanges.length === 0) return;
+  let ok = 0, fail = 0;
+  // apply reorders first, then edits
+  for (const p of pendingChanges) {
+    try {
+      if (p.type === 'reorder') {
+        const resp = await fetch('/api/reorder', { method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ file: p.file, rows: p.rows }) });
+        if (resp.ok) ok++; else fail++;
+      } else {
+        const resp = await fetch('/api/update', { method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ file: p.file, index: p.index, row: p.row }) });
+        if (resp.ok) ok++; else fail++;
+      }
+    } catch { fail++; }
+  }
+  pendingChanges = [];
+  updatePendingUI();
+  alert(fail === 0 ? '&#x2705; Saved ' + ok + ' change' + (ok > 1 ? 's' : '') : '&#x26A0;&#xFE0F; ' + ok + ' saved, ' + fail + ' failed');
+  btnAdd.innerHTML = '&#x2795; ADD ENTRY';
+  editIndex = -1;
+  container.querySelectorAll('input').forEach(inp => inp.value = '');
+  loadEntries();
+});
+
+document.getElementById('btnDiscard').addEventListener('click', () => {
+  if (pendingChanges.length === 0) return;
+  if (!confirm('&#x274C; Discard ' + pendingChanges.length + ' pending change' + (pendingChanges.length > 1 ? 's' : '') + '?')) return;
+  pendingChanges = [];
+  updatePendingUI();
+  editIndex = -1;
+  btnAdd.innerHTML = '&#x2795; ADD ENTRY';
+  container.querySelectorAll('input').forEach(inp => inp.value = '');
+  loadEntries();
 });
 
 function showStatus(msg, type) {
@@ -355,6 +540,47 @@ const server = http.createServer((req, res) => {
         const data = JSON.parse(fs.readFileSync(filePath, 'utf8'));
         if (index < 0 || index >= data.rows.length) { res.writeHead(400); res.end('{"error":"invalid index"}'); return; }
         data.rows.splice(index, 1);
+        fs.writeFileSync(filePath, JSON.stringify(data, null, 2) + '\n');
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end('{"ok":true}');
+      } catch (e) {
+        res.writeHead(500, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: e.message }));
+      }
+    });
+    return;
+  }
+
+  // API: fetch og:image from a URL
+  if (pathname === '/api/fetch-image') {
+    const targetUrl = url.searchParams.get('url');
+    if (!targetUrl) { res.writeHead(400); res.end('{"error":"missing url"}'); return; }
+    fetch(targetUrl, { signal: AbortSignal.timeout(8000), headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36' } })
+      .then(r => r.text())
+      .then(html => {
+        const m = html.match(/<meta[^>]+property="og:image"[^>]+content="([^"]+)"/)
+          || html.match(/<meta[^>]+content="([^"]+)"[^>]+property="og:image"/);
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ image: m ? m[1] : '' }));
+      })
+      .catch(() => {
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ image: '' }));
+      });
+    return;
+  }
+
+  if (pathname === '/api/reorder' && req.method === 'POST') {
+    let body = '';
+    req.on('data', chunk => body += chunk);
+    req.on('end', () => {
+      try {
+        const { file, rows } = JSON.parse(body);
+        if (!file || !rows) { res.writeHead(400); res.end('{"error":"invalid data"}'); return; }
+        const filePath = path.join(dataDir, file);
+        if (!fs.existsSync(filePath)) { res.writeHead(404); res.end('{"error":"file not found"}'); return; }
+        const data = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+        data.rows = rows;
         fs.writeFileSync(filePath, JSON.stringify(data, null, 2) + '\n');
         res.writeHead(200, { 'Content-Type': 'application/json' });
         res.end('{"ok":true}');
