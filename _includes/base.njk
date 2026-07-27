@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>&#x1F339; ROSE FISH DATABASE &#x1F339;</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>&#x1F339; ROSE &#xFF1C;&#xFF1E;&#xFF1C; DATABASE &#x1F339;</h1>
+      <p>Archive for all FISH &lt;&gt;&lt; COMMUNITY content</p>
+    </header>
+
+    <div class="submit-row">
+      <a class="submit-badge" href="https://rosefish-submit.ziver64.workers.dev/public" target="_blank">&#x1F517; SUBMIT TO DATABASE</a>
+    </div>
+
+    <nav class="tab-nav" id="tab-nav">
+      {% for tab in tabs %}
+      {% if tab.type === 'section' %}
+      <span class="tab-section">{{ tab.label | safe }}</span>
+      {% else %}
+      <button class="tab-btn" data-tab="{{ tab.id }}">{{ tab.label | safe }}</button>
+      {% endif %}
+      {% endfor %}
+    </nav>
+
+    <div id="tab-container">
+      {{ content | safe }}
+    </div>
+  </div>
+
+  <script src="js/tabs.js"></script>
+</body>
+</html>

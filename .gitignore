@@ -1,0 +1,6 @@
+node_modules/
+temp_*.csv
+_site/
+data/pending-state.json
+worker_test/
+worker/

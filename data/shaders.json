@@ -1,0 +1,29 @@
+{
+  "title": "🖼️SHADERS",
+  "headers": [
+    "Shader Name",
+    "Picture",
+    "Link",
+    "Info",
+    "Author",
+    "Button"
+  ],
+  "rows": [
+    [
+      "FISH SHADER",
+      "previews/1784951732652_FISH_SHADER.jpg",
+      "https://drive.google.com/uc?export=download&id=1AoldwDoZFTJ54Myhna_3EmdLK3uPvyu3",
+      "no mesh or textures required, just fish created out of thin air :3. you can adjust sliders and even toggle on rtx if you want to make your gpus suffer",
+      "z3y",
+      "DOWNLOAD"
+    ],
+    [
+      "Fish Daily Timer",
+      "previews/1784951924319_timer.png",
+      "https://drive.google.com/uc?export=download&id=12V08inbSlyOI1nrf50GI-aHtDhQW59hz",
+      "Shader that displays a countdown until the daily vrchat event",
+      "Ashley Gaming",
+      "DOWNLOAD"
+    ]
+  ]
+}

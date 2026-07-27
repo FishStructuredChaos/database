@@ -1,0 +1,45 @@
+{
+  "title": "🎮GAMES",
+  "headers": [
+    "Game Name",
+    "Picture",
+    "Link",
+    "Info",
+    "Author",
+    "Button"
+  ],
+  "rows": [
+    [
+      "fish_clicker",
+      "previews/1784994224950_fish_clicker.jpg",
+      "https://github.com/Crash285github/fish_clicker",
+      "Android app, Tap on the fish in the center, which will increase a global counter that everyone sees!",
+      "Crash285",
+      "OPEN"
+    ],
+    [
+      "walking",
+      "previews/1784995009007_walking.jpg",
+      "https://github.com/Crash285github/walking",
+      "Android app, Detects when you're walking and makes sounds! Also has a spinning fish you can tap.",
+      "Crash285",
+      "OPEN"
+    ],
+    [
+      "Bonk Game",
+      "https://img.itch.zone/aW1nLzIwNzY5MzQxLnBuZw==/original/fYlfr7.png",
+      "https://tekkerskillet.itch.io/bonk-game",
+      "Travel eboy/egirl packed worlds of VRChat, bonking the horny and bringing pants to the needy. Game built entirely off screenshots from VRChat, all worlds and avatars are in the credits at the end of the game.",
+      "Tekkey",
+      "OPEN"
+    ],
+    [
+      "FishGame",
+      "https://img.itch.zone/aW1nLzIyNjgzNjY0LnBuZw==/original/LKs%2FPt.png",
+      "https://ami-sweetfang.itch.io/fishgame",
+      "",
+      "Ami SweetFang",
+      "OPEN"
+    ]
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "about": [
+    "ROSE &lt;&gt;&lt; creates and archives all FISH &lt;&gt;&lt; COMMUNITY content and promotes the work of rose fish members, who get access to exclusive things like SECRET COOL PLACES IN WORLDS.",
+    "Contributions from ROSE FISH members are showcased in a publicly accessible database ensuring visibility within the entire FISH &lt;&gt;&lt; COMMUNITY."
+  ],
+  "joinIntro": "Make a contribution that requires human effort to create and could be easily used by the fish community members.",
+  "acceptableContributions": [
+    "Public VRChat avatar/world",
+    "3D model",
+    "Script, Code, Utility, Tool",
+    "Shaders",
+    "Videos/Animations",
+    "Music, Sound Effects",
+    "Drawings",
+    "Other &lt;&gt;&lt; related content"
+  ],
+  "discordInvite": "https://discord.gg/Z34mSSM",
+  "voteText": "After submitting a contribution it will be reviewed by theziver and decided if a vote is necessary, if so all the rose fish members will participate in a 2-day long voting process. To receive a rose fish invitation, the contribution must receive a YES vote from over 60% of the voting rose fish members.",
+  "voteCriteriaHeader": "Deciding if a vote is necessary @THEZIVER will consider these things:",
+  "voteCriteria": [
+    { "title": "Fun", "text": "Is it fun?" },
+    { "title": "Presentability", "text": "Is the contribution well presented and easy to understand?" },
+    { "title": "Effort", "text": "How much human effort was needed to make this? How much did AI help?" },
+    { "title": "Usability", "text": "Can it be used for something?" },
+    { "title": "Originality", "text": "How different is the contribution from previous contributions?" },
+    { "title": "Collaboration", "text": "How many people were involved in creating the contribution?" }
+  ],
+  "guidelines": [
+    { "title": "AVATAR CONTEXT", "text": "Avatar context matters, avatars designed with the intention of being sexual, offensive, or malicious are not allowed." },
+    { "title": "CLOTHING", "text": "Avatars can wear skimpy clothing, but it must be used in a non-sexual manner." },
+    { "title": "GORE", "text": "Avatars that show realistic violence or gore are not allowed." },
+    { "title": "PARODY COMEDY", "text": "Avatars that are loud, disruptive, or malicious are allowed if they're created for comedic purposes. This includes avatars with bright colors, flashing images, and performance-heavy shaders." },
+    { "title": "COPYRIGHT RESPONSIBILITY", "text": "By submitting an avatar, users accept the risk of a DMCA strike if they violate intellectual property rights." }
+  ],
+  "avatarWorldLink": "https://vrchat.com/home/world/wrld_6e2090d1-6e1a-4098-b608-452a6ad54376"
+}

@@ -1,0 +1,196 @@
+---
+layout: base.njk
+---
+{% for tab in tabs %}
+{% if tab.type !== 'section' %}
+<div id="tab-{{ tab.id }}" class="tab-content{% if loop.first %} active{% endif %}">
+{% if tab.type == 'info' %}
+  {% set info = tabsData.information %}
+
+  <div class="info-banner">
+    <img src="images/ROSE_FISH_SPIN.gif" alt="ROSE FISH SPIN">
+  </div>
+
+  <div class="info-section">
+    <h2>&#x1F339; ABOUT ROSE FISH &#x1F339;</h2>
+    {% for p in info.about %}
+    <p>{{ p | safe }}</p>
+    {% endfor %}
+  </div>
+
+  <div class="info-section">
+    <h2>&#x1F339; TO JOIN ROSE FISH &#x1F339;</h2>
+    <p>{{ info.joinIntro }}</p>
+    <p><strong>Acceptable Contributions:</strong></p>
+    <ul>
+      {% for c in info.acceptableContributions %}
+      <li>{{ c | safe }}</li>
+      {% endfor %}
+    </ul>
+    <p style="margin-top:10px">If you believe you have made a significant contribution, you can submit it on the &lt;&gt;&lt; discord server at <a href="{{ info.discordInvite }}" target="_blank">{{ info.discordInvite }}</a></p>
+  </div>
+
+  <div class="info-section">
+    <h2>&#x1F339; ROSE FISH VOTE? &#x1F339;</h2>
+    <p>{{ info.voteText }}</p>
+    <p style="margin-top:10px"><strong>{{ info.voteCriteriaHeader }}</strong></p>
+    <ul>
+      {% for c in info.voteCriteria %}
+      <li><strong>{{ c.title }}:</strong> {{ c.text }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  <div class="info-section">
+    <h2>&#x1F339; AVATAR SUBMISSION GUIDELINES &#x1F339;</h2>
+    {% for g in info.guidelines %}
+    <p style="margin-bottom:10px"><strong>{{ g.title }}:</strong> {{ g.text }}</p>
+    {% endfor %}
+    <p style="margin-top:10px"><strong>AVATARS!</strong> VRChat World: <a href="{{ info.avatarWorldLink }}" target="_blank">{{ info.avatarWorldLink }}</a></p>
+  </div>
+
+  <div class="info-section">
+    <h2>&#x1F339; ROSE FISH MEMBERS &#x1F339;</h2>
+    <div id="rosefish-members-list">
+      <div class="loader">loading members...</div>
+    </div>
+  </div>
+
+{% elif tab.type == 'data' %}
+  {% set d = tabsData[tab.id] %}
+  {% if d.rows and d.rows.length > 0 %}
+    {% set picIdx = d.headers | findCol('picture|preview|image') %}
+    {% set linkIdx = d.headers | findCol('link|website|download') %}
+    {% set priceIdx = d.headers | findCol('price') %}
+    {% set btnIdx = d.headers | findCol('button') %}
+    {% set isNoBtn = tab.id | inList(noButtonTabs) %}
+    {% set defaultLabel = tab.id | btnLabel %}
+
+    {% if d.worldLink and tab.worldLabel %}
+    <a class="world-badge" href="{{ d.worldLink }}" target="_blank">{{ tab.worldLabel }}</a>
+    {% endif %}
+
+    <div class="section-info">
+      <span class="count" data-label="items">{{ d.rows.length }} items</span>
+    </div>
+    <div class="search-bar">
+      <span class="search-icon">&#x1F50D;</span>
+      <input type="text" placeholder="SEARCH" oninput="filterCards(this, 'card-grid-{{ tab.id }}')">
+    </div>
+    <div class="data-card-grid" id="card-grid-{{ tab.id }}">
+      {% for row in d.rows %}
+      {% set name = row[0] %}
+      {% set img = row[picIdx] if picIdx >= 0 else '' %}
+      {% set link = row[linkIdx] if linkIdx >= 0 else '' %}
+      {% set rowLabel = row[btnIdx] if btnIdx >= 0 and row[btnIdx] else defaultLabel %}
+      {% if isNoBtn and link %}
+      <a href="{{ link }}" target="_blank" class="data-card-link">
+      {% endif %}
+      <div class="data-card">
+        {% if img %}
+        <div class="dc-img-wrap"><img class="table-img" src="{{ img | imgUrl }}" alt="{{ name }}" loading="lazy"></div>
+        {% endif %}
+        <div class="dc-body">
+          <div class="dc-name">{{ name }}</div>
+          {% for cell in row %}
+          {% set ci = loop.index0 %}
+          {% if ci > 0 and ci !== picIdx and ci !== linkIdx and ci !== btnIdx and cell %}
+          {% set header = d.headers[ci] %}
+          <div class="dc-field">
+            <span class="dc-label">{{ header }}:</span>
+            {% if ci === priceIdx %}
+            <span class="dc-value{{ cell | priceClass }}">{{ cell }}</span>
+            {% else %}
+            <span class="dc-value">{{ cell }}</span>
+            {% endif %}
+          </div>
+          {% endif %}
+          {% endfor %}
+          {% if not isNoBtn and link %}
+          <div class="dc-link-out"><a href="{{ link }}" target="_blank">{{ rowLabel }}</a></div>
+          {% endif %}
+        </div>
+      </div>
+      {% if isNoBtn and link %}
+      </a>
+      {% endif %}
+      {% endfor %}
+    </div>
+  {% elif d.notes %}
+    {% set m = d.notes | matchUrl %}
+    <div class="external-link-card">
+      <a href="{{ m.url }}" target="_blank">{{ d.title }}</a>
+      <p>{{ d.notes }}</p>
+    </div>
+  {% else %}
+    <div class="empty-state">No entries yet.</div>
+  {% endif %}
+
+{% elif tab.type == 'embed' %}
+  {% if tab.openLabel %}
+  <a class="world-badge" href="{{ tab.embedUrl }}" target="_blank">{{ tab.openLabel }}</a>
+  {% endif %}
+  <div class="embed-container">
+    <iframe src="{{ tab.embedUrl }}" class="embed-frame" frameborder="0" allowfullscreen></iframe>
+  </div>
+
+{% elif tab.type == 'external' %}
+  {% set d = tabsData[tab.id] %}
+  {% set m = d.notes | matchUrl %}
+  <div class="external-link-card">
+    <a href="{{ m.url }}" target="_blank">{{ d.title }}</a>
+    <p>{{ d.notes }}</p>
+  </div>
+
+{% elif tab.type == 'dynamic' %}
+  {% if tab.worldLink and tab.worldLabel %}
+  <a class="world-badge" href="{{ tab.worldLink }}" target="_blank">{{ tab.worldLabel }}</a>
+  {% endif %}
+  <div class="section-info">
+    <span class="count" id="count-{{ tab.id }}" data-label="{{ tab.id }}">loading...</span>
+  </div>
+  <div class="search-bar">
+    <span class="search-icon">&#x1F50D;</span>
+    <input type="text" placeholder="SEARCH" oninput="filterCards(this, 'card-grid-{{ tab.id }}')">
+  </div>
+  {% if tab.submitLink and tab.submitLabel %}
+  <div class="submit-row">
+    <a class="submit-badge" href="{{ tab.submitLink }}" target="_blank">{{ tab.submitLabel }}</a>
+  </div>
+  {% endif %}
+  <div class="card-grid" id="card-grid-{{ tab.id }}" data-gist-key="{{ tab.gistKey }}">
+    <div class="loader">loading {{ tab.id }}...</div>
+  </div>
+
+{% elif tab.type == 'groups' %}
+  <div class="section-info">
+    <span class="count" id="count-{{ tab.id }}" data-label="{{ tab.id }}">loading...</span>
+  </div>
+  <div class="search-bar">
+    <span class="search-icon">&#x1F50D;</span>
+    <input type="text" placeholder="SEARCH" oninput="filterCards(this, 'card-grid-{{ tab.id }}')">
+  </div>
+  <div class="group-grid" id="card-grid-{{ tab.id }}">
+    <div class="loader">loading {{ tab.id }}...</div>
+  </div>
+
+{% elif tab.type == 'members' %}
+  {% if tab.submitLink and tab.submitLabel %}
+  <div class="submit-row">
+    <a class="submit-badge" href="{{ tab.submitLink }}" target="_blank">{{ tab.submitLabel }}</a>
+  </div>
+  {% endif %}
+  <div class="section-info">
+    <span class="count" id="count-{{ tab.id }}" data-label="members">loading...</span>
+  </div>
+  <div class="search-bar">
+    <span class="search-icon">&#x1F50D;</span>
+    <input type="text" placeholder="SEARCH" oninput="filterCards(this, 'card-grid-{{ tab.id }}')">
+  </div>
+  <div class="member-grid" id="card-grid-{{ tab.id }}">
+    <div class="loader">loading members...</div>
+  </div>
+{% endif %}
+</div>
+{% endif %}
+{% endfor %}
