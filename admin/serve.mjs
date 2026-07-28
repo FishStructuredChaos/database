@@ -7,7 +7,7 @@ import { fileURLToPath } from 'url';
 const scriptDir = path.dirname(fileURLToPath(import.meta.url));
 const dir = fs.realpathSync(path.join(scriptDir, '..'));
 const dataDir = path.join(dir, 'data');
-const siteDir = path.join(dir, '_site');
+const siteDir = path.join(dir, 'docs');
 const PORT = 3456;
 const SUBMIT_ENDPOINT = process.env.SUBMIT_ENDPOINT || '';
 const GIST_URL = process.env.GIST_URL || 'https://gist.github.com/FishStructuredChaos/7b0971c63dbb689847b81cdf84299c1f#file-database-pending-files-json';
