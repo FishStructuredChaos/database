@@ -57,74 +57,19 @@ layout: base.njk
   </div>
 
 {% elif tab.type == 'data' %}
-  {% set d = tabsData[tab.id] %}
-  {% if d.rows and d.rows.length > 0 %}
-    {% set picIdx = d.headers | findCol('picture|preview|image') %}
-    {% set linkIdx = d.headers | findCol('link|website|download') %}
-    {% set priceIdx = d.headers | findCol('price') %}
-    {% set btnIdx = d.headers | findCol('button') %}
-    {% set isNoBtn = tab.id | inList(noButtonTabs) %}
-    {% set defaultLabel = tab.id | btnLabel %}
-
-    {% if d.worldLink and tab.worldLabel %}
-    <a class="world-badge" href="{{ d.worldLink }}" target="_blank">{{ tab.worldLabel }}</a>
-    {% endif %}
-
-    <div class="section-info">
-      <span class="count" data-label="items">{{ d.rows.length }} items</span>
-    </div>
-    <div class="search-bar">
-      <span class="search-icon">&#x1F50D;</span>
-      <input type="text" placeholder="SEARCH" oninput="filterCards(this, 'card-grid-{{ tab.id }}')">
-    </div>
-    <div class="data-card-grid" id="card-grid-{{ tab.id }}">
-      {% for row in d.rows %}
-      {% set name = row[0] %}
-      {% set img = row[picIdx] if picIdx >= 0 else '' %}
-      {% set link = row[linkIdx] if linkIdx >= 0 else '' %}
-      {% set rowLabel = row[btnIdx] if btnIdx >= 0 and row[btnIdx] else defaultLabel %}
-      {% if isNoBtn and link %}
-      <a href="{{ link }}" target="_blank" class="data-card-link">
-      {% endif %}
-      <div class="data-card">
-        {% if img %}
-        <div class="dc-img-wrap"><img class="table-img" src="{{ img | imgUrl }}" alt="{{ name }}" loading="lazy"></div>
-        {% endif %}
-        <div class="dc-body">
-          <div class="dc-name">{{ name }}</div>
-          {% for cell in row %}
-          {% set ci = loop.index0 %}
-          {% if ci > 0 and ci !== picIdx and ci !== linkIdx and ci !== btnIdx and cell %}
-          {% set header = d.headers[ci] %}
-          <div class="dc-field">
-            <span class="dc-label">{{ header }}:</span>
-            {% if ci === priceIdx %}
-            <span class="dc-value{{ cell | priceClass }}">{{ cell }}</span>
-            {% else %}
-            <span class="dc-value">{{ cell }}</span>
-            {% endif %}
-          </div>
-          {% endif %}
-          {% endfor %}
-          {% if not isNoBtn and link %}
-          <div class="dc-link-out"><a href="{{ link }}" target="_blank">{{ rowLabel }}</a></div>
-          {% endif %}
-        </div>
-      </div>
-      {% if isNoBtn and link %}
-      </a>
-      {% endif %}
-      {% endfor %}
-    </div>
-  {% elif d.notes %}
-    {% set m = d.notes | matchUrl %}
-    <div class="external-link-card">
-      <a href="{{ m.url }}" target="_blank">{{ d.title }}</a>
-      <p>{{ d.notes }}</p>
-    </div>
-  {% else %}
-    <div class="empty-state">No entries yet.</div>
+  {% if tab.worldLink and tab.worldLabel %}
+  <a class="world-badge" href="{{ tab.worldLink }}" target="_blank">{{ tab.worldLabel }}</a>
   {% endif %}
+  <div class="section-info">
+    <span class="count" id="count-{{ tab.id }}" data-label="items">loading...</span>
+  </div>
+  <div class="search-bar">
+    <span class="search-icon">&#x1F50D;</span>
+    <input type="text" placeholder="SEARCH" oninput="filterCards(this, 'card-grid-{{ tab.id }}')">
+  </div>
+  <div class="data-card-grid" id="card-grid-{{ tab.id }}" data-file="{{ tab.id }}">
+    <div class="loader">loading {{ tab.id }}...</div>
+  </div>
 
 {% elif tab.type == 'embed' %}
   {% if tab.openLabel %}

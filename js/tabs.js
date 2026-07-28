@@ -1,10 +1,18 @@
 (function () {
   const ALLOWED_TAGS = ['ROSE_FISH', 'FISH'];
 
+  function esc(str) {
+    if (str == null) return '';
+    var d = document.createElement('div');
+    d.textContent = str;
+    return d.innerHTML;
+  }
+
   document.addEventListener('DOMContentLoaded', function () {
     initTabs();
     loadContributions();
     loadGistTabs();
+    loadDataTabs();
     loadGroups();
     loadMembers();
   });
@@ -127,13 +135,6 @@
               tagClass = 'tag-r';
             }
 
-            function esc(str) {
-              if (str == null) return '';
-              var d = document.createElement('div');
-              d.textContent = str;
-              return d.innerHTML;
-            }
-
             var card = '<div class="card">';
             if (link) {
               card += '<a href="' + esc(link) + '" target="_blank" class="card-link-wrap">';
@@ -174,6 +175,101 @@
       });
   }
 
+  function loadDataTabs() {
+    var grids = document.querySelectorAll('.data-card-grid[data-file]');
+    if (grids.length === 0) return;
+
+    var downloadTabs = new Set(['models-3d', 'avatar-prefabs', 'shaders']);
+    var noButtonTabs = new Set(['asset-websites', 'useful-things', 'luxury-trash', 'tools']);
+
+    function findCol(headers, pattern) {
+      var re = new RegExp(pattern, 'i');
+      for (var i = 0; i < headers.length; i++) {
+        if (re.test(headers[i])) return i;
+      }
+      return -1;
+    }
+
+    function imgUrl(val) {
+      if (!val || val.indexOf('http') === 0) return val;
+      if (val.indexOf('/images/') === 0 || val.indexOf('images/') === 0 || val.indexOf('/previews/') === 0 || val.indexOf('previews/') === 0) {
+        var clean = val.replace(/^\//, '');
+        return 'https://raw.githubusercontent.com/FishStructuredChaos/database/main/' + clean;
+      }
+      return val;
+    }
+
+    grids.forEach(function (grid) {
+      var fileId = grid.dataset.file;
+      var url = 'https://raw.githubusercontent.com/FishStructuredChaos/database/main/data/' + fileId + '.json';
+
+      fetch(url)
+        .then(function (r) { return r.json(); })
+        .then(function (d) {
+          var rows = d.rows || [];
+          var headers = d.headers || [];
+          var countEl = document.getElementById('count-' + fileId);
+          if (countEl) countEl.textContent = rows.length + ' items';
+
+          if (rows.length === 0) {
+            grid.innerHTML = '<div class="empty-state">No entries yet.</div>';
+            return;
+          }
+
+          var picIdx = findCol(headers, 'picture|preview|image');
+          var linkIdx = findCol(headers, 'link|website|download');
+          var priceIdx = findCol(headers, 'price');
+          var btnIdx = findCol(headers, 'button');
+          var isNoBtn = noButtonTabs.has(fileId);
+          var defaultLabel = downloadTabs.has(fileId) ? 'DOWNLOAD' : 'OPEN';
+
+          var html = '';
+          for (var ri = 0; ri < rows.length; ri++) {
+            var row = rows[ri];
+            var name = row[0] || '';
+            var img = picIdx >= 0 ? (row[picIdx] || '') : '';
+            var link = linkIdx >= 0 ? (row[linkIdx] || '') : '';
+            var rowLabel = (btnIdx >= 0 && row[btnIdx]) ? row[btnIdx] : defaultLabel;
+
+            if (isNoBtn && link) {
+              html += '<a href="' + esc(link) + '" target="_blank" class="data-card-link">';
+            }
+            html += '<div class="data-card">';
+            if (img) {
+              html += '<div class="dc-img-wrap"><img class="table-img" src="' + esc(imgUrl(img)) + '" alt="' + esc(name) + '" loading="lazy"></div>';
+            }
+            html += '<div class="dc-body">';
+            html += '<div class="dc-name">' + esc(name) + '</div>';
+            for (var ci = 1; ci < headers.length; ci++) {
+              if (ci === picIdx || ci === linkIdx || ci === btnIdx) continue;
+              var cell = row[ci];
+              if (!cell) continue;
+              var headerText = headers[ci];
+              html += '<div class="dc-field"><span class="dc-label">' + esc(headerText) + ':</span>';
+              if (ci === priceIdx) {
+                var priceClass = String(cell).toLowerCase() === 'free' ? ' price free' : ' price';
+                html += '<span class="dc-value' + priceClass + '">' + esc(cell) + '</span>';
+              } else {
+                html += '<span class="dc-value">' + esc(cell) + '</span>';
+              }
+              html += '</div>';
+            }
+            if (!isNoBtn && link) {
+              html += '<div class="dc-link-out"><a href="' + esc(link) + '" target="_blank">' + esc(rowLabel) + '</a></div>';
+            }
+            html += '</div></div>';
+            if (isNoBtn && link) {
+              html += '</a>';
+            }
+          }
+          grid.innerHTML = html;
+        })
+        .catch(function () {
+          grid.innerHTML = '<div class="empty-state">Failed to load data.</div>';
+        });
+    });
+  }
+
   function loadGroups() {
     var grid = document.getElementById('card-grid-vrchat-groups');
     if (!grid) return;
@@ -190,13 +286,6 @@
         if (countEl) countEl.textContent = groups.length + ' groups';
 
         grid.innerHTML = groups.map(function (g) {
-          function esc(str) {
-            if (str == null) return '';
-            var d = document.createElement('div');
-            d.textContent = str;
-            return d.innerHTML;
-          }
-
           return '<div class="group-card">' +
             '<a href="' + esc(g.group_link) + '" target="_blank" class="gc-link-wrap">' +
               '<div class="gc-icon-wrap">' +
