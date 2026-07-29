@@ -245,7 +245,8 @@
               var cell = row[ci];
               if (!cell) continue;
               var headerText = headers[ci];
-              html += '<div class="dc-field"><span class="dc-label">' + esc(headerText) + ':</span>';
+              var isInfo = headerText.toLowerCase().indexOf('info about') === 0;
+              html += '<div class="dc-field">' + (isInfo ? '' : '<span class="dc-label">' + esc(headerText) + ':</span>');
               if (ci === priceIdx) {
                 var priceClass = String(cell).toLowerCase() === 'free' ? ' price free' : ' price';
                 html += '<span class="dc-value' + priceClass + '">' + esc(cell) + '</span>';
