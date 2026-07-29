@@ -6,5 +6,12 @@
     "Link",
     "Info"
   ],
-  "rows": []
+  "rows": [
+    [
+      "Ezgif",
+      "https://ezgif.com/images/ezgif-homepage.png",
+      "https://ezgif.com/",
+      "Ezgif.com is a simple, free online GIF maker and toolset for basic animated image editing.\nHere you can create, edit and convert GIF, APNG, WebP, MNG, JXL and AVIF animations."
+    ]
+  ]
 }
