@@ -1191,11 +1191,11 @@ async function renderList() {
       }
 
       var linkVal = (linkIdx >= 0) ? (row[linkIdx] || '') : '';
-      var btnLabel = 'DOWNLOAD';
+      var btnLabel = 'OPEN';
       if (linkIdx >= 0) {
-        for (var j = headers.length - 1; j > linkIdx; j--) {
-          if (row[j]) { btnLabel = row[j]; break; }
-        }
+        var btnCol = headers.findIndex(h => h.toLowerCase() === 'button');
+        if (btnCol >= 0) btnLabel = row[btnCol] || 'OPEN';
+        else btnLabel = 'OPEN';
       }
 
       var fileLabel = s.file ? s.file.replace('.json', '').replace(/-/g, ' ').toUpperCase() : 'UNKNOWN';
