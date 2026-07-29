@@ -650,7 +650,7 @@ sel.addEventListener('change', async () => {
         o.textContent = opt;
         input.appendChild(o);
       });
-    } else if (header.toLowerCase() === 'info') {
+    } else if (header.toLowerCase().startsWith('info')) {
       input = document.createElement('textarea');
       input.placeholder = header;
       input.maxLength = 280;
@@ -1695,6 +1695,17 @@ const server = http.createServer((req, res) => {
   if (pathname === '/admin' || pathname === '/add') {
     res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
     res.end(ADMIN_HTML.replace('</body>', CONVERTER_HTML + '</body>'));
+    return;
+  }
+
+  // API: return full JSON data file
+  if (pathname === '/api/json-data' && req.method === 'GET') {
+    var fileName = url.searchParams.get('file');
+    if (!fileName) { res.writeHead(400); res.end('{"error":"missing file"}'); return; }
+    var jsonPath = path.join(dataDir, fileName);
+    if (!fs.existsSync(jsonPath)) { res.writeHead(404); res.end('{"error":"file not found"}'); return; }
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(fs.readFileSync(jsonPath, 'utf8'));
     return;
   }
 

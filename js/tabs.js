@@ -202,6 +202,9 @@
     grids.forEach(function (grid) {
       var fileId = grid.dataset.file;
       var url = 'https://raw.githubusercontent.com/FishStructuredChaos/database/main/data/' + fileId + '.json';
+      if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
+        url = '/api/json-data?file=' + fileId + '.json';
+      }
 
       fetch(url)
         .then(function (r) { return r.json(); })
