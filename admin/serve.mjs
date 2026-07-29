@@ -663,8 +663,9 @@ sel.addEventListener('change', async () => {
       else input.maxLength = 280;
     }
     if (header.toLowerCase() !== 'button' && !isLink(header) && !isPic(header) && !isSound(header)) {
+      div.style.position = 'relative';
       var counter = document.createElement('div');
-      counter.style.cssText = 'font-size:0.7rem;color:#886666;text-align:right;margin-top:2px';
+      counter.style.cssText = 'position:absolute;bottom:4px;right:6px;font-size:0.65rem;color:#886666;pointer-events:none';
       counter.textContent = input.maxLength || '280';
       input.addEventListener('input', function() { counter.textContent = (this.maxLength || 280) - this.value.length; });
       div.appendChild(counter);
