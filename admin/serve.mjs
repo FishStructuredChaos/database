@@ -1583,6 +1583,7 @@ const server = http.createServer((req, res) => {
           state.updatedAt = new Date().toISOString();
           await savePendingState(state, fileName);
           writeApprovedGist(submission);
+          buildAsync();
         } else {
           const livePath = path.join(dataDir, submission.file);
           if (!fs.existsSync(livePath)) {
