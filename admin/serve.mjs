@@ -635,6 +635,7 @@ sel.addEventListener('change', async () => {
     container.innerHTML = '';
   const isPic = (h) => /picture|preview|image/i.test(h);
   const isLink = (h) => /link|website|download/i.test(h);
+  const isSound = (h) => /sound file|audio/i.test(h);
   const inputs = [];
   h.forEach((header, i) => {
     const div = document.createElement('div');
@@ -657,6 +658,16 @@ sel.addEventListener('change', async () => {
     } else {
       input = document.createElement('input');
       input.placeholder = header;
+      if (isLink(header)) input.maxLength = 100;
+      else if (i === 0 || header.toLowerCase() === 'author') input.maxLength = 30;
+      else input.maxLength = 280;
+    }
+    if (header.toLowerCase() !== 'button' && !isLink(header) && !isPic(header) && !isSound(header)) {
+      var counter = document.createElement('div');
+      counter.style.cssText = 'font-size:0.7rem;color:#886666;text-align:right;margin-top:2px';
+      counter.textContent = input.maxLength || '280';
+      input.addEventListener('input', function() { counter.textContent = (this.maxLength || 280) - this.value.length; });
+      div.appendChild(counter);
     }
     if (isLink(header)) input.dataset.isLink = '1';
     input.addEventListener('input', queueEdit);
