@@ -15,7 +15,7 @@ export default function (eleventyConfig) {
   });
 
   const downloadTabs = new Set(['models-3d', 'avatar-prefabs', 'shaders']);
-  const noButtonTabs = new Set(['asset-websites', 'useful-things', 'luxury-trash', 'tools']);
+  const noButtonTabs = new Set(['asset-websites', 'useful-things', 'luxury-trash', 'tools', 'web-apps']);
   const selectBtnTabs = new Set(['models-3d', 'avatar-prefabs', 'world-prefabs', 'shaders']);
 
   eleventyConfig.addGlobalData('tabs', [
@@ -34,6 +34,7 @@ export default function (eleventyConfig) {
     { id: 'luxury-trash', label: '\ud83d\udcb0LUXURY TRASH', type: 'data', worldLabel: 'Open "LUXURY TRASH" VRChat World' },
     { id: '_section_extra', label: 'EXTRA RESOURCES', type: 'section' },
     { id: 'useful-things', label: '\ud83d\udc96USEFUL-THINGS', type: 'data' },
+    { id: 'web-apps', label: '\ud83c\udf10WEB-APPS', type: 'data' },
     { id: 'asset-websites', label: '\ud83c\udf10ASSET-WEBSITES', type: 'data' },
     { id: 'vrchat-groups', label: '\ud83d\udc65VRCHAT-GROUPS', type: 'groups' },
     { id: 'fish-members', label: '\ud83d\udc1fFISH-MEMBERS', type: 'members', submitLabel: 'OPEN MEMBER LIST', submitLink: 'https://gist.githubusercontent.com/TheZiver/def41cbeb9b2e8eb071015f58bf8eb54/raw/48b6c7290489157d85e01f23d51915e4105c78dd/fish_community_members.txt' },
