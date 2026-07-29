@@ -4,7 +4,7 @@
     "Model Name",
     "Picture",
     "Link",
-    "Info",
+    "Info about model",
     "Author",
     "Button"
   ],
@@ -113,3 +113,4 @@
     ]
   ]
 }
+

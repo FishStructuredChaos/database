@@ -4,7 +4,7 @@
     "Useful Thing Name",
     "Picture",
     "Link",
-    "Info",
+    "Info about thing",
     "Author"
   ],
   "rows": [
@@ -171,3 +171,4 @@
     ]
   ]
 }
+

@@ -4,7 +4,7 @@
     "App Name",
     "Picture",
     "Link",
-    "Info"
+    "Info about app"
   ],
   "rows": [
     [
@@ -15,3 +15,4 @@
     ]
   ]
 }
+

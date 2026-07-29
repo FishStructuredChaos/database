@@ -4,7 +4,7 @@
     "Prefab Name",
     "Picture",
     "Link",
-    "Info",
+    "Info about world prefab",
     "Author",
     "Button"
   ],
@@ -27,3 +27,4 @@
     ]
   ]
 }
+

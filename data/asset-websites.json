@@ -4,7 +4,7 @@
                     "Site Name",
                     "Picture",
                     "Link",
-                    "Info"
+                    "Info about site"
                 ],
     "rows":  [
                  [
@@ -123,3 +123,4 @@
                  ]
              ]
 }
+

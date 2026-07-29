@@ -4,7 +4,7 @@
     "Game Name",
     "Picture",
     "Link",
-    "Info",
+    "Info about game",
     "Author",
     "Button"
   ],
@@ -43,3 +43,4 @@
     ]
   ]
 }
+

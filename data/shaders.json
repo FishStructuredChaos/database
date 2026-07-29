@@ -4,7 +4,7 @@
     "Shader Name",
     "Picture",
     "Link",
-    "Info",
+    "Info about shader",
     "Author",
     "Button"
   ],
@@ -27,3 +27,4 @@
     ]
   ]
 }
+
