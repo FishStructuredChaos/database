@@ -180,7 +180,7 @@
     if (grids.length === 0) return;
 
     var downloadTabs = new Set(['models-3d', 'avatar-prefabs', 'shaders']);
-    var noButtonTabs = new Set(['asset-websites', 'useful-things', 'luxury-trash', 'tools']);
+    var noButtonTabs = new Set(['asset-websites', 'useful-things', 'luxury-trash', 'tools', 'web-apps']);
 
     function findCol(headers, pattern) {
       var re = new RegExp(pattern, 'i');
