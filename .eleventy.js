@@ -20,9 +20,12 @@ export default function (eleventyConfig) {
 
   eleventyConfig.addGlobalData('tabs', [
     { id: 'information', label: '\u2753INFORMATION', type: 'info' },
-    { id: '_section_community', label: 'COMMUNITY CREATIONS', type: 'section' },
-    { id: 'public-avatars', label: '\ud83c\udf39PUBLIC-AVATARS', type: 'dynamic', gistKey: 'community_avatars', worldLink: 'https://vrchat.com/home/world/wrld_6e2090d1-6e1a-4098-b608-452a6ad54376', worldLabel: 'Open "AVATARS!" VRChat World' },
+    { id: '_section_vrchat', label: 'VRCHAT CONTENT', type: 'section' },
     { id: 'worlds', label: '\ud83c\udf0eWORLDS', type: 'dynamic', gistKey: 'community_worlds' },
+    { id: 'public-avatars', label: '\ud83c\udf39PUBLIC-AVATARS', type: 'dynamic', gistKey: 'community_avatars', worldLink: 'https://vrchat.com/home/world/wrld_6e2090d1-6e1a-4098-b608-452a6ad54376', worldLabel: 'Open "AVATARS!" VRChat World' },
+    { id: 'vrchat-groups', label: '\ud83d\udc65VRCHAT-GROUPS', type: 'groups' },
+    { id: 'fish-members', label: '\ud83d\udc1fFISH-MEMBERS', type: 'members', submitLabel: 'OPEN MEMBER LIST', submitLink: 'https://gist.githubusercontent.com/TheZiver/def41cbeb9b2e8eb071015f58bf8eb54/raw/48b6c7290489157d85e01f23d51915e4105c78dd/fish_community_members.txt' },
+    { id: '_section_community', label: 'COMMUNITY ASSETS', type: 'section' },
     { id: 'gallery', label: '\ud83c\udfb4GALLERY', type: 'embed', embedUrl: 'https://fishstructuredchaos.github.io/gallery/', openLabel: 'Open Gallery In New Window' },
     { id: 'models-3d', label: '\ud83d\udcbe3D-MODELS', type: 'data' },
     { id: 'sounds', label: '\ud83d\udd0aSOUNDS', type: 'embed', embedUrl: 'https://fishstructuredchaos.github.io/sounds/', openLabel: 'Open Soundboard In New Window' },
@@ -36,8 +39,6 @@ export default function (eleventyConfig) {
     { id: 'useful-things', label: '\ud83d\udc96USEFUL-THINGS', type: 'data' },
     { id: 'web-apps', label: '\ud83c\udf10WEB-APPS', type: 'data' },
     { id: 'asset-websites', label: '\ud83c\udf10ASSET-WEBSITES', type: 'data' },
-    { id: 'vrchat-groups', label: '\ud83d\udc65VRCHAT-GROUPS', type: 'groups' },
-    { id: 'fish-members', label: '\ud83d\udc1fFISH-MEMBERS', type: 'members', submitLabel: 'OPEN MEMBER LIST', submitLink: 'https://gist.githubusercontent.com/TheZiver/def41cbeb9b2e8eb071015f58bf8eb54/raw/48b6c7290489157d85e01f23d51915e4105c78dd/fish_community_members.txt' },
   ]);
 
   eleventyConfig.addGlobalData('tabsData', () => {

@@ -24,7 +24,11 @@
       
       
       
-      <span class="tab-section">COMMUNITY CREATIONS</span>
+      <span class="tab-section">VRCHAT CONTENT</span>
+      
+      
+      
+      <button class="tab-btn" data-tab="worlds">🌎WORLDS</button>
       
       
       
@@ -32,7 +36,15 @@
       
       
       
-      <button class="tab-btn" data-tab="worlds">🌎WORLDS</button>
+      <button class="tab-btn" data-tab="vrchat-groups">👥VRCHAT-GROUPS</button>
+      
+      
+      
+      <button class="tab-btn" data-tab="fish-members">🐟FISH-MEMBERS</button>
+      
+      
+      
+      <span class="tab-section">COMMUNITY ASSETS</span>
       
       
       
@@ -85,14 +97,6 @@
       
       
       <button class="tab-btn" data-tab="asset-websites">🌐ASSET-WEBSITES</button>
-      
-      
-      
-      <button class="tab-btn" data-tab="vrchat-groups">👥VRCHAT-GROUPS</button>
-      
-      
-      
-      <button class="tab-btn" data-tab="fish-members">🐟FISH-MEMBERS</button>
       
       
     </nav>
@@ -194,6 +198,26 @@
 
 
 
+<div id="tab-worlds" class="tab-content">
+
+  
+  <div class="section-info">
+    <span class="count" id="count-worlds" data-label="worlds">loading...</span>
+  </div>
+  <div class="search-bar">
+    <span class="search-icon">&#x1F50D;</span>
+    <input type="text" placeholder="SEARCH" oninput="filterCards(this, 'card-grid-worlds')">
+  </div>
+  
+  <div class="card-grid" id="card-grid-worlds" data-gist-key="community_worlds">
+    <div class="loader">loading worlds...</div>
+  </div>
+
+
+</div>
+
+
+
 <div id="tab-public-avatars" class="tab-content">
 
   
@@ -216,23 +240,45 @@
 
 
 
-<div id="tab-worlds" class="tab-content">
+<div id="tab-vrchat-groups" class="tab-content">
 
-  
   <div class="section-info">
-    <span class="count" id="count-worlds" data-label="worlds">loading...</span>
+    <span class="count" id="count-vrchat-groups" data-label="vrchat-groups">loading...</span>
   </div>
   <div class="search-bar">
     <span class="search-icon">&#x1F50D;</span>
-    <input type="text" placeholder="SEARCH" oninput="filterCards(this, 'card-grid-worlds')">
+    <input type="text" placeholder="SEARCH" oninput="filterCards(this, 'card-grid-vrchat-groups')">
   </div>
-  
-  <div class="card-grid" id="card-grid-worlds" data-gist-key="community_worlds">
-    <div class="loader">loading worlds...</div>
+  <div class="group-grid" id="card-grid-vrchat-groups">
+    <div class="loader">loading vrchat-groups...</div>
   </div>
 
 
 </div>
+
+
+
+<div id="tab-fish-members" class="tab-content">
+
+  
+  <div class="submit-row">
+    <a class="submit-badge" href="https://gist.githubusercontent.com/TheZiver/def41cbeb9b2e8eb071015f58bf8eb54/raw/48b6c7290489157d85e01f23d51915e4105c78dd/fish_community_members.txt" target="_blank">OPEN MEMBER LIST</a>
+  </div>
+  
+  <div class="section-info">
+    <span class="count" id="count-fish-members" data-label="members">loading...</span>
+  </div>
+  <div class="search-bar">
+    <span class="search-icon">&#x1F50D;</span>
+    <input type="text" placeholder="SEARCH" oninput="filterCards(this, 'card-grid-fish-members')">
+  </div>
+  <div class="member-grid" id="card-grid-fish-members">
+    <div class="loader">loading members...</div>
+  </div>
+
+</div>
+
+
 
 
 
@@ -451,46 +497,6 @@
     <div class="loader">loading asset-websites...</div>
   </div>
 
-
-</div>
-
-
-
-<div id="tab-vrchat-groups" class="tab-content">
-
-  <div class="section-info">
-    <span class="count" id="count-vrchat-groups" data-label="vrchat-groups">loading...</span>
-  </div>
-  <div class="search-bar">
-    <span class="search-icon">&#x1F50D;</span>
-    <input type="text" placeholder="SEARCH" oninput="filterCards(this, 'card-grid-vrchat-groups')">
-  </div>
-  <div class="group-grid" id="card-grid-vrchat-groups">
-    <div class="loader">loading vrchat-groups...</div>
-  </div>
-
-
-</div>
-
-
-
-<div id="tab-fish-members" class="tab-content">
-
-  
-  <div class="submit-row">
-    <a class="submit-badge" href="https://gist.githubusercontent.com/TheZiver/def41cbeb9b2e8eb071015f58bf8eb54/raw/48b6c7290489157d85e01f23d51915e4105c78dd/fish_community_members.txt" target="_blank">OPEN MEMBER LIST</a>
-  </div>
-  
-  <div class="section-info">
-    <span class="count" id="count-fish-members" data-label="members">loading...</span>
-  </div>
-  <div class="search-bar">
-    <span class="search-icon">&#x1F50D;</span>
-    <input type="text" placeholder="SEARCH" oninput="filterCards(this, 'card-grid-fish-members')">
-  </div>
-  <div class="member-grid" id="card-grid-fish-members">
-    <div class="loader">loading members...</div>
-  </div>
 
 </div>
 

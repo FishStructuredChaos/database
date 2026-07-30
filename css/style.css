@@ -84,8 +84,8 @@ header p {
   margin: 4px 0 2px;
   letter-spacing: 1px;
   text-transform: uppercase;
-  text-align: center;
-  border-bottom: 1px solid #552222;
+  text-align: left;
+  border-bottom: 1px solid #331111;
 }
 
 /* TAB CONTENT */

@@ -666,7 +666,7 @@ sel.addEventListener('change', async () => {
       div.style.position = 'relative';
       input.style.paddingBottom = '20px';
       var counter = document.createElement('div');
-      counter.style.cssText = 'position:absolute;bottom:4px;right:18px;font-size:0.65rem;color:#886666;pointer-events:none;line-height:1';
+      counter.style.cssText = 'position:absolute;bottom:14px;right:10px;font-size:0.65rem;color:#886666;pointer-events:none;line-height:1';
       counter.textContent = input.maxLength || '280';
       input.addEventListener('input', function() { counter.textContent = (this.maxLength || 280) - this.value.length; });
       div.appendChild(counter);
@@ -1736,4 +1736,6 @@ build();
 server.listen(PORT, () => {
   console.log(`\n  ROSE DATABASE — http://localhost:${PORT}\n  ADMIN PAGE — http://localhost:${PORT}/admin\n`);
 });
+
+
 
