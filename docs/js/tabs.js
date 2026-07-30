@@ -235,7 +235,7 @@
             var rowLabel = (btnIdx >= 0 && row[btnIdx]) ? row[btnIdx] : defaultLabel;
 
             if (isNoBtn && link) {
-              html += '<a href="' + esc(link) + '" target="_blank" class="data-card-link">';
+              html += '<a href="' + esc(link.indexOf('/r2/') === 0 ? 'https://rosefish-submit.ziver64.workers.dev' + link : link) + '" target="_blank" class="data-card-link">';
             }
             html += '<div class="data-card">';
             if (img) {
@@ -259,7 +259,7 @@
               html += '</div>';
             }
             if (!isNoBtn && link) {
-              html += '<div class="dc-link-out"><a href="' + esc(link) + '" target="_blank">' + esc(rowLabel) + '</a></div>';
+              html += '<div class="dc-link-out"><a href="' + esc(link.indexOf('/r2/') === 0 ? 'https://rosefish-submit.ziver64.workers.dev' + link : link) + '" target="_blank">' + esc(rowLabel) + '</a></div>';
             }
             html += '</div></div>';
             if (isNoBtn && link) {

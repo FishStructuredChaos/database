@@ -1221,7 +1221,7 @@ async function renderList() {
         + '<div class="dc-meta">' + (FILE_EMOJIS[s.file] || '') + ' File: <span>' + escapeHtml(s.file || '-') + '</span> &mdash; by <span>' + escapeHtml(s.submittedBy || '-') + (s.createdAt ? '</span> &mdash; <span>' + new Date(s.createdAt).toLocaleString() : '') + '</span></div>'
         + (s.note ? '<div class="dc-meta">Note: <span>' + escapeHtml(s.note) + '</span></div>' : '')
         + fieldsHtml
-        + (linkVal ? '<div class="dc-link-out"><a href="' + escapeHtml(linkVal) + '" target="_blank">' + escapeHtml(btnLabel) + '</a></div>' : '')
+        + (linkVal ? '<div class="dc-link-out"><a href="' + escapeHtml(linkVal.indexOf('/r2/') === 0 ? 'https://rosefish-submit.ziver64.workers.dev' + linkVal : linkVal) + '" target="_blank">' + escapeHtml(btnLabel) + '</a></div>' : '')
         + '<div class="dc-actions">' + actionsHtml + '</div>'
         + '</div></div>';
     }
