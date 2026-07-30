@@ -78,6 +78,9 @@ export default function (eleventyConfig) {
       const clean = val.replace(/^\//, '');
       return `https://raw.githubusercontent.com/FishStructuredChaos/database/main/${clean}`;
     }
+    if (val.startsWith('/r2/')) {
+      return `https://rosefish-submit.ziver64.workers.dev${val}`;
+    }
     return val;
   });
 
