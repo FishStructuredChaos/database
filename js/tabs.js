@@ -362,6 +362,7 @@
   // ============================================================
 
   var MODEL_LIB = 'https://cdn.jsdelivr.net/npm/three@0.147.0/';
+  var FFLATE_LIB = 'https://cdn.jsdelivr.net/npm/fflate@0.8.1/umd/index.js';
   var modelLibsLoaded = false;
   var activeViewer = null;
 
@@ -385,6 +386,7 @@
       MODEL_LIB + 'build/three.min.js',
       MODEL_LIB + 'examples/js/controls/OrbitControls.js',
       MODEL_LIB + 'examples/js/loaders/OBJLoader.js',
+      FFLATE_LIB,
       MODEL_LIB + 'examples/js/loaders/FBXLoader.js',
     ];
     var i = 0;
