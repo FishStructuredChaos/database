@@ -453,49 +453,60 @@
 
     function renderModel(obj) {
       if (!canvas.isConnected) return;
-      var w = canvas.clientWidth || 140;
-      var h = canvas.clientHeight || 100;
-      var renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
-      renderer.setSize(w, h, false);
-      var scene = new THREE.Scene();
-      var camera = new THREE.PerspectiveCamera(40, w / h, 0.1, 100);
-      camera.position.set(2.2, 1.6, 2.8);
-      scene.add(new THREE.AmbientLight(0xffffff, 0.7));
-      var dir = new THREE.DirectionalLight(0xffffff, 1.1);
-      dir.position.set(3, 5, 4);
-      scene.add(dir);
-      scene.add(new THREE.HemisphereLight(0x886666, 0x220000, 0.5));
+      try {
+        var w = canvas.clientWidth || 140;
+        var h = canvas.clientHeight || 100;
+        var renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
+        renderer.setSize(w, h, false);
+        var scene = new THREE.Scene();
+        var camera = new THREE.PerspectiveCamera(40, w / h, 0.1, 100);
+        camera.position.set(2.2, 1.6, 2.8);
+        scene.add(new THREE.AmbientLight(0xffffff, 0.7));
+        var dir = new THREE.DirectionalLight(0xffffff, 1.1);
+        dir.position.set(3, 5, 4);
+        scene.add(dir);
+        scene.add(new THREE.HemisphereLight(0x886666, 0x220000, 0.5));
 
-      var model = obj.clone();
-      var box = new THREE.Box3().setFromObject(model);
-      var size = box.getSize(new THREE.Vector3());
-      var maxDim = Math.max(size.x, size.y, size.z) || 1;
-      var scale = 2 / maxDim;
-      model.scale.setScalar(scale);
-      model.position.x = -(box.min.x + size.x / 2) * scale;
-      model.position.y = -box.min.y * scale;
-      model.position.z = -(box.min.z + size.z / 2) * scale;
-      scene.add(model);
+        var model = obj.clone();
+        var box = new THREE.Box3().setFromObject(model);
+        var size = box.getSize(new THREE.Vector3());
+        var maxDim = Math.max(size.x, size.y, size.z) || 1;
+        var scale = 2 / maxDim;
+        model.scale.setScalar(scale);
+        model.position.x = -(box.min.x + size.x / 2) * scale;
+        model.position.y = -box.min.y * scale;
+        model.position.z = -(box.min.z + size.z / 2) * scale;
+        scene.add(model);
 
-      if (img) img.style.display = 'none';
-      canvas.style.display = 'block';
-      if (statusEl) statusEl.style.display = 'none';
-
-      var animId = null;
-      function tick() {
-        model.rotation.y += 0.012;
+        // Render once synchronously while the preview is still visible — the
+        // image is only swapped out if this first render actually succeeds.
         renderer.render(scene, camera);
-        animId = requestAnimationFrame(tick);
-      }
-      tick();
+        if (img) img.style.display = 'none';
+        canvas.style.display = 'block';
+        if (statusEl) statusEl.style.display = 'none';
 
-      cardRenderers[url] = {
-        stop: function () {
-          if (animId) cancelAnimationFrame(animId);
-          renderer.dispose();
-        },
-      };
+        var animId = null;
+        function tick() {
+          model.rotation.y += 0.012;
+          renderer.render(scene, camera);
+          animId = requestAnimationFrame(tick);
+        }
+        tick();
+
+        cardRenderers[url] = {
+          stop: function () {
+            if (animId) cancelAnimationFrame(animId);
+            renderer.dispose();
+          },
+        };
+      } catch (e) {
+        // backup: keep the preview image visible
+        if (canvas) canvas.style.display = 'none';
+        if (img) img.style.display = '';
+        if (statusEl) statusEl.style.display = 'none';
+        console.error('card model render failed:', e);
+      }
     }
 
     loadModelLibs(function () {
