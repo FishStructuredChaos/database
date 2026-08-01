@@ -20,6 +20,7 @@ export default function (eleventyConfig) {
 
   eleventyConfig.addGlobalData('tabs', [
     { id: 'information', label: '\u2753INFORMATION', type: 'info' },
+    { id: 'websites', label: '\ud83c\udf10WEBSITES', type: 'data' },
     { id: '_section_vrchat', label: 'VRCHAT CONTENT', type: 'section' },
     { id: 'worlds', label: '\ud83c\udf0eWORLDS', type: 'dynamic', gistKey: 'community_worlds' },
     { id: 'public-avatars', label: '\ud83c\udf39PUBLIC-AVATARS', type: 'dynamic', gistKey: 'community_avatars', worldLink: 'https://vrchat.com/home/world/wrld_6e2090d1-6e1a-4098-b608-452a6ad54376', worldLabel: 'Open "AVATARS!" VRChat World' },

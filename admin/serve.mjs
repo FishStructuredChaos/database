@@ -213,7 +213,7 @@ const ADMIN_HTML = `<!DOCTYPE html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ROSE DATABASE â€” ADMIN</title>
+<title>ROSE DATABASE — ADMIN</title>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;700&family=VT323&display=swap" rel="stylesheet">
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -335,7 +335,7 @@ body.admin-page { max-width: 960px; }
 <div class="form-group">
   <label for="fileSelect">&#x1F4C1; FILE <span id="fileLoadStatus" style="color:#886666;font-size:0.7rem"></span></label>
   <select id="fileSelect">
-    <option value="">â€” select a file â€”</option>
+    <option value="">— select a file —</option>
   </select>
   <div id="fileError" style="display:none;margin-top:6px;font-size:0.75rem;color:#cc6666;background:#220000;padding:6px;border:1px solid #660000"></div>
 </div>
@@ -922,7 +922,7 @@ const REVIEW_HTML = `<!DOCTYPE html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ROSE DATABASE â€” REVIEW</title>
+<title>ROSE DATABASE — REVIEW</title>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;700&family=VT323&display=swap" rel="stylesheet">
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -1722,7 +1722,7 @@ const server = http.createServer((req, res) => {
     return;
   }
 
-  // Static files â€” serve from _site/ or root
+  // Static files — serve from _site/ or root
   const relPath = pathname === '/' ? 'index.html' : pathname.slice(1);
   let filePath = path.join(siteDir, relPath);
   if (!fs.existsSync(filePath) && (relPath.startsWith('images/') || relPath.startsWith('previews/'))) {
@@ -1734,7 +1734,7 @@ const server = http.createServer((req, res) => {
 console.log('Building site...');
 build();
 server.listen(PORT, () => {
-  console.log(`\n  ROSE DATABASE â€” http://localhost:${PORT}\n  ADMIN PAGE â€” http://localhost:${PORT}/admin\n`);
+  console.log(`\n  ROSE DATABASE — http://localhost:${PORT}\n  ADMIN PAGE — http://localhost:${PORT}/admin\n`);
 });
 
 

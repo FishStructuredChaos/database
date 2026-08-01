@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;700&family=VT323&display=swap');
 
 * { box-sizing: border-box; }
 
@@ -6,7 +6,7 @@ body {
   margin: 0;
   padding: 0;
   overflow-y: scroll;
-  font-family: "Courier Prime", "Courier New", Courier, monospace;
+  font-family: "IBM Plex Mono", "Courier New", Courier, monospace;
   background: #1a0000;
   color: #e0c0c0;
   font-size: 14px;
@@ -30,9 +30,11 @@ header {
 }
 
 header h1 {
-  font-size: 1.5rem;
+  font-family: "VT323", "Courier New", monospace;
+  font-size: 2.3rem;
+  font-weight: normal;
   margin: 0 0 2px;
-  letter-spacing: 1px;
+  letter-spacing: 0;
   color: #ff8080;
 }
 
@@ -55,7 +57,7 @@ header p {
 }
 
 .tab-btn {
-  font-family: "Courier Prime", "Courier New", Courier, monospace;
+  font-family: "IBM Plex Mono", "Courier New", Courier, monospace;
   font-size: 0.75rem;
   background: #330000;
   border: 1px solid #552222;
@@ -78,11 +80,12 @@ header p {
 
 .tab-section {
   width: 100%;
-  font-size: 0.78rem;
+  font-family: "VT323", "Courier New", monospace;
+  font-size: 1.1rem;
   color: #cc8888;
   padding: 3px 0 1px;
   margin: 4px 0 2px;
-  letter-spacing: 1px;
+  letter-spacing: 0;
   text-transform: uppercase;
   text-align: left;
   border-bottom: 1px solid #331111;
@@ -136,7 +139,7 @@ header p {
 }
 
 .search-bar input {
-  font-family: "Courier Prime", "Courier New", Courier, monospace;
+  font-family: "IBM Plex Mono", "Courier New", Courier, monospace;
   font-size: 0.85rem;
   border: none;
   background: transparent;
@@ -208,7 +211,9 @@ header p {
 }
 
 .info-section h2 {
-  font-size: 1rem;
+  font-family: "VT323", "Courier New", monospace;
+  font-size: 1.5rem;
+  font-weight: normal;
   color: #ff8080;
   margin: 0 0 10px;
   padding-bottom: 4px;
