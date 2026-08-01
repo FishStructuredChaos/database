@@ -465,37 +465,45 @@
     onResize();
     window.addEventListener('resize', onResize);
 
-    var loader = /\.fbx(\?|#|$)/i.test(url) ? new THREE.FBXLoader() : new THREE.OBJLoader();
-    loader.load(url, function (obj) {
-      if (closed) return;
-      setStatus('LOADED');
-      var box = new THREE.Box3().setFromObject(obj);
-      var size = box.getSize(new THREE.Vector3());
-      var maxDim = Math.max(size.x, size.y, size.z) || 1;
-      var scale = 2.5 / maxDim;
-      obj.scale.setScalar(scale);
-      obj.position.x = -(box.min.x + size.x / 2) * scale;
-      obj.position.y = -box.min.y * scale;
-      obj.position.z = -(box.min.z + size.z / 2) * scale;
-      obj.traverse(function (child) {
-        if (!child.isMesh || !child.material) return;
-        var mats = Array.isArray(child.material) ? child.material : [child.material];
-        mats.forEach(function (m) {
-          if (!m.map) m.color = new THREE.Color(0xcc9999);
-          m.side = THREE.DoubleSide;
-          if (m.roughness === undefined) m.roughness = 0.7;
+    var isFbx = /\.fbx(\?|#|$)/i.test(url);
+    // Fetch manually instead of using the loader's internal XHR: this surfaces
+    // the REAL error (HTTP status, CORS failures, parse errors) in the status
+    // bar instead of a generic message.
+    fetch(url)
+      .then(function (r) {
+        if (!r.ok) throw new Error('HTTP ' + r.status + (r.status === 429 ? ' — too many downloads, wait a minute and retry' : ''));
+        return isFbx ? r.arrayBuffer() : r.text();
+      })
+      .then(function (data) {
+        if (closed) return;
+        var obj = isFbx ? new THREE.FBXLoader().parse(data, '') : new THREE.OBJLoader().parse(data, '');
+        setStatus('LOADED');
+        var box = new THREE.Box3().setFromObject(obj);
+        var size = box.getSize(new THREE.Vector3());
+        var maxDim = Math.max(size.x, size.y, size.z) || 1;
+        var scale = 2.5 / maxDim;
+        obj.scale.setScalar(scale);
+        obj.position.x = -(box.min.x + size.x / 2) * scale;
+        obj.position.y = -box.min.y * scale;
+        obj.position.z = -(box.min.z + size.z / 2) * scale;
+        obj.traverse(function (child) {
+          if (!child.isMesh || !child.material) return;
+          var mats = Array.isArray(child.material) ? child.material : [child.material];
+          mats.forEach(function (m) {
+            if (!m.map) m.color = new THREE.Color(0xcc9999);
+            m.side = THREE.DoubleSide;
+            if (m.roughness === undefined) m.roughness = 0.7;
+          });
         });
+        scene.add(obj);
+        statusEl.style.display = 'none';
+        animate();
+      })
+      .catch(function (e) {
+        if (closed) return;
+        var msg = (e && e.message) ? e.message : 'unknown error';
+        setStatus('FAILED TO LOAD MODEL — ' + msg, true);
       });
-      scene.add(obj);
-      statusEl.style.display = 'none';
-      animate();
-    }, undefined, function (err) {
-      if (closed) return;
-      var detail = '';
-      var st = err && err.target && err.target.status;
-      if (st) detail = ' (HTTP ' + st + (st === 429 ? ' — too many downloads, wait a minute and retry' : '') + ')';
-      setStatus('FAILED TO LOAD MODEL — corrupt file, ASCII FBX, or the link is blocked.' + detail, true);
-    });
 
     function animate() {
       if (closed) return;
