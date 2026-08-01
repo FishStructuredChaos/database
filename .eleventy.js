@@ -15,7 +15,7 @@ export default function (eleventyConfig) {
   });
 
   const downloadTabs = new Set(['models-3d', 'avatar-prefabs', 'shaders']);
-  const noButtonTabs = new Set(['asset-websites', 'useful-things', 'luxury-trash', 'tools', 'web-apps']);
+  const noButtonTabs = new Set(['asset-websites', 'useful-things', 'luxury-trash', 'tools', 'web-apps', 'websites']);
   const selectBtnTabs = new Set(['models-3d', 'avatar-prefabs', 'world-prefabs', 'shaders']);
 
   eleventyConfig.addGlobalData('tabs', [
