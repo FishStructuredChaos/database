@@ -362,7 +362,8 @@
   // ============================================================
 
   var MODEL_LIB = 'https://cdn.jsdelivr.net/npm/three@0.147.0/';
-  var FFLATE_LIB = 'https://cdn.jsdelivr.net/npm/fflate@0.8.1/umd/index.js';
+  // 0.8.2: 0.8.1's UMD referenced `exports` directly and crashed in browsers
+  var FFLATE_LIB = 'https://cdn.jsdelivr.net/npm/fflate@0.8.2/umd/index.js';
   var modelLibsLoaded = false;
   var activeViewer = null;
 
