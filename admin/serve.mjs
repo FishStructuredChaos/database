@@ -411,7 +411,7 @@ const FILE_EMOJIS = {
   'models-3d.json': '\u{1F4BE}', 'avatar-prefabs.json': '\u{1F4E6}',
   'world-prefabs.json': '\u{1F4E6}', 'shaders.json': '\u{1F5BC}',
   'tools.json': '\u{1F6E0}', 'luxury-trash.json': '\u{1F4B0}',
-  'useful-things.json': '\u{1F497}', 'web-apps.json': '\u{1F310}', 'asset-websites.json': '\u{1F310}',
+  'useful-things.json': '\u{1F497}', 'web-apps.json': '\u{1F310}', 'asset-websites.json': '\u{1F310}', 'websites.json': '\u{1F310}',
   'games.json': '\u{1F3AE}', 'sounds.json': '\u{1F50A}', 'gallery.json': '\u{1F5BC}',
 };
 
@@ -1092,7 +1092,7 @@ var FILE_EMOJIS = {
   'models-3d.json': '\u{1F4BE}', 'avatar-prefabs.json': '\u{1F4E6}',
   'world-prefabs.json': '\u{1F4E6}', 'shaders.json': '\u{1F5BC}',
   'tools.json': '\u{1F6E0}', 'luxury-trash.json': '\u{1F4B0}',
-  'useful-things.json': '\u{1F497}', 'web-apps.json': '\u{1F310}', 'asset-websites.json': '\u{1F310}',
+  'useful-things.json': '\u{1F497}', 'web-apps.json': '\u{1F310}', 'asset-websites.json': '\u{1F310}', 'websites.json': '\u{1F310}',
   'games.json': '\u{1F3AE}', 'sounds.json': '\u{1F50A}', 'gallery.json': '\u{1F5BC}',
 };
 function imgError(img) {
