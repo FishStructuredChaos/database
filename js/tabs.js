@@ -225,6 +225,7 @@
           var btnIdx = findCol(headers, 'button');
           var isNoBtn = noButtonTabs.has(fileId);
           var defaultLabel = downloadTabs.has(fileId) ? 'DOWNLOAD' : 'OPEN';
+          var isModelsTab = fileId === 'models-3d';
 
           var html = '';
           for (var ri = 0; ri < rows.length; ri++) {
@@ -233,9 +234,10 @@
             var img = picIdx >= 0 ? (row[picIdx] || '') : '';
             var link = linkIdx >= 0 ? (row[linkIdx] || '') : '';
             var rowLabel = (btnIdx >= 0 && row[btnIdx]) ? row[btnIdx] : defaultLabel;
+            var isModel = isModelsTab && /\.(obj|fbx)(\?|#|$)/i.test(link);
 
             if (isNoBtn && link) {
-              html += '<a href="' + esc(link.indexOf('/r2/') === 0 ? 'https://rosefish-submit.ziver64.workers.dev' + link : link) + '" target="_blank" class="data-card-link">';
+              html += '<a href="' + esc(link.indexOf('/r2/') === 0 ? 'https://tokens.theziver.com' + link : link) + '" target="_blank" class="data-card-link">';
             }
             html += '<div class="data-card">';
             if (img) {
@@ -259,7 +261,11 @@
               html += '</div>';
             }
             if (!isNoBtn && link) {
-              html += '<div class="dc-link-out"><a href="' + esc(link.indexOf('/r2/') === 0 ? 'https://rosefish-submit.ziver64.workers.dev' + link : link) + '" target="_blank">' + esc(rowLabel) + '</a></div>';
+              html += '<div class="dc-link-out"><a href="' + esc(link.indexOf('/r2/') === 0 ? 'https://tokens.theziver.com' + link : link) + '" target="_blank">' + esc(rowLabel) + '</a></div>';
+            }
+            if (isModel) {
+              var modelUrl = link.indexOf('/r2/') === 0 ? 'https://tokens.theziver.com' + link : link;
+              html += '<div class="dc-link-out"><button type="button" class="dc-btn3d" data-model-url="' + esc(encodeURIComponent(modelUrl)) + '" data-model-name="' + esc(encodeURIComponent(name)) + '">&#x1F3AF; 3D VIEW</button></div>';
             }
             html += '</div></div>';
             if (isNoBtn && link) {
@@ -350,4 +356,152 @@
       }
     }
   };
+
+  // ============================================================
+  // 3D MODEL VIEWER (OBJ / FBX) — rotates models in an overlay
+  // ============================================================
+
+  var MODEL_LIB = 'https://cdn.jsdelivr.net/npm/three@0.147.0/';
+  var modelLibsLoaded = false;
+  var activeViewer = null;
+
+  document.addEventListener('click', function (e) {
+    var btn = e.target.closest('.dc-btn3d');
+    if (!btn) return;
+    var url = btn.dataset.modelUrl ? decodeURIComponent(btn.dataset.modelUrl) : '';
+    var name = btn.dataset.modelName ? decodeURIComponent(btn.dataset.modelName) : '3D MODEL';
+    if (url) openModelViewer(url, name);
+  });
+
+  window.openModelViewer = function (url, name) {
+    loadModelLibs(function () {
+      openViewer(url, name);
+    });
+  };
+
+  function loadModelLibs(cb) {
+    if (modelLibsLoaded) { cb(); return; }
+    var scripts = [
+      MODEL_LIB + 'build/three.min.js',
+      MODEL_LIB + 'examples/js/controls/OrbitControls.js',
+      MODEL_LIB + 'examples/js/loaders/OBJLoader.js',
+      MODEL_LIB + 'examples/js/loaders/FBXLoader.js',
+    ];
+    var i = 0;
+    function next() {
+      if (i >= scripts.length) { modelLibsLoaded = true; cb(); return; }
+      var s = document.createElement('script');
+      s.src = scripts[i++];
+      s.onload = next;
+      s.onerror = function () {
+        alert('Failed to load the 3D library. Check your connection.');
+      };
+      document.head.appendChild(s);
+    }
+    next();
+  }
+
+  function openViewer(url, name) {
+    if (activeViewer) return;
+    var overlay = document.createElement('div');
+    overlay.className = 'viewer-overlay';
+    overlay.innerHTML =
+      '<div class="viewer-top"><div class="viewer-title">' + esc(name) + '</div>' +
+      '<button type="button" class="viewer-close">&#x2715;</button></div>' +
+      '<div class="viewer-canvas-wrap"></div>' +
+      '<div class="viewer-status">LOADING MODEL...</div>';
+    document.body.appendChild(overlay);
+    activeViewer = overlay;
+
+    var wrap = overlay.querySelector('.viewer-canvas-wrap');
+    var statusEl = overlay.querySelector('.viewer-status');
+    var closed = false;
+    var renderer = null, controls = null, animId = null;
+
+    function setStatus(msg, isErr) {
+      statusEl.textContent = msg;
+      statusEl.style.color = isErr ? '#cc8888' : '#ddcc88';
+    }
+
+    function close() {
+      if (closed) return;
+      closed = true;
+      overlay.remove();
+      window.removeEventListener('resize', onResize);
+      if (animId) cancelAnimationFrame(animId);
+      if (renderer) renderer.dispose();
+      if (controls) controls.dispose();
+      activeViewer = null;
+    }
+    overlay.querySelector('.viewer-close').addEventListener('click', close);
+    overlay.addEventListener('click', function (e) { if (e.target === overlay) close(); });
+
+    var scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x0a0000);
+    var camera = new THREE.PerspectiveCamera(45, 1, 0.1, 5000);
+    camera.position.set(3, 2, 5);
+    renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setPixelRatio(window.devicePixelRatio || 1);
+    wrap.appendChild(renderer.domElement);
+
+    controls = new THREE.OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.autoRotate = true;
+    controls.autoRotateSpeed = 3;
+
+    scene.add(new THREE.AmbientLight(0xffffff, 0.6));
+    var dir = new THREE.DirectionalLight(0xffffff, 1.2);
+    dir.position.set(5, 10, 7);
+    scene.add(dir);
+    scene.add(new THREE.HemisphereLight(0x886666, 0x220000, 0.6));
+
+    function onResize() {
+      var w = wrap.clientWidth, h = wrap.clientHeight;
+      if (w === 0 || h === 0) return;
+      renderer.setSize(w, h);
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
+    }
+    onResize();
+    window.addEventListener('resize', onResize);
+
+    var loader = /\.fbx(\?|#|$)/i.test(url) ? new THREE.FBXLoader() : new THREE.OBJLoader();
+    loader.load(url, function (obj) {
+      if (closed) return;
+      setStatus('LOADED');
+      var box = new THREE.Box3().setFromObject(obj);
+      var size = box.getSize(new THREE.Vector3());
+      var maxDim = Math.max(size.x, size.y, size.z) || 1;
+      var scale = 2.5 / maxDim;
+      obj.scale.setScalar(scale);
+      obj.position.x = -(box.min.x + size.x / 2) * scale;
+      obj.position.y = -box.min.y * scale;
+      obj.position.z = -(box.min.z + size.z / 2) * scale;
+      obj.traverse(function (child) {
+        if (!child.isMesh || !child.material) return;
+        var mats = Array.isArray(child.material) ? child.material : [child.material];
+        mats.forEach(function (m) {
+          if (!m.map) m.color = new THREE.Color(0xcc9999);
+          m.side = THREE.DoubleSide;
+          if (m.roughness === undefined) m.roughness = 0.7;
+        });
+      });
+      scene.add(obj);
+      statusEl.style.display = 'none';
+      animate();
+    }, undefined, function (err) {
+      if (closed) return;
+      var detail = '';
+      var st = err && err.target && err.target.status;
+      if (st) detail = ' (HTTP ' + st + (st === 429 ? ' — too many downloads, wait a minute and retry' : '') + ')';
+      setStatus('FAILED TO LOAD MODEL — corrupt file, ASCII FBX, or the link is blocked.' + detail, true);
+    });
+
+    function animate() {
+      if (closed) return;
+      animId = requestAnimationFrame(animate);
+      controls.update();
+      renderer.render(scene, camera);
+    }
+  }
 })();
