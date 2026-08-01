@@ -198,6 +198,9 @@
         var clean = val.replace(/^\//, '');
         return 'https://raw.githubusercontent.com/FishStructuredChaos/database/main/' + clean;
       }
+      if (val.indexOf('/r2/') === 0) {
+        return 'https://rosefish-submit.ziver64.workers.dev' + val;
+      }
       return val;
     }
 
