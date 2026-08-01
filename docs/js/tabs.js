@@ -163,7 +163,9 @@
 
           grid.querySelectorAll('.card-img').forEach(function (img) {
             img.addEventListener('error', function () {
-              this.parentElement.innerHTML = '<div class="card-img-placeholder">?</div>';
+              // Replace only the image, not the whole wrapper: innerHTML on the
+              // wrapper would wipe the tag badges sitting next to the image.
+              this.outerHTML = '<div class="card-img-placeholder">?</div>';
             });
           });
         });

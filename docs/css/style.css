@@ -293,11 +293,23 @@ header p {
   line-height: 1.4;
 }
 
-/* CARD GRID */
+/* CARD GRID — flex layout so hovering a card grows it and smoothly pushes its neighbors */
 .card-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  display: flex;
+  flex-wrap: wrap;
   gap: 8px;
+}
+
+.card-grid > .card {
+  flex: 1 1 220px;
+  min-width: 0;
+  transition: flex-basis 0.25s ease, transform 0.25s ease;
+}
+
+.card-grid > .card:hover {
+  flex-basis: 255px;
+  transform: scale(1.02);
+  z-index: 1;
 }
 
 .card {
@@ -417,6 +429,7 @@ header p {
   display: flex;
   gap: 0;
   align-items: flex-start;
+  transition: border-color 0.15s, transform 0.2s ease;
 }
 
 .data-card-link {
@@ -430,6 +443,13 @@ header p {
 }
 .data-card-link:hover .data-card {
   border-color: #993333;
+  transform: scale(1.03);
+  z-index: 1;
+}
+
+.data-card:hover {
+  transform: scale(1.03);
+  z-index: 1;
 }
 
 .dc-img-wrap {
@@ -672,10 +692,10 @@ header p {
 ::-webkit-scrollbar-track { background: #1a0000; }
 ::-webkit-scrollbar-thumb { background: #550000; border: 2px outset #771111; }
 
-/* GROUP CARDS */
+/* GROUP CARDS — same grow-and-push behavior as the card grid */
 .group-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  display: flex;
+  flex-wrap: wrap;
   gap: 8px;
 }
 
@@ -683,6 +703,15 @@ header p {
   background: #1a0505;
   border: 2px ridge #660000;
   aspect-ratio: 1;
+  flex: 1 1 160px;
+  min-width: 0;
+  transition: flex-basis 0.25s ease, transform 0.25s ease;
+}
+
+.group-card:hover {
+  flex-basis: 185px;
+  transform: scale(1.02);
+  z-index: 1;
 }
 
 .gc-link-wrap {
@@ -760,10 +789,5 @@ header p {
 @media (max-width: 768px) {
   header h1 { font-size: 1.2rem; }
   .tab-btn { font-size: 0.7rem; padding: 2px 5px; }
-  .card-grid { grid-template-columns: 1fr 1fr; }
   .contributions-list { grid-template-columns: 1fr; }
-}
-
-@media (max-width: 480px) {
-  .card-grid { grid-template-columns: 1fr; }
 }

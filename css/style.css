@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;700&family=VT323&display=swap');
 
 * { box-sizing: border-box; }
 
@@ -6,7 +6,7 @@ body {
   margin: 0;
   padding: 0;
   overflow-y: scroll;
-  font-family: "Courier Prime", "Courier New", Courier, monospace;
+  font-family: "IBM Plex Mono", "Courier New", Courier, monospace;
   background: #1a0000;
   color: #e0c0c0;
   font-size: 14px;
@@ -30,9 +30,11 @@ header {
 }
 
 header h1 {
-  font-size: 1.5rem;
+  font-family: "VT323", "Courier New", monospace;
+  font-size: 2.3rem;
+  font-weight: normal;
   margin: 0 0 2px;
-  letter-spacing: 1px;
+  letter-spacing: 0;
   color: #ff8080;
 }
 
@@ -55,7 +57,7 @@ header p {
 }
 
 .tab-btn {
-  font-family: "Courier Prime", "Courier New", Courier, monospace;
+  font-family: "IBM Plex Mono", "Courier New", Courier, monospace;
   font-size: 0.75rem;
   background: #330000;
   border: 1px solid #552222;
@@ -78,11 +80,12 @@ header p {
 
 .tab-section {
   width: 100%;
-  font-size: 0.78rem;
+  font-family: "VT323", "Courier New", monospace;
+  font-size: 1.1rem;
   color: #cc8888;
   padding: 3px 0 1px;
   margin: 4px 0 2px;
-  letter-spacing: 1px;
+  letter-spacing: 0;
   text-transform: uppercase;
   text-align: left;
   border-bottom: 1px solid #331111;
@@ -136,7 +139,7 @@ header p {
 }
 
 .search-bar input {
-  font-family: "Courier Prime", "Courier New", Courier, monospace;
+  font-family: "IBM Plex Mono", "Courier New", Courier, monospace;
   font-size: 0.85rem;
   border: none;
   background: transparent;
@@ -208,7 +211,9 @@ header p {
 }
 
 .info-section h2 {
-  font-size: 1rem;
+  font-family: "VT323", "Courier New", monospace;
+  font-size: 1.5rem;
+  font-weight: normal;
   color: #ff8080;
   margin: 0 0 10px;
   padding-bottom: 4px;
@@ -293,11 +298,23 @@ header p {
   line-height: 1.4;
 }
 
-/* CARD GRID */
+/* CARD GRID — flex layout so hovering a card grows it and smoothly pushes its neighbors */
 .card-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  display: flex;
+  flex-wrap: wrap;
   gap: 8px;
+}
+
+.card-grid > .card {
+  flex: 1 1 220px;
+  min-width: 0;
+  transition: flex-basis 0.25s ease, transform 0.25s ease;
+}
+
+.card-grid > .card:hover {
+  flex-basis: 255px;
+  transform: scale(1.02);
+  z-index: 1;
 }
 
 .card {
@@ -417,6 +434,7 @@ header p {
   display: flex;
   gap: 0;
   align-items: flex-start;
+  transition: border-color 0.15s, transform 0.2s ease;
 }
 
 .data-card-link {
@@ -430,6 +448,13 @@ header p {
 }
 .data-card-link:hover .data-card {
   border-color: #993333;
+  transform: scale(1.03);
+  z-index: 1;
+}
+
+.data-card:hover {
+  transform: scale(1.03);
+  z-index: 1;
 }
 
 .dc-img-wrap {
@@ -672,10 +697,10 @@ header p {
 ::-webkit-scrollbar-track { background: #1a0000; }
 ::-webkit-scrollbar-thumb { background: #550000; border: 2px outset #771111; }
 
-/* GROUP CARDS */
+/* GROUP CARDS — same grow-and-push behavior as the card grid */
 .group-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  display: flex;
+  flex-wrap: wrap;
   gap: 8px;
 }
 
@@ -683,6 +708,15 @@ header p {
   background: #1a0505;
   border: 2px ridge #660000;
   aspect-ratio: 1;
+  flex: 1 1 160px;
+  min-width: 0;
+  transition: flex-basis 0.25s ease, transform 0.25s ease;
+}
+
+.group-card:hover {
+  flex-basis: 185px;
+  transform: scale(1.02);
+  z-index: 1;
 }
 
 .gc-link-wrap {
@@ -760,10 +794,5 @@ header p {
 @media (max-width: 768px) {
   header h1 { font-size: 1.2rem; }
   .tab-btn { font-size: 0.7rem; padding: 2px 5px; }
-  .card-grid { grid-template-columns: 1fr 1fr; }
   .contributions-list { grid-template-columns: 1fr; }
-}
-
-@media (max-width: 480px) {
-  .card-grid { grid-template-columns: 1fr; }
 }
