@@ -404,7 +404,8 @@
       s.src = scripts[i++];
       s.onload = next;
       s.onerror = function () {
-        if (!silent) alert('Failed to load the 3D library. Check your connection.');
+        console.error('3D library script failed to load:', s.src);
+        next(); // continue anyway: a missing loader only disables its own format
       };
       document.head.appendChild(s);
     }
@@ -531,11 +532,12 @@
           modelCache[url] = obj;
           renderModel(obj);
         })
-        .catch(function () {
+        .catch(function (e) {
           // backup: keep the preview image visible
           if (statusEl) statusEl.style.display = 'none';
           if (canvas) canvas.style.display = 'none';
           if (img) img.style.display = '';
+          console.error('card model load failed:', url, e && e.message ? e.message : e);
         });
     }, true);
   }
