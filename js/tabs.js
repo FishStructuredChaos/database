@@ -235,12 +235,19 @@
             var link = linkIdx >= 0 ? (row[linkIdx] || '') : '';
             var rowLabel = (btnIdx >= 0 && row[btnIdx]) ? row[btnIdx] : defaultLabel;
             var isModel = isModelsTab && /\.(obj|fbx)(\?|#|$)/i.test(link);
+            var modelUrl = isModel ? (link.indexOf('/r2/') === 0 ? 'https://tokens.theziver.com' + link : link) : '';
 
             if (isNoBtn && link) {
               html += '<a href="' + esc(link.indexOf('/r2/') === 0 ? 'https://tokens.theziver.com' + link : link) + '" target="_blank" class="data-card-link">';
             }
             html += '<div class="data-card">';
-            if (img) {
+            if (isModel) {
+              html += '<div class="dc-img-wrap dc-model" data-model-url="' + esc(encodeURIComponent(modelUrl)) + '">';
+              if (img) {
+                html += '<img class="table-img" src="' + esc(imgUrl(img)) + '" alt="' + esc(name) + '" loading="lazy">';
+              }
+              html += '<canvas class="dc-model-canvas"></canvas><div class="dc-model-status"></div></div>';
+            } else if (img) {
               html += '<div class="dc-img-wrap"><img class="table-img" src="' + esc(imgUrl(img)) + '" alt="' + esc(name) + '" loading="lazy"></div>';
             }
             html += '<div class="dc-body">';
@@ -264,7 +271,6 @@
               html += '<div class="dc-link-out"><a href="' + esc(link.indexOf('/r2/') === 0 ? 'https://tokens.theziver.com' + link : link) + '" target="_blank">' + esc(rowLabel) + '</a></div>';
             }
             if (isModel) {
-              var modelUrl = link.indexOf('/r2/') === 0 ? 'https://tokens.theziver.com' + link : link;
               html += '<div class="dc-link-out"><button type="button" class="dc-btn3d" data-model-url="' + esc(encodeURIComponent(modelUrl)) + '" data-model-name="' + esc(encodeURIComponent(name)) + '">&#x1F3AF; 3D VIEW</button></div>';
             }
             html += '</div></div>';
@@ -273,6 +279,7 @@
             }
           }
           grid.innerHTML = html;
+          if (isModelsTab) observeCardModels();
         })
         .catch(function () {
           grid.innerHTML = '<div class="empty-state">Failed to load data.</div>';
@@ -381,7 +388,7 @@
     });
   };
 
-  function loadModelLibs(cb) {
+  function loadModelLibs(cb, silent) {
     if (modelLibsLoaded) { cb(); return; }
     var scripts = [
       MODEL_LIB + 'build/three.min.js',
@@ -397,11 +404,129 @@
       s.src = scripts[i++];
       s.onload = next;
       s.onerror = function () {
-        alert('Failed to load the 3D library. Check your connection.');
+        if (!silent) alert('Failed to load the 3D library. Check your connection.');
       };
       document.head.appendChild(s);
     }
     next();
+  }
+
+  // ============================================================
+  // SPINNING MODELS ON THE CARDS (preview image is the backup)
+  // ============================================================
+
+  var modelCache = {};        // parsed model per URL, reused on scroll-back
+  var cardRenderers = {};     // active mini renderer per URL
+  var cardObserver = null;
+
+  function observeCardModels() {
+    if (!('IntersectionObserver' in window)) return;
+    if (!cardObserver) {
+      cardObserver = new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) {
+          var card = en.target;
+          var url = decodeURIComponent(card.dataset.modelUrl || '');
+          if (en.isIntersecting) {
+            if (!card.dataset.modelStarted) {
+              card.dataset.modelStarted = '1';
+              startCardModel(card, url);
+            }
+          } else if (cardRenderers[url]) {
+            cardRenderers[url].stop();
+            delete cardRenderers[url];
+            var canvas = card.querySelector('.dc-model-canvas');
+            var img = card.querySelector('.table-img');
+            if (canvas) canvas.style.display = 'none';
+            if (img) img.style.display = '';
+          }
+        });
+      }, { rootMargin: '300px' });
+    }
+    document.querySelectorAll('.dc-model').forEach(function (el) { cardObserver.observe(el); });
+  }
+
+  function startCardModel(card, url) {
+    var canvas = card.querySelector('.dc-model-canvas');
+    var img = card.querySelector('.table-img');
+    var statusEl = card.querySelector('.dc-model-status');
+    if (!url || !canvas) return;
+
+    function renderModel(obj) {
+      if (!canvas.isConnected) return;
+      var w = canvas.clientWidth || 140;
+      var h = canvas.clientHeight || 100;
+      var renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
+      renderer.setSize(w, h, false);
+      var scene = new THREE.Scene();
+      var camera = new THREE.PerspectiveCamera(40, w / h, 0.1, 100);
+      camera.position.set(2.2, 1.6, 2.8);
+      scene.add(new THREE.AmbientLight(0xffffff, 0.7));
+      var dir = new THREE.DirectionalLight(0xffffff, 1.1);
+      dir.position.set(3, 5, 4);
+      scene.add(dir);
+      scene.add(new THREE.HemisphereLight(0x886666, 0x220000, 0.5));
+
+      var model = obj.clone();
+      var box = new THREE.Box3().setFromObject(model);
+      var size = box.getSize(new THREE.Vector3());
+      var maxDim = Math.max(size.x, size.y, size.z) || 1;
+      var scale = 2 / maxDim;
+      model.scale.setScalar(scale);
+      model.position.x = -(box.min.x + size.x / 2) * scale;
+      model.position.y = -box.min.y * scale;
+      model.position.z = -(box.min.z + size.z / 2) * scale;
+      scene.add(model);
+
+      if (img) img.style.display = 'none';
+      canvas.style.display = 'block';
+      if (statusEl) statusEl.style.display = 'none';
+
+      var animId = null;
+      function tick() {
+        model.rotation.y += 0.012;
+        renderer.render(scene, camera);
+        animId = requestAnimationFrame(tick);
+      }
+      tick();
+
+      cardRenderers[url] = {
+        stop: function () {
+          if (animId) cancelAnimationFrame(animId);
+          renderer.dispose();
+        },
+      };
+    }
+
+    loadModelLibs(function () {
+      if (modelCache[url]) { renderModel(modelCache[url]); return; }
+      if (statusEl) { statusEl.textContent = 'LOADING MODEL...'; statusEl.style.display = 'block'; }
+      var isFbx = /\.fbx(\?|#|$)/i.test(url);
+      fetch(url)
+        .then(function (r) {
+          if (!r.ok) throw new Error('HTTP ' + r.status);
+          return isFbx ? r.arrayBuffer() : r.text();
+        })
+        .then(function (data) {
+          var obj = isFbx ? new THREE.FBXLoader().parse(data, '') : new THREE.OBJLoader().parse(data, '');
+          obj.traverse(function (child) {
+            if (!child.isMesh || !child.material) return;
+            var mats = Array.isArray(child.material) ? child.material : [child.material];
+            mats.forEach(function (m) {
+              if (!m.map) m.color = new THREE.Color(0xcc9999);
+              m.side = THREE.DoubleSide;
+            });
+          });
+          modelCache[url] = obj;
+          renderModel(obj);
+        })
+        .catch(function () {
+          // backup: keep the preview image visible
+          if (statusEl) statusEl.style.display = 'none';
+          if (canvas) canvas.style.display = 'none';
+          if (img) img.style.display = '';
+        });
+    }, true);
   }
 
   function openViewer(url, name) {
