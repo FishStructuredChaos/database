@@ -1072,6 +1072,19 @@ header p {
   cursor: pointer;
   clip-path: polygon(50% 8%, 96% 92%, 4% 92%);
   transition: background 0.15s ease, border-color 0.15s ease;
+  /* Idle attention animation: gentle bob + pulsing glow */
+  animation: backTop-idle 2.2s ease-in-out infinite;
+}
+
+@keyframes backTop-idle {
+  0%, 100% {
+    transform: translateY(0);
+    filter: drop-shadow(0 0 2px rgba(255, 120, 120, 0.35));
+  }
+  50% {
+    transform: translateY(-6px);
+    filter: drop-shadow(0 0 12px rgba(255, 120, 120, 0.85));
+  }
 }
 
 #backTop:hover {
@@ -1084,6 +1097,8 @@ header p {
   header h1 { font-size: 1.2rem; }
   .tab-btn { font-size: 0.7rem; padding: 2px 5px; }
   .contributions-list { grid-template-columns: 1fr; }
+  /* Keep the back-to-top triangle near the right edge on small screens */
+  #backTop { right: 16px; bottom: 16px; }
 }
 
 @media (max-width: 900px) {
