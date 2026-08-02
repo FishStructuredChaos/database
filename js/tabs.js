@@ -397,7 +397,9 @@
       list.innerHTML = items.map(function (e) {
         var img;
         if (e.kind === 'sound') {
-          img = '<button type="button" class="wn-play" data-url="' + esc(e.audioUrl) + '" title="Play">\u25B6</button>';
+          // A div, not a button: this sits inside the card's .wn-link button,
+          // and nested <button> elements break the HTML structure.
+          img = '<div class="wn-play" role="button" tabindex="0" title="Play" data-url="' + esc(e.audioUrl) + '">\u25B6</div>';
         } else if (e.img) {
           img = '<img class="wn-img" src="' + esc(e.img) + '" loading="lazy" onerror="if(this.dataset.fb){this.style.display=\'none\';this.parentElement.classList.add(\'wn-emoji\')}else{this.dataset.fb=\'1\';this.src=\'' + defaultGroupIcon + '\'}">';
         } else if (e.emoji) {
