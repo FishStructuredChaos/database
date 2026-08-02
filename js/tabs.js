@@ -156,7 +156,7 @@
             }
             card += '<div class="card-img-wrap">';
             if (image) {
-              card += '<img class="card-img" src="' + esc(image) + '" alt="' + esc(name) + '" loading="lazy">';
+              card += '<img class="card-img" src="' + esc(image) + '" alt="' + esc(name) + '" loading="lazy" decoding="async">';
             } else {
               card += '<div class="card-img-placeholder">?</div>';
             }
@@ -254,7 +254,7 @@
             }
             html += '<div class="data-card">';
             if (img) {
-              html += '<div class="dc-img-wrap"><img class="table-img" src="' + esc(imgUrl(img)) + '" alt="' + esc(name) + '" loading="lazy"></div>';
+              html += '<div class="dc-img-wrap"><img class="table-img" src="' + esc(imgUrl(img)) + '" alt="' + esc(name) + '" loading="lazy" decoding="async"></div>';
             }
             html += '<div class="dc-body">';
             html += '<div class="dc-name">' + esc(name) + '</div>';
@@ -401,7 +401,7 @@
           // and nested <button> elements break the HTML structure.
           img = '<div class="wn-play" role="button" tabindex="0" title="Play" data-url="' + esc(e.audioUrl) + '">\u25B6</div>';
         } else if (e.img) {
-          img = '<img class="wn-img" src="' + esc(e.img) + '" loading="lazy" onerror="if(this.dataset.fb){this.style.display=\'none\';this.parentElement.classList.add(\'wn-emoji\')}else{this.dataset.fb=\'1\';this.src=\'' + defaultGroupIcon + '\'}">';
+          img = '<img class="wn-img" src="' + esc(e.img) + '" loading="lazy" decoding="async" onerror="if(this.dataset.fb){this.style.display=\'none\';this.parentElement.classList.add(\'wn-emoji\')}else{this.dataset.fb=\'1\';this.src=\'' + defaultGroupIcon + '\'}">';
         } else if (e.emoji) {
           img = '<div class="wn-emoji">' + e.emoji + '</div>';
         } else {
@@ -723,7 +723,7 @@
           results.innerHTML = '<div class="gs-empty">No matches in the whole database.</div>';
         } else {
           results.innerHTML = hits.map(function (h) {
-            var img = h.img ? '<img class="gs-img" src="' + esc(h.img) + '" loading="lazy" onerror="this.style.display=\'none\'">' : '<span class="gs-img gs-img-none"></span>';
+            var img = h.img ? '<img class="gs-img" src="' + esc(h.img) + '" loading="lazy" decoding="async" onerror="this.style.display=\'none\'">' : '<span class="gs-img gs-img-none"></span>';
             return '<button type="button" class="gs-item" data-tab="' + h.tabId + '" data-kind="' + (h.link ? 'vrc' : 'file') + '" data-url="' + esc(h.link || '') + '" data-name="' + esc(h.name) + '">'
               + img
               + '<span class="gs-body"><span class="gs-name">' + highlight(h.name, q) + '</span>'
@@ -777,7 +777,7 @@
         return '<div class="group-card">' +
           '<a href="' + esc(g.group_link) + '" target="_blank" class="gc-link-wrap">' +
             '<div class="gc-icon-wrap">' +
-              '<img class="gc-icon" src="' + esc(g.icon_url) + '" alt="' + esc(g.group_name) + '" loading="lazy" onerror="this.parentElement.innerHTML=\'<div class=\\\'gc-icon-fallback\\\'>' + esc(g.group_name) + '</div>\'">' +
+              '<img class="gc-icon" src="' + esc(g.icon_url) + '" alt="' + esc(g.group_name) + '" loading="lazy" decoding="async" onerror="this.parentElement.innerHTML=\'<div class=\\\'gc-icon-fallback\\\'>' + esc(g.group_name) + '</div>\'">' +
             '</div>' +
             '<div class="gc-name">' + esc(g.group_name) + '</div>' +
           '</a>' +

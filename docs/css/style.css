@@ -273,6 +273,7 @@ header p {
 .card-grid > .card {
   flex: 1 1 220px;
   min-width: 0;
+  max-width: 280px;
 }
 
 .card-grid > .card:hover {
