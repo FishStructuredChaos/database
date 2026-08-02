@@ -366,18 +366,18 @@
     if (!el) return;
     var list = el.querySelector('.wn-list');
     var FILE_EMOJIS = {
-      'models-3d.json': '\u{1F4BE}', 'avatar-prefabs.json': '\u{1F4E6}', 'world-prefabs.json': '\u{1F4E6}',
-      'shaders.json': '\u{1F5BC}', 'games.json': '\u{1F3AE}', 'tools.json': '\u{1F6E0}',
-      'luxury-trash.json': '\u{1F4B0}', 'useful-things.json': '\u{1F497}', 'web-apps.json': '\u{1F310}',
-      'asset-websites.json': '\u{1F310}', 'websites.json': '\u{1F310}', 'sounds.json': '\u{1F50A}', 'gallery.json': '\u{1F5BC}',
+      'models-3d.json': '\ud83d\udcbe', 'avatar-prefabs.json': '\ud83d\udce6', 'world-prefabs.json': '\ud83d\udce6',
+      'shaders.json': '\ud83d\uddbc', 'games.json': '\ud83c\udfae', 'tools.json': '\ud83d\udee0',
+      'luxury-trash.json': '\ud83d\udcb0', 'useful-things.json': '\ud83d\udc97', 'web-apps.json': '\ud83c\udf10',
+      'asset-websites.json': '\ud83c\udf10', 'websites.json': '\ud83c\udf10', 'sounds.json': '\ud83d\udd0a', 'gallery.json': '\ud83d\uddbc',
     };
     // Tab-button labels with emojis, matching the nav exactly.
     var TAB_LABELS = {
-      worlds: '\u{1F30E}WORLDS', 'public-avatars': '\u{1F339}PUBLIC-AVATARS', 'vrchat-groups': '\u{1F465}VRCHAT-GROUPS',
-      gallery: '\u{1F3B4}GALLERY', 'models-3d': '\u{1F4BE}3D-MODELS', sounds: '\u{1F50A}SOUNDS',
-      'avatar-prefabs': '\u{1F4E6}AVATAR-PREFABS', 'world-prefabs': '\u{1F4E6}WORLD-PREFABS', shaders: '\u{1F5BC}\u{FE0F}SHADERS',
-      games: '\u{1F3AE}GAMES', tools: '\u{1F6E0}\u{FE0F}TOOLS', 'luxury-trash': '\u{1F4B0}LUXURY TRASH',
-      'useful-things': '\u{1F496}USEFUL-THINGS', 'web-apps': '\u{1F310}WEB-APPS', 'asset-websites': '\u{1F310}ASSET-WEBSITES', websites: '\u{1F310}WEBSITES',
+      worlds: '\ud83c\udf0eWORLDS', 'public-avatars': '\ud83c\udf39PUBLIC-AVATARS', 'vrchat-groups': '\ud83d\udc65VRCHAT-GROUPS',
+      gallery: '\ud83c\udfb4GALLERY', 'models-3d': '\ud83d\udcbe3D-MODELS', sounds: '\ud83d\udd0aSOUNDS',
+      'avatar-prefabs': '\ud83d\udce6AVATAR-PREFABS', 'world-prefabs': '\ud83d\udce6WORLD-PREFABS', shaders: '\ud83d\uddbc\ufe0fSHADERS',
+      games: '\ud83c\udfaeGAMES', tools: '\ud83d\udee0\ufe0fTOOLS', 'luxury-trash': '\ud83d\udcb0LUXURY TRASH',
+      'useful-things': '\ud83d\udc96USEFUL-THINGS', 'web-apps': '\ud83c\udf10WEB-APPS', 'asset-websites': '\ud83c\udf10ASSET-WEBSITES', websites: '\ud83c\udf10WEBSITES',
     };
     var FILE_COLORS = {
       'models-3d.json': '#4466aa', 'avatar-prefabs.json': '#8855bb', 'world-prefabs.json': '#338877',
@@ -386,9 +386,9 @@
       'asset-websites.json': '#889944', 'websites.json': '#33aa99', 'sounds.json': '#44cc44', 'gallery.json': '#dd66aa',
     };
     var TYPE_META = {
-      world: { emoji: '\u{1F30E}', label: 'WORLDS', color: '#4466cc' },
-      avatar: { emoji: '\u{1F339}', label: 'PUBLIC-AVATARS', color: '#cc4488' },
-      group: { emoji: '\u{1F465}', label: 'VRCHAT-GROUPS', color: '#44aa55' },
+      world: { emoji: '\ud83c\udf0e', label: 'WORLDS', color: '#4466cc' },
+      avatar: { emoji: '\ud83c\udf39', label: 'PUBLIC-AVATARS', color: '#cc4488' },
+      group: { emoji: '\ud83d\udc65', label: 'VRCHAT-GROUPS', color: '#44aa55' },
     };
     var defaultGroupIcon = 'https://assets.vrchat.com/www/groups/default_icon.png';
     function fileLabel(f) { return f ? f.replace('.json', '').replace(/-/g, ' ').toUpperCase() : ''; }
@@ -562,7 +562,7 @@
           img: isSound ? '' : resolveImg(isMedia ? s.row[0] : (s.row[1] || '')),
           audioUrl: isSound ? s.row[0] : '',
           kind: isSound ? 'sound' : 'file',
-          emoji: FILE_EMOJIS[s.file] || '\u{1F4C1}',
+          emoji: FILE_EMOJIS[s.file] || '\ud83d\udcc1',
           tab: s.file ? s.file.replace('.json', '') : '',
           label: TAB_LABELS[s.file ? s.file.replace('.json', '') : ''] || fileLabel(s.file) || 'FILE',
           color: FILE_COLORS[s.file] || '#885555',
