@@ -349,6 +349,12 @@
     var card = locateCard(tabId, kind, url, name);
     if (card) {
       setTimeout(function () { markTarget(card); }, 60);
+    } else if (tabId === 'gallery') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      flashNotice('You can find this image in GALLERY.');
+    } else if (tabId === 'sounds') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      flashNotice('You can find this sound in SOUNDS.');
     } else {
       window.scrollTo({ top: 0, behavior: 'smooth' });
       flashNotice('This entry isn\u2019t displayed on the site yet.');
