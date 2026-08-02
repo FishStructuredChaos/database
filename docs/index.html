@@ -4,6 +4,16 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>&#x1F339; ROSE FISH DATABASE &#x1F339;</title>
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="ROSE FISH DATABASE">
+  <meta property="og:title" content="ROSE FISH DATABASE &#x1F339;">
+  <meta property="og:description" content="The central archive for all FISH <>< COMMUNITY content — worlds, avatars, groups, 3D models, shaders, games, tools, sounds and more.">
+  <meta property="og:image" content="https://raw.githubusercontent.com/FishStructuredChaos/database/main/images/ROSE_FISH_SPIN.gif">
+  <meta property="og:url" content="https://database.theziver.com/">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="ROSE FISH DATABASE">
+  <meta name="twitter:description" content="The central archive for all FISH <>< COMMUNITY content.">
+  <meta name="twitter:image" content="https://raw.githubusercontent.com/FishStructuredChaos/database/main/images/ROSE_FISH_SPIN.gif">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -13,8 +23,18 @@
       <p>Archive for all FISH &lt;&gt;&lt; COMMUNITY content</p>
     </header>
 
+    <div class="gsearch-wrap">
+      <input id="gsearch" type="text" placeholder="&#x1F50D; SEARCH THE WHOLE DATABASE..." autocomplete="off">
+      <div id="gsearch-results"></div>
+    </div>
+
     <div class="submit-row">
       <a class="submit-badge" href="https://rosefish-submit.ziver64.workers.dev/public" target="_blank">&#x1F517; SUBMIT TO DATABASE</a>
+    </div>
+
+    <div class="whats-new" id="whatsNew">
+      <div class="wn-title">WHAT IS NEW?</div>
+      <div class="wn-list">loading...</div>
     </div>
 
     <nav class="tab-nav" id="tab-nav">
@@ -206,10 +226,6 @@
   <div class="section-info">
     <span class="count" id="count-websites" data-label="items">loading...</span>
   </div>
-  <div class="search-bar">
-    <span class="search-icon">&#x1F50D;</span>
-    <input type="text" placeholder="SEARCH" oninput="filterCards(this, 'card-grid-websites')">
-  </div>
   <div class="data-card-grid" id="card-grid-websites" data-file="websites">
     <div class="loader">loading websites...</div>
   </div>
@@ -226,10 +242,6 @@
   
   <div class="section-info">
     <span class="count" id="count-worlds" data-label="worlds">loading...</span>
-  </div>
-  <div class="search-bar">
-    <span class="search-icon">&#x1F50D;</span>
-    <input type="text" placeholder="SEARCH" oninput="filterCards(this, 'card-grid-worlds')">
   </div>
   
   <div class="card-grid" id="card-grid-worlds" data-gist-key="community_worlds">
@@ -249,10 +261,6 @@
   <div class="section-info">
     <span class="count" id="count-public-avatars" data-label="public-avatars">loading...</span>
   </div>
-  <div class="search-bar">
-    <span class="search-icon">&#x1F50D;</span>
-    <input type="text" placeholder="SEARCH" oninput="filterCards(this, 'card-grid-public-avatars')">
-  </div>
   
   <div class="card-grid" id="card-grid-public-avatars" data-gist-key="community_avatars">
     <div class="loader">loading public-avatars...</div>
@@ -267,10 +275,6 @@
 
   <div class="section-info">
     <span class="count" id="count-vrchat-groups" data-label="vrchat-groups">loading...</span>
-  </div>
-  <div class="search-bar">
-    <span class="search-icon">&#x1F50D;</span>
-    <input type="text" placeholder="SEARCH" oninput="filterCards(this, 'card-grid-vrchat-groups')">
   </div>
   <div class="group-grid" id="card-grid-vrchat-groups">
     <div class="loader">loading vrchat-groups...</div>
@@ -290,10 +294,6 @@
   
   <div class="section-info">
     <span class="count" id="count-fish-members" data-label="members">loading...</span>
-  </div>
-  <div class="search-bar">
-    <span class="search-icon">&#x1F50D;</span>
-    <input type="text" placeholder="SEARCH" oninput="filterCards(this, 'card-grid-fish-members')">
   </div>
   <div class="member-grid" id="card-grid-fish-members">
     <div class="loader">loading members...</div>
@@ -325,10 +325,6 @@
   <div class="section-info">
     <span class="count" id="count-models-3d" data-label="items">loading...</span>
   </div>
-  <div class="search-bar">
-    <span class="search-icon">&#x1F50D;</span>
-    <input type="text" placeholder="SEARCH" oninput="filterCards(this, 'card-grid-models-3d')">
-  </div>
   <div class="data-card-grid" id="card-grid-models-3d" data-file="models-3d">
     <div class="loader">loading models-3d...</div>
   </div>
@@ -358,10 +354,6 @@
   <div class="section-info">
     <span class="count" id="count-avatar-prefabs" data-label="items">loading...</span>
   </div>
-  <div class="search-bar">
-    <span class="search-icon">&#x1F50D;</span>
-    <input type="text" placeholder="SEARCH" oninput="filterCards(this, 'card-grid-avatar-prefabs')">
-  </div>
   <div class="data-card-grid" id="card-grid-avatar-prefabs" data-file="avatar-prefabs">
     <div class="loader">loading avatar-prefabs...</div>
   </div>
@@ -376,10 +368,6 @@
   
   <div class="section-info">
     <span class="count" id="count-world-prefabs" data-label="items">loading...</span>
-  </div>
-  <div class="search-bar">
-    <span class="search-icon">&#x1F50D;</span>
-    <input type="text" placeholder="SEARCH" oninput="filterCards(this, 'card-grid-world-prefabs')">
   </div>
   <div class="data-card-grid" id="card-grid-world-prefabs" data-file="world-prefabs">
     <div class="loader">loading world-prefabs...</div>
@@ -396,10 +384,6 @@
   <div class="section-info">
     <span class="count" id="count-shaders" data-label="items">loading...</span>
   </div>
-  <div class="search-bar">
-    <span class="search-icon">&#x1F50D;</span>
-    <input type="text" placeholder="SEARCH" oninput="filterCards(this, 'card-grid-shaders')">
-  </div>
   <div class="data-card-grid" id="card-grid-shaders" data-file="shaders">
     <div class="loader">loading shaders...</div>
   </div>
@@ -414,10 +398,6 @@
   
   <div class="section-info">
     <span class="count" id="count-games" data-label="items">loading...</span>
-  </div>
-  <div class="search-bar">
-    <span class="search-icon">&#x1F50D;</span>
-    <input type="text" placeholder="SEARCH" oninput="filterCards(this, 'card-grid-games')">
   </div>
   <div class="data-card-grid" id="card-grid-games" data-file="games">
     <div class="loader">loading games...</div>
@@ -434,10 +414,6 @@
   <div class="section-info">
     <span class="count" id="count-tools" data-label="items">loading...</span>
   </div>
-  <div class="search-bar">
-    <span class="search-icon">&#x1F50D;</span>
-    <input type="text" placeholder="SEARCH" oninput="filterCards(this, 'card-grid-tools')">
-  </div>
   <div class="data-card-grid" id="card-grid-tools" data-file="tools">
     <div class="loader">loading tools...</div>
   </div>
@@ -452,10 +428,6 @@
   
   <div class="section-info">
     <span class="count" id="count-luxury-trash" data-label="items">loading...</span>
-  </div>
-  <div class="search-bar">
-    <span class="search-icon">&#x1F50D;</span>
-    <input type="text" placeholder="SEARCH" oninput="filterCards(this, 'card-grid-luxury-trash')">
   </div>
   <div class="data-card-grid" id="card-grid-luxury-trash" data-file="luxury-trash">
     <div class="loader">loading luxury-trash...</div>
@@ -474,10 +446,6 @@
   <div class="section-info">
     <span class="count" id="count-useful-things" data-label="items">loading...</span>
   </div>
-  <div class="search-bar">
-    <span class="search-icon">&#x1F50D;</span>
-    <input type="text" placeholder="SEARCH" oninput="filterCards(this, 'card-grid-useful-things')">
-  </div>
   <div class="data-card-grid" id="card-grid-useful-things" data-file="useful-things">
     <div class="loader">loading useful-things...</div>
   </div>
@@ -492,10 +460,6 @@
   
   <div class="section-info">
     <span class="count" id="count-web-apps" data-label="items">loading...</span>
-  </div>
-  <div class="search-bar">
-    <span class="search-icon">&#x1F50D;</span>
-    <input type="text" placeholder="SEARCH" oninput="filterCards(this, 'card-grid-web-apps')">
   </div>
   <div class="data-card-grid" id="card-grid-web-apps" data-file="web-apps">
     <div class="loader">loading web-apps...</div>
@@ -512,10 +476,6 @@
   <div class="section-info">
     <span class="count" id="count-asset-websites" data-label="items">loading...</span>
   </div>
-  <div class="search-bar">
-    <span class="search-icon">&#x1F50D;</span>
-    <input type="text" placeholder="SEARCH" oninput="filterCards(this, 'card-grid-asset-websites')">
-  </div>
   <div class="data-card-grid" id="card-grid-asset-websites" data-file="asset-websites">
     <div class="loader">loading asset-websites...</div>
   </div>
@@ -529,5 +489,6 @@
   </div>
 
   <script src="js/tabs.js"></script>
+  <button id="backTop" type="button" title="Back to top" aria-label="Back to top"></button>
 </body>
 </html>

@@ -1,4 +1,4 @@
-(function () {
+﻿(function () {
   const ALLOWED_TAGS = ['ROSE_FISH', 'FISH'];
 
   function esc(str) {
@@ -15,7 +15,21 @@
     loadDataTabs();
     loadGroups();
     loadMembers();
+    loadWhatsNew();
+    initGlobalSearch();
+    initBackTop();
   });
+
+  function initBackTop() {
+    var btn = document.getElementById('backTop');
+    if (!btn) return;
+    window.addEventListener('scroll', function () {
+      btn.style.display = window.scrollY > 400 ? 'block' : 'none';
+    }, { passive: true });
+    btn.addEventListener('click', function () {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  }
 
   function initTabs() {
     const buttons = document.querySelectorAll('.tab-btn');
@@ -64,7 +78,7 @@
           }
         }
         if (members.length === 0) {
-          listEl.innerHTML = '<p class="empty-note">No members data available.</p>';
+          listEl.innerHTML = '<p class="empty-note">Nothing archived here yet \u2014 be the first!</p>';
         } else {
           listEl.innerHTML = members.map(function (m) {
             function esc(str) {
@@ -78,13 +92,12 @@
         }
       })
       .catch(function () {
-        listEl.innerHTML = '<p class="empty-note">Failed to load contributions.</p>';
+        listEl.innerHTML = '<p class="empty-note">Couldn\u2019t reach the archive \u2014 try again in a bit.</p>';
       });
   }
 
   function loadGistTabs() {
     var grids = document.querySelectorAll('.card-grid[data-gist-key]');
-    if (grids.length === 0) return;
     if (grids.length === 0) return;
 
     fetch('https://gist.githubusercontent.com/TheZiver/bb99f9facb8d14fd607dbb79e9a99d83/raw')
@@ -109,7 +122,7 @@
           if (countEl) countEl.textContent = label;
 
           if (items.length === 0) {
-            grid.innerHTML = '<div class="empty-state">No items found.</div>';
+            grid.innerHTML = '<div class="empty-state">Nothing archived here yet \u2014 be the first!</div>';
             return;
           }
 
@@ -172,7 +185,7 @@
       })
       .catch(function () {
         grids.forEach(function (grid) {
-          grid.innerHTML = '<div class="empty-state">Failed to load data.</div>';
+          grid.innerHTML = '<div class="empty-state">Couldn\u2019t reach the archive \u2014 try again in a bit.</div>';
         });
       });
   }
@@ -198,15 +211,15 @@
         var clean = val.replace(/^\//, '');
         return 'https://raw.githubusercontent.com/FishStructuredChaos/database/main/' + clean;
       }
+      if (val.indexOf('/r2/') === 0) {
+        return 'https://rosefish-submit.ziver64.workers.dev' + val;
+      }
       return val;
     }
 
     grids.forEach(function (grid) {
       var fileId = grid.dataset.file;
       var url = 'https://raw.githubusercontent.com/FishStructuredChaos/database/main/data/' + fileId + '.json';
-      if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
-        url = '/api/json-data?file=' + fileId + '.json';
-      }
 
       fetch(url)
         .then(function (r) { return r.json(); })
@@ -217,7 +230,7 @@
           if (countEl) countEl.textContent = rows.length + ' items';
 
           if (rows.length === 0) {
-            grid.innerHTML = '<div class="empty-state">No entries yet.</div>';
+            grid.innerHTML = '<div class="empty-state">Nothing archived here yet \u2014 be the first!</div>';
             return;
           }
 
@@ -271,8 +284,474 @@
           grid.innerHTML = html;
         })
         .catch(function () {
-          grid.innerHTML = '<div class="empty-state">Failed to load data.</div>';
+          grid.innerHTML = '<div class="empty-state">Couldn\u2019t reach the archive \u2014 try again in a bit.</div>';
         });
+    });
+  }
+
+  // WHAT'S NEW: the 5 most recently approved entries from the review gist,
+  // shown on the INFORMATION tab. Thumbnails are matched from the ecosystem
+  // gists by URL (emoji fallback when there's no image). Hidden quietly if the
+  // gist is unreachable.
+  // Shared "locate + mark" helpers for WHAT IS NEW cards and search results.
+  var wnArrowTimer = null;
+  function markTarget(card) {
+    document.querySelectorAll('.wn-target').forEach(function (c) { c.classList.remove('wn-target'); });
+    document.querySelectorAll('.wn-arrow').forEach(function (a) { a.remove(); });
+    clearTimeout(wnArrowTimer);
+    card.classList.add('wn-target');
+    var dirs = ['t', 'b', 'l', 'r'];
+    dirs.forEach(function (dir) {
+      var a = document.createElement('div');
+      a.className = 'wn-arrow wn-arrow-' + dir;
+      a.textContent = dir === 't' ? '\u25BC' : dir === 'b' ? '\u25B2' : dir === 'l' ? '\u25B6' : '\u25C0';
+      card.appendChild(a);
+    });
+    try { card.scrollIntoView({ block: 'center', behavior: 'smooth' }); } catch (e) { card.scrollIntoView(); }
+    wnArrowTimer = setTimeout(function () {
+      card.classList.remove('wn-target');
+      card.querySelectorAll('.wn-arrow').forEach(function (a) { a.remove(); });
+    }, 4000);
+  }
+  function locateCard(tabId, kind, url, name) {
+    var card = null;
+    var urlId = url ? String(url).match(/[a-z]{3,4}_[a-f0-9-]+$/i) : null;
+    urlId = urlId ? urlId[0].toLowerCase() : null;
+    if (kind === 'vrc' && url) {
+      var links = document.querySelectorAll('#card-grid-worlds a[href], #card-grid-public-avatars a[href], #card-grid-vrchat-groups a[href]');
+      for (var i = 0; i < links.length; i++) {
+        var href = links[i].getAttribute('href') || '';
+        var hrefId = href.match(/[a-z]{3,4}_[a-f0-9-]+$/i);
+        hrefId = hrefId ? hrefId[0].toLowerCase() : null;
+        if (href === url || (urlId && hrefId === urlId)) { card = links[i].closest('.card, .group-card'); break; }
+      }
+    } else if (kind === 'file' && tabId) {
+      var grid = document.querySelector('.data-card-grid[data-file="' + tabId + '"]');
+      if (grid) {
+        var names = grid.querySelectorAll('.dc-name');
+        for (var j = 0; j < names.length; j++) {
+          if (name && names[j].textContent.trim().indexOf(name) === 0) { card = names[j].closest('.data-card'); break; }
+        }
+      }
+    }
+    return card;
+  }
+  function flashNotice(msg) {
+    var el = document.createElement('div');
+    el.className = 'wn-notice';
+    el.textContent = msg;
+    var anchor = document.getElementById('whatsNew') || document.querySelector('.container');
+    if (anchor) anchor.appendChild(el);
+    setTimeout(function () { if (el.parentNode) el.parentNode.removeChild(el); }, 3200);
+  }
+  function locateAndMark(tabId, kind, url, name) {
+    if (tabId) switchTab(tabId);
+    var card = locateCard(tabId, kind, url, name);
+    if (card) {
+      setTimeout(function () { markTarget(card); }, 60);
+    } else {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      flashNotice('This entry isn\u2019t displayed on the site yet.');
+    }
+  }
+
+  function loadWhatsNew() {
+    var el = document.getElementById('whatsNew');
+    if (!el) return;
+    var list = el.querySelector('.wn-list');
+    var FILE_EMOJIS = {
+      'models-3d.json': '\u{1F4BE}', 'avatar-prefabs.json': '\u{1F4E6}', 'world-prefabs.json': '\u{1F4E6}',
+      'shaders.json': '\u{1F5BC}', 'games.json': '\u{1F3AE}', 'tools.json': '\u{1F6E0}',
+      'luxury-trash.json': '\u{1F4B0}', 'useful-things.json': '\u{1F497}', 'web-apps.json': '\u{1F310}',
+      'asset-websites.json': '\u{1F310}', 'websites.json': '\u{1F310}', 'sounds.json': '\u{1F50A}', 'gallery.json': '\u{1F5BC}',
+    };
+    // Tab-button labels with emojis, matching the nav exactly.
+    var TAB_LABELS = {
+      worlds: '\u{1F30E}WORLDS', 'public-avatars': '\u{1F339}PUBLIC-AVATARS', 'vrchat-groups': '\u{1F465}VRCHAT-GROUPS',
+      gallery: '\u{1F3B4}GALLERY', 'models-3d': '\u{1F4BE}3D-MODELS', sounds: '\u{1F50A}SOUNDS',
+      'avatar-prefabs': '\u{1F4E6}AVATAR-PREFABS', 'world-prefabs': '\u{1F4E6}WORLD-PREFABS', shaders: '\u{1F5BC}\u{FE0F}SHADERS',
+      games: '\u{1F3AE}GAMES', tools: '\u{1F6E0}\u{FE0F}TOOLS', 'luxury-trash': '\u{1F4B0}LUXURY TRASH',
+      'useful-things': '\u{1F496}USEFUL-THINGS', 'web-apps': '\u{1F310}WEB-APPS', 'asset-websites': '\u{1F310}ASSET-WEBSITES', websites: '\u{1F310}WEBSITES',
+    };
+    var FILE_COLORS = {
+      'models-3d.json': '#4466aa', 'avatar-prefabs.json': '#8855bb', 'world-prefabs.json': '#338877',
+      'shaders.json': '#55aacc', 'games.json': '#55aa55', 'tools.json': '#cc8833',
+      'luxury-trash.json': '#ccaa33', 'useful-things.json': '#cc5588', 'web-apps.json': '#6688dd',
+      'asset-websites.json': '#889944', 'websites.json': '#33aa99', 'sounds.json': '#44cc44', 'gallery.json': '#dd66aa',
+    };
+    var TYPE_META = {
+      world: { emoji: '\u{1F30E}', label: 'WORLDS', color: '#4466cc' },
+      avatar: { emoji: '\u{1F339}', label: 'PUBLIC-AVATARS', color: '#cc4488' },
+      group: { emoji: '\u{1F465}', label: 'VRCHAT-GROUPS', color: '#44aa55' },
+    };
+    var defaultGroupIcon = 'https://assets.vrchat.com/www/groups/default_icon.png';
+    function fileLabel(f) { return f ? f.replace('.json', '').replace(/-/g, ' ').toUpperCase() : ''; }
+    function show(items) {
+      if (!items.length) { list.innerHTML = '<div class="wn-empty">Nothing new yet \u2014 check back soon!</div>'; return; }
+      list.innerHTML = items.map(function (e) {
+        var img;
+        if (e.kind === 'sound') {
+          img = '<button type="button" class="wn-play" data-url="' + esc(e.audioUrl) + '" title="Play">\u25B6</button>';
+        } else if (e.img) {
+          img = '<img class="wn-img" src="' + esc(e.img) + '" loading="lazy" onerror="if(this.dataset.fb){this.style.display=\'none\';this.parentElement.classList.add(\'wn-emoji\')}else{this.dataset.fb=\'1\';this.src=\'' + defaultGroupIcon + '\'}">';
+        } else if (e.emoji) {
+          img = '<div class="wn-emoji">' + e.emoji + '</div>';
+        } else {
+          img = '<div class="wn-emoji">' + (TYPE_META[e.type] || TYPE_META.world).emoji + '</div>';
+        }
+        var linkOpen = '<button type="button" class="wn-link" data-tab="' + e.tab + '" data-kind="' + (e.kind || '') + '" data-url="' + esc(e.url || '') + '" data-name="' + esc(String(e.name).slice(0, 60)) + '">';
+        var linkClose = '</button>';
+        var authorChip = '';
+        if (e.author && e.authorNote !== 'none') {
+          // Real creators get "BY <name>"; submitters get just the bare name.
+          // Names that are actually URLs (e.g. someone typed their website as
+          // their name) display as just the domain.
+          var authorTxt = e.author;
+          var urlMatch = /^https?:\/\/([^\/]+)/i.exec(e.author);
+          if (urlMatch) authorTxt = urlMatch[1];
+          authorChip = '<div class="wn-author"' + (e.authorNote === 'submitted' ? ' style="color:#886644;border-color:#443300;background:#1a0f00"' : '') + '>' + (e.authorNote === 'creator' ? 'BY <b>' : '<b>') + esc(authorTxt) + '</b></div>';
+        }
+        return '<div class="wn-item">'
+          + linkOpen
+          + '<div class="wn-imgwrap">' + img + '</div>'
+          + '<div class="wn-name">' + esc(String(e.name).slice(0, 60)) + '</div>'
+          + linkClose
+          + authorChip
+          + '<div class="wn-meta"><span class="wn-badge">' + esc(e.label) + '</span></div>'
+          + '</div>';
+      }).join('');
+      // Shared audio player for the strip: playing one stops any other, with
+      // the .ogg-sibling fallback for converted files.
+      var wnAudio = null;
+      var wnBtn = null;
+      function wnStop() {
+        if (wnAudio) { wnAudio.pause(); wnAudio = null; }
+        if (wnBtn) { wnBtn.textContent = '\u25B6'; wnBtn.classList.remove('playing'); wnBtn = null; }
+      }
+      function wnPlay(url, btn) {
+        if (wnAudio && wnAudio.src === url) { wnStop(); return; }
+        wnStop();
+        btn.textContent = '\u2026';
+        var audio = new Audio(url);
+        wnAudio = audio;
+        wnBtn = btn;
+        audio.addEventListener('canplay', function () { btn.textContent = '\u23F8'; btn.classList.add('playing'); });
+        audio.addEventListener('error', function () {
+          var ogg = url.replace(/\.mp3$/i, '.ogg');
+          if (ogg !== url && audio.dataset.tried !== '1') {
+            audio.dataset.tried = '1';
+            audio.src = ogg;
+            audio.play().catch(function () { wnStop(); });
+          } else {
+            btn.textContent = '\u26A0';
+            setTimeout(function () { btn.textContent = '\u25B6'; }, 1200);
+            wnAudio = null;
+          }
+        });
+        audio.addEventListener('ended', function () {
+          btn.textContent = '\u25B6';
+          btn.classList.remove('playing');
+          wnAudio = null;
+          wnBtn = null;
+        });
+        audio.play().catch(function () {});
+      }
+      // Clicking a card jumps to where the item lives in the database (the tab
+      // that shows it), scrolls to it, and marks it with four pointing arrows
+      // that disappear after a few seconds.
+      list.addEventListener('click', function (e) {
+        var playBtn = e.target.closest('.wn-play');
+        if (playBtn) {
+          e.preventDefault();
+          var url = playBtn.getAttribute('data-url');
+          if (url) wnPlay(url, playBtn);
+          return;
+        }
+        var link = e.target.closest('.wn-link');
+        if (link) {
+          e.preventDefault();
+          locateAndMark(link.getAttribute('data-tab'), link.getAttribute('data-kind') || '', link.getAttribute('data-url'), link.getAttribute('data-name'));
+        }
+      });
+    }
+    var vrcUrl = 'https://gist.githubusercontent.com/FishStructuredChaos/56babd51194abfdffa87d11a481c3541/raw/database-pending-worlds-avatars-groups.json';
+    var filesUrl = 'https://gist.githubusercontent.com/FishStructuredChaos/7b0971c63dbb689847b81cdf84299c1f/raw/database-pending-files.json';
+    var avatarsEcoUrl = 'https://gist.githubusercontent.com/TheZiver/bb99f9facb8d14fd607dbb79e9a99d83/raw';
+    var groupsEcoUrl = 'https://gist.githubusercontent.com/TheZiver/9fdd3f8c495098ffa0beceece373d382/raw/structured_chaos_community_ecosystem_groups.json';
+    Promise.all([
+      fetch(vrcUrl).then(function (r) { return r.json(); }).catch(function () { return []; }),
+      fetch(filesUrl).then(function (r) { return r.json(); }).catch(function () { return { submissions: [] }; }),
+      fetch(avatarsEcoUrl).then(function (r) { return r.json(); }).catch(function () { return {}; }),
+      fetch(groupsEcoUrl).then(function (r) { return r.json(); }).catch(function () { return {}; }),
+    ]).then(function (results) {
+      var vrc = Array.isArray(results[0]) ? results[0] : ((results[0] && results[0].entries) || []);
+      var files = (results[1] && results[1].submissions) || [];
+      // The ecosystem gists know the REAL creators/owners and names — the
+      // review gist only knows who submitted the link, which is not authorship.
+      var authorByUrl = {};
+      var nameByUrl = {};
+      var imgByUrl = {};
+      Object.keys(results[2] || {}).forEach(function (key) {
+        (results[2][key] || []).forEach(function (item) {
+          var u = item.avatar_link || item.world_link;
+          var img = item.avatar_image_url || item.world_image_url;
+          if (u && img) imgByUrl[u] = img;
+          if (u && item.author) authorByUrl[u] = item.author;
+          if (u && (item.avatar_name || item.world_name)) nameByUrl[u] = item.avatar_name || item.world_name;
+        });
+      });
+      (results[3].community_groups || []).forEach(function (g) {
+        if (g.group_link && g.icon_url) imgByUrl[g.group_link] = g.icon_url;
+        if (g.group_link && g.owner) authorByUrl[g.group_link] = g.owner;
+        if (g.group_link && g.group_name) nameByUrl[g.group_link] = g.group_name;
+      });
+      var items = [];
+      vrc.forEach(function (e) {
+        if (e.status !== 'approved') return;
+        var u = e.url || e.avatar_link || e.world_link;
+        var date = e.approvedAt || e.createdAt;
+        if (!u || !date) return;
+        var meta = TYPE_META[e.type] || TYPE_META.world;
+        var realAuthor = u ? authorByUrl[u] : null;
+        // Review-gist entries carry no name — prefer the ecosystem gist's real
+        // name, then a short ID for groups so the card never shows the raw URL.
+        var shortName = nameByUrl[u] || e.name || e.avatar_name || e.world_name;
+        if (!shortName && e.type === 'group') {
+          var gid = String(u).match(/grp_[a-f0-9]+/i);
+          shortName = gid ? gid[0] : u;
+        }
+        if (!shortName) shortName = u;
+        items.push({
+          type: e.type,
+          name: shortName,
+          url: u,
+          date: date,
+          img: u ? (imgByUrl[u] || (e.type === 'group' ? defaultGroupIcon : '')) : '',
+          emoji: meta.emoji,
+          author: realAuthor || (e.type === 'group' ? '' : e.submittedBy || ''),
+          authorNote: realAuthor ? 'creator' : (e.type === 'group' ? 'none' : 'submitted'),
+          tab: e.type === 'group' ? 'vrchat-groups' : (e.type === 'avatar' ? 'public-avatars' : 'worlds'),
+          kind: 'vrc',
+          label: TAB_LABELS[e.type === 'group' ? 'vrchat-groups' : (e.type === 'avatar' ? 'public-avatars' : 'worlds')] || meta.label,
+          color: meta.color,
+        });
+      });
+      files.forEach(function (s) {
+        if (s.status !== 'approved' || !s.approvedAt || !s.row || !s.row[0]) return;
+        var isMedia = s.file === 'sounds.json' || s.file === 'gallery.json';
+        var isSound = s.file === 'sounds.json';
+        var link = isMedia ? s.row[0] : (s.row[2] || '');
+        var mediaName = String(s.row[0]).split('/').pop().replace(/\.[a-z0-9]+$/i, '') || String(s.row[0]);
+        // Files carry the real author in their row's Author column — the
+        // submitter is only who uploaded it. Gallery/sounds show no author at all.
+        var AUTHOR_FILES = ['models-3d.json', 'avatar-prefabs.json', 'world-prefabs.json', 'shaders.json', 'games.json', 'tools.json', 'useful-things.json', 'websites.json'];
+        var rowAuthor = AUTHOR_FILES.indexOf(s.file) >= 0 && s.row[4] ? String(s.row[4]) : '';
+        var fileAuthor = rowAuthor || s.submittedBy || '';
+        var fileNote = rowAuthor ? 'creator' : 'submitted';
+        items.push({
+          type: 'file',
+          name: isMedia ? mediaName : String(s.row[0]),
+          url: link || '',
+          date: s.approvedAt,
+          img: isSound ? '' : resolveImg(isMedia ? s.row[0] : (s.row[1] || '')),
+          audioUrl: isSound ? s.row[0] : '',
+          kind: isSound ? 'sound' : 'file',
+          emoji: FILE_EMOJIS[s.file] || '\u{1F4C1}',
+          tab: s.file ? s.file.replace('.json', '') : '',
+          label: TAB_LABELS[s.file ? s.file.replace('.json', '') : ''] || fileLabel(s.file) || 'FILE',
+          color: FILE_COLORS[s.file] || '#885555',
+          author: fileAuthor,
+          authorNote: fileNote,
+        });
+      });
+      items.sort(function (a, b) { return String(b.date).localeCompare(String(a.date)); });
+      show(items.slice(0, 10));
+    }).catch(function () {
+      list.innerHTML = '<div class="wn-empty">Couldn\u2019t load recent additions right now.</div>';
+    });
+  }
+
+  // GLOBAL SEARCH: indexes every data file + the VRC/group sources once, then
+  // filters across all tabs. Clicking a result jumps to that tab.
+  var gsIndex = null;
+  var gsIndexing = null;
+  function resolveImg(val) {
+    if (!val) return '';
+    if (val.indexOf('http') === 0) return val;
+    if (val.indexOf('/images/') === 0 || val.indexOf('images/') === 0 || val.indexOf('/previews/') === 0 || val.indexOf('previews/') === 0) {
+      return 'https://raw.githubusercontent.com/FishStructuredChaos/database/main/' + val.replace(/^\//, '');
+    }
+    if (val.indexOf('/r2/') === 0) return 'https://rosefish-submit.ziver64.workers.dev' + val;
+    return '';
+  }
+  function buildGsIndex() {
+    if (gsIndex) return Promise.resolve(gsIndex);
+    if (gsIndexing) return gsIndexing;
+    gsIndexing = (async function () {
+      var index = [];
+      var grids = document.querySelectorAll('.data-card-grid[data-file]');
+      await Promise.all(Array.prototype.map.call(grids, function (grid) {
+        return fetch('https://raw.githubusercontent.com/FishStructuredChaos/database/main/data/' + grid.dataset.file + '.json')
+          .then(function (r) { return r.json(); })
+          .then(function (d) {
+            var headers = d.headers || [];
+            var nameIdx = 0;
+            var infoIdx = headers.findIndex(function (h) { return /info/i.test(h); });
+            var picIdx = headers.findIndex(function (h) { return /picture|preview|image/i.test(h); });
+            (d.rows || []).forEach(function (row) {
+              if (!row || !row[nameIdx]) return;
+              var isMedia = grid.dataset.file === 'sounds.json' || grid.dataset.file === 'gallery.json';
+              var name = isMedia
+                ? String(row[nameIdx]).split('/').pop().replace(/\.[a-z0-9]+$/i, '') || String(row[nameIdx])
+                : String(row[nameIdx]);
+              index.push({
+                tabId: grid.dataset.file,
+                label: getTabLabel(grid.dataset.file),
+                name: name,
+                info: infoIdx >= 0 ? String(row[infoIdx] || '') : '',
+                link: '',
+                img: resolveImg(picIdx >= 0 ? row[picIdx] : ''),
+              });
+            });
+          })
+          .catch(function () {});
+      }));
+      await fetch('https://gist.githubusercontent.com/TheZiver/bb99f9facb8d14fd607dbb79e9a99d83/raw')
+        .then(function (r) { return r.json(); })
+        .then(function (json) {
+          Object.keys(json).forEach(function (key) {
+            var tabId = key === 'community_avatars' ? 'public-avatars' : 'worlds';
+            (json[key] || []).forEach(function (item) {
+              if (!item) return;
+              var name = item.avatar_name || item.world_name;
+              if (!name) return;
+              index.push({
+                tabId: tabId,
+                label: getTabLabel(tabId),
+                name: String(name),
+                info: '',
+                link: item.avatar_link || item.world_link || '',
+                img: item.avatar_image_url || item.world_image_url || '',
+              });
+            });
+          });
+        })
+        .catch(function () {});
+      await fetch('https://gist.githubusercontent.com/TheZiver/9fdd3f8c495098ffa0beceece373d382/raw/structured_chaos_community_ecosystem_groups.json')
+        .then(function (r) { return r.json(); })
+        .then(function (json) {
+          (json.community_groups || []).forEach(function (g) {
+            if (!g.group_name) return;
+            index.push({
+              tabId: 'vrchat-groups',
+              label: getTabLabel('vrchat-groups'),
+              name: String(g.group_name),
+              info: '',
+              link: g.group_link || '',
+              img: g.icon_url || '',
+            });
+          });
+        })
+        .catch(function () {});
+      gsIndex = index;
+      return index;
+    })();
+    return gsIndexing;
+  }
+  function getTabLabel(tabId) {
+    var btn = document.querySelector('.tab-btn[data-tab="' + tabId + '"]');
+    return btn ? btn.textContent.trim() : tabId;
+  }
+  function highlight(text, q) {
+    var escText = esc(text);
+    if (!q) return escText;
+    var safe = q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    return escText.replace(new RegExp('(' + safe + ')', 'ig'), '<mark>$1</mark>');
+  }
+  function initGlobalSearch() {
+    var input = document.getElementById('gsearch');
+    if (!input) return;
+    var results = document.getElementById('gsearch-results');
+    var whatsNewEl = document.getElementById('whatsNew');
+    var timer = null;
+    var activeIdx = -1;
+    function setActive(idx) {
+      var items = results.querySelectorAll('.gs-item');
+      activeIdx = idx;
+      for (var i = 0; i < items.length; i++) {
+        items[i].classList.toggle('active', i === idx);
+        if (i === idx) items[i].scrollIntoView({ block: 'nearest' });
+      }
+    }
+    input.addEventListener('input', function () {
+      clearTimeout(timer);
+      timer = setTimeout(doSearch, 150);
+    });
+    input.addEventListener('focus', doSearch);
+    document.addEventListener('click', function (e) {
+      if (!e.target.closest('.gsearch-wrap')) results.style.display = 'none';
+    });
+    input.addEventListener('keydown', function (e) {
+      var items = results.querySelectorAll('.gs-item');
+      if (!items.length) return;
+      if (e.key === 'ArrowDown') { e.preventDefault(); setActive(Math.min(activeIdx + 1, items.length - 1)); }
+      else if (e.key === 'ArrowUp') { e.preventDefault(); setActive(Math.max(activeIdx - 1, 0)); }
+      else if (e.key === 'Enter' && activeIdx >= 0) { e.preventDefault(); items[activeIdx].click(); }
+      else if (e.key === 'Escape') { results.style.display = 'none'; activeIdx = -1; }
+    });
+    function doSearch() {
+      var q = input.value.trim().toLowerCase();
+      // Hide the WHAT IS NEW strip while actively searching; restore when empty.
+      if (whatsNewEl) whatsNewEl.style.display = q.length >= 2 ? 'none' : '';
+      if (q.length < 2) { results.style.display = 'none'; activeIdx = -1; return; }
+      buildGsIndex().then(function (index) {
+        var hits = [];
+        for (var i = 0; i < index.length && hits.length < 12; i++) {
+          var it = index[i];
+          var hay = (it.name + ' ' + it.info + ' ' + it.label).toLowerCase();
+          if (hay.indexOf(q) >= 0) hits.push(it);
+        }
+        if (!hits.length) {
+          results.innerHTML = '<div class="gs-empty">No matches in the whole database.</div>';
+        } else {
+          results.innerHTML = hits.map(function (h) {
+            var img = h.img ? '<img class="gs-img" src="' + esc(h.img) + '" loading="lazy" onerror="this.style.display=\'none\'">' : '<span class="gs-img gs-img-none"></span>';
+            return '<button type="button" class="gs-item" data-tab="' + h.tabId + '" data-kind="' + (h.link ? 'vrc' : 'file') + '" data-url="' + esc(h.link || '') + '" data-name="' + esc(h.name) + '">'
+              + img
+              + '<span class="gs-body"><span class="gs-name">' + highlight(h.name, q) + '</span>'
+              + (h.info ? '<span class="gs-info">' + esc(h.info.slice(0, 70)) + '</span>' : '')
+              + '</span>'
+              + '<span class="gs-tab">' + esc(h.label) + '</span>'
+              + '</button>';
+          }).join('');
+          // Direct listeners on each result as well as delegation below — belt
+          // and suspenders, in case anything interferes with event bubbling.
+          results.querySelectorAll('.gs-item').forEach(function (b) {
+            b.addEventListener('click', function () { openResult(b); });
+          });
+        }
+        results.style.display = 'block';
+        setActive(-1);
+      });
+    }
+    function openResult(btn) {
+      var id = btn.getAttribute('data-tab');
+      var kind = btn.getAttribute('data-kind') || '';
+      var url = btn.getAttribute('data-url');
+      var name = btn.getAttribute('data-name');
+      results.style.display = 'none';
+      input.value = '';
+      activeIdx = -1;
+      if (whatsNewEl) whatsNewEl.style.display = '';
+      if (!id) return;
+      // Same behavior as the WHAT IS NEW cards: jump to the tab, scroll to the
+      // cell, and mark it with the four pointing arrows.
+      locateAndMark(id, kind, url, name);
+    }
+    results.addEventListener('click', function (e) {
+      var btn = e.target && e.target.closest ? e.target.closest('.gs-item') : null;
+      if (!btn) return;
+      openResult(btn);
     });
   }
 
@@ -280,30 +759,47 @@
     var grid = document.getElementById('card-grid-vrchat-groups');
     if (!grid) return;
     var countEl = document.getElementById('count-vrchat-groups');
-
-    fetch('https://gist.githubusercontent.com/TheZiver/9fdd3f8c495098ffa0beceece373d382/raw/c7b161cf283aded62242df37a1e66a5b5a428a21/structured_chaos_community_ecosystem_groups.json')
+    function render(groups) {
+      if (groups.length === 0) {
+        grid.innerHTML = '<div class="empty-state">Nothing archived here yet \u2014 be the first!</div>';
+        return;
+      }
+      if (countEl) countEl.textContent = groups.length + ' groups';
+      grid.innerHTML = groups.map(function (g) {
+        return '<div class="group-card">' +
+          '<a href="' + esc(g.group_link) + '" target="_blank" class="gc-link-wrap">' +
+            '<div class="gc-icon-wrap">' +
+              '<img class="gc-icon" src="' + esc(g.icon_url) + '" alt="' + esc(g.group_name) + '" loading="lazy" onerror="this.parentElement.innerHTML=\'<div class=\\\'gc-icon-fallback\\\'>' + esc(g.group_name) + '</div>\'">' +
+            '</div>' +
+            '<div class="gc-name">' + esc(g.group_name) + '</div>' +
+          '</a>' +
+        '</div>';
+      }).join('');
+    }
+    fetch('https://gist.githubusercontent.com/TheZiver/9fdd3f8c495098ffa0beceece373d382/raw/structured_chaos_community_ecosystem_groups.json')
       .then(function (r) { return r.json(); })
       .then(function (json) {
         var groups = json.community_groups || [];
-        if (groups.length === 0) {
-          grid.innerHTML = '<div class="empty-state">No groups found.</div>';
-          return;
-        }
-        if (countEl) countEl.textContent = groups.length + ' groups';
-
-        grid.innerHTML = groups.map(function (g) {
-          return '<div class="group-card">' +
-            '<a href="' + esc(g.group_link) + '" target="_blank" class="gc-link-wrap">' +
-              '<div class="gc-icon-wrap">' +
-                '<img class="gc-icon" src="' + esc(g.icon_url) + '" alt="' + esc(g.group_name) + '" loading="lazy" onerror="this.parentElement.innerHTML=\'<div class=\\\'gc-icon-fallback\\\'>' + esc(g.group_name) + '</div>\'">' +
-              '</div>' +
-              '<div class="gc-name">' + esc(g.group_name) + '</div>' +
-            '</a>' +
-          '</div>';
-        }).join('');
+        // Approved groups from the review gist that aren't in the ecosystem
+        // list yet still get displayed (default icon, id as name), so they are
+        // findable on the site.
+        fetch('https://gist.githubusercontent.com/FishStructuredChaos/56babd51194abfdffa87d11a481c3541/raw/database-pending-worlds-avatars-groups.json')
+          .then(function (r) { return r.json(); })
+          .then(function (json2) {
+            var all = Array.isArray(json2) ? json2 : ((json2 && json2.entries) || []);
+            var existing = {};
+            groups.forEach(function (g) { existing[g.group_link] = true; });
+            all.forEach(function (e) {
+              if (!e || e.type !== 'group' || e.status !== 'approved' || !e.url || existing[e.url]) return;
+              var idm = String(e.url).match(/grp_[a-f0-9]+/i);
+              groups.push({ group_name: idm ? idm[0] : 'NEW GROUP', group_link: e.url, icon_url: 'https://assets.vrchat.com/www/groups/default_icon.png' });
+            });
+            render(groups);
+          })
+          .catch(function () { render(groups); });
       })
       .catch(function () {
-        grid.innerHTML = '<div class="empty-state">Failed to load groups.</div>';
+        grid.innerHTML = '<div class="empty-state">Couldn\u2019t reach the archive \u2014 try again in a bit.</div>';
       });
   }
 
@@ -317,7 +813,7 @@
       .then(function (raw) {
         var names = raw.split(',').map(function (n) { return n.trim(); }).filter(function (n) { return n.length > 0; });
         if (names.length === 0) {
-          grid.innerHTML = '<div class="empty-state">No members found.</div>';
+          grid.innerHTML = '<div class="empty-state">Nothing archived here yet \u2014 be the first!</div>';
           return;
         }
         if (countEl) countEl.textContent = names.length + ' members';
@@ -328,28 +824,8 @@
         }).join('') + '</div>';
       })
       .catch(function () {
-        grid.innerHTML = '<div class="empty-state">Failed to load members.</div>';
+        grid.innerHTML = '<div class="empty-state">Couldn\u2019t reach the archive \u2014 try again in a bit.</div>';
       });
   }
-
-  window.filterCards = function (input, gridId) {
-    var q = input.value.toLowerCase();
-    var container = document.getElementById(gridId);
-    if (!container) return;
-    var cards = container.querySelectorAll('.card, .data-card, .group-card, .member-pill');
-    var count = 0;
-    cards.forEach(function (card) {
-      var match = card.textContent.toLowerCase().indexOf(q) >= 0;
-      card.style.display = match ? '' : 'none';
-      if (match) count++;
-    });
-    var info = input.parentElement.previousElementSibling;
-    if (info && info.classList.contains('section-info')) {
-      var countEl = info.querySelector('.count');
-      if (countEl) {
-        var label = countEl.dataset.label || '';
-        countEl.textContent = count + ' ' + label;
-      }
-    }
-  };
 })();
+

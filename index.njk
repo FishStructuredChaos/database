@@ -63,10 +63,6 @@ layout: base.njk
   <div class="section-info">
     <span class="count" id="count-{{ tab.id }}" data-label="items">loading...</span>
   </div>
-  <div class="search-bar">
-    <span class="search-icon">&#x1F50D;</span>
-    <input type="text" placeholder="SEARCH" oninput="filterCards(this, 'card-grid-{{ tab.id }}')">
-  </div>
   <div class="data-card-grid" id="card-grid-{{ tab.id }}" data-file="{{ tab.id }}">
     <div class="loader">loading {{ tab.id }}...</div>
   </div>
@@ -94,10 +90,6 @@ layout: base.njk
   <div class="section-info">
     <span class="count" id="count-{{ tab.id }}" data-label="{{ tab.id }}">loading...</span>
   </div>
-  <div class="search-bar">
-    <span class="search-icon">&#x1F50D;</span>
-    <input type="text" placeholder="SEARCH" oninput="filterCards(this, 'card-grid-{{ tab.id }}')">
-  </div>
   {% if tab.submitLink and tab.submitLabel %}
   <div class="submit-row">
     <a class="submit-badge" href="{{ tab.submitLink }}" target="_blank">{{ tab.submitLabel }}</a>
@@ -111,10 +103,6 @@ layout: base.njk
   <div class="section-info">
     <span class="count" id="count-{{ tab.id }}" data-label="{{ tab.id }}">loading...</span>
   </div>
-  <div class="search-bar">
-    <span class="search-icon">&#x1F50D;</span>
-    <input type="text" placeholder="SEARCH" oninput="filterCards(this, 'card-grid-{{ tab.id }}')">
-  </div>
   <div class="group-grid" id="card-grid-{{ tab.id }}">
     <div class="loader">loading {{ tab.id }}...</div>
   </div>
@@ -127,10 +115,6 @@ layout: base.njk
   {% endif %}
   <div class="section-info">
     <span class="count" id="count-{{ tab.id }}" data-label="members">loading...</span>
-  </div>
-  <div class="search-bar">
-    <span class="search-icon">&#x1F50D;</span>
-    <input type="text" placeholder="SEARCH" oninput="filterCards(this, 'card-grid-{{ tab.id }}')">
   </div>
   <div class="member-grid" id="card-grid-{{ tab.id }}">
     <div class="loader">loading members...</div>

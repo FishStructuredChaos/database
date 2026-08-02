@@ -118,42 +118,7 @@ header p {
   background: rgba(0,0,0,0.7);
 }
 
-/* SEARCH BAR */
-.search-bar {
-  margin-bottom: 8px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: #0d0000;
-  border: 2px inset #660000;
-  padding: 4px 8px;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.search-icon {
-  font-size: 0.9rem;
-  line-height: 1;
-  color: #884444;
-  flex-shrink: 0;
-}
-
-.search-bar input {
-  font-family: "IBM Plex Mono", "Courier New", Courier, monospace;
-  font-size: 0.85rem;
-  border: none;
-  background: transparent;
-  color: #ffcccc;
-  flex: 1;
-  min-width: 0;
-  outline: none;
-}
-
-.search-bar input:focus {
-  background: #1a0000;
-  outline: none;
-}
-
+/* TAB CONTENT */
 /* INFORMATION PAGE */
 .info-section {
   background: #220000;
@@ -298,7 +263,7 @@ header p {
   line-height: 1.4;
 }
 
-/* CARD GRID — flex layout so hovering a card grows it and smoothly pushes its neighbors */
+/* CARD GRID — fixed flex layout; hover highlights without resizing or pushing neighbors */
 .card-grid {
   display: flex;
   flex-wrap: wrap;
@@ -308,12 +273,9 @@ header p {
 .card-grid > .card {
   flex: 1 1 220px;
   min-width: 0;
-  transition: flex-basis 0.25s ease, transform 0.25s ease;
 }
 
 .card-grid > .card:hover {
-  flex-basis: 255px;
-  transform: scale(1.02);
   z-index: 1;
 }
 
@@ -327,11 +289,14 @@ header p {
   color: inherit;
   display: block;
   height: 100%;
+  border: 2px solid transparent;
+  transition: border-color 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
 }
 
 .card-link-wrap:hover {
-  border: 2px solid #cc4444;
-  margin: -2px;
+  border-color: #cc4444;
+  background: #330000;
+  box-shadow: 0 0 14px rgba(204, 68, 68, 0.3);
 }
 
 .card-link-wrap:hover .card-img-wrap {
@@ -434,7 +399,7 @@ header p {
   display: flex;
   gap: 0;
   align-items: flex-start;
-  transition: border-color 0.15s, transform 0.2s ease;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
 .data-card-link {
@@ -444,17 +409,16 @@ header p {
 }
 .data-card-link .data-card {
   border-color: #442222;
-  transition: border-color 0.15s;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 .data-card-link:hover .data-card {
-  border-color: #993333;
-  transform: scale(1.03);
-  z-index: 1;
+  border-color: #cc4444;
+  box-shadow: 0 0 12px rgba(204, 68, 68, 0.25);
 }
 
 .data-card:hover {
-  transform: scale(1.03);
-  z-index: 1;
+  border-color: #cc4444;
+  box-shadow: 0 0 12px rgba(204, 68, 68, 0.25);
 }
 
 .dc-img-wrap {
@@ -697,7 +661,7 @@ header p {
 ::-webkit-scrollbar-track { background: #1a0000; }
 ::-webkit-scrollbar-thumb { background: #550000; border: 2px outset #771111; }
 
-/* GROUP CARDS — same grow-and-push behavior as the card grid */
+/* GROUP CARDS — fixed flex layout, hover highlights without resizing */
 .group-grid {
   display: flex;
   flex-wrap: wrap;
@@ -709,14 +673,17 @@ header p {
   border: 2px ridge #660000;
   aspect-ratio: 1;
   flex: 1 1 160px;
-  min-width: 0;
-  transition: flex-basis 0.25s ease, transform 0.25s ease;
+  min-width: 120px;
+  max-width: 200px;
+  min-height: 120px;
+  max-height: 200px;
+  overflow: hidden;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
 .group-card:hover {
-  flex-basis: 185px;
-  transform: scale(1.02);
-  z-index: 1;
+  border-color: #cc4444;
+  box-shadow: 0 0 14px rgba(204, 68, 68, 0.3);
 }
 
 .gc-link-wrap {
@@ -767,6 +734,12 @@ header p {
   color: #ffcccc;
   line-height: 1.3;
   word-break: break-word;
+  /* Fixed 2-line box so every card is the same height */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 2.1em;
 }
 
 /* MEMBER PILLS */
@@ -790,9 +763,339 @@ header p {
   border-radius: 4px;
 }
 
+/* WHAT'S NEW — grid of cards: image, name, author focus, type + date */
+.whats-new {
+  background: #0d0000;
+  border: 1px solid #331111;
+  margin-bottom: 10px;
+  padding: 10px 12px;
+}
+
+.wn-title {
+  color: #cc8888;
+  font-weight: bold;
+  letter-spacing: 1px;
+  font-size: 0.8rem;
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+.wn-list {
+  display: grid;
+  grid-template-columns: repeat(10, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.wn-item {
+  background: #140303;
+  border: 1px solid #331111;
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  min-width: 0;
+}
+
+.wn-item:hover {
+  border-color: #cc4444;
+  box-shadow: 0 0 12px rgba(204, 68, 68, 0.25);
+}
+
+.wn-link {
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  font-family: inherit;
+  font-size: inherit;
+  text-align: left;
+  cursor: pointer;
+  width: 100%;
+}
+
+/* Four arrows pointing at the located card from all sides; removed after ~4s */
+.card.wn-target,
+.data-card.wn-target,
+.group-card.wn-target {
+  position: relative;
+  border-color: #ffcc44 !important;
+  box-shadow: 0 0 18px rgba(255, 200, 68, 0.5);
+}
+
+.wn-arrow {
+  position: absolute;
+  z-index: 8;
+  color: #ffcc44;
+  font-size: 20px;
+  line-height: 1;
+  text-shadow: 0 0 8px rgba(255, 200, 68, 0.9);
+  pointer-events: none;
+}
+
+.wn-arrow-t { top: -24px; left: 50%; transform: translateX(-50%); animation: wn-pulse-t 0.7s infinite; }
+.wn-arrow-b { bottom: -24px; left: 50%; transform: translateX(-50%); animation: wn-pulse-b 0.7s infinite; }
+.wn-arrow-l { left: -24px; top: 50%; transform: translateY(-50%); animation: wn-pulse-l 0.7s infinite; }
+.wn-arrow-r { right: -24px; top: 50%; transform: translateY(-50%); animation: wn-pulse-r 0.7s infinite; }
+
+@keyframes wn-pulse-t { 0%, 100% { transform: translate(-50%, 0); } 50% { transform: translate(-50%, 6px); } }
+@keyframes wn-pulse-b { 0%, 100% { transform: translate(-50%, 0); } 50% { transform: translate(-50%, -6px); } }
+@keyframes wn-pulse-l { 0%, 100% { transform: translate(0, -50%); } 50% { transform: translate(6px, -50%); } }
+@keyframes wn-pulse-r { 0%, 100% { transform: translate(0, -50%); } 50% { transform: translate(-6px, -50%); } }
+
+.wn-imgwrap {
+  width: 100%;
+  aspect-ratio: 1;
+  background: #1a0000;
+  border: 1px solid #331111;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.wn-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.wn-emoji {
+  font-size: 1.7rem;
+  line-height: 1;
+}
+
+.wn-play {
+  width: 100%;
+  height: 100%;
+  font-size: 2.2rem;
+  background: #220000;
+  border: none;
+  color: #ff8888;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.wn-play:hover { background: #330000; color: #ffcccc; }
+
+.wn-play.playing { color: #88cc88; }
+
+.wn-name {
+  color: #ffcccc;
+  font-size: 0.68rem;
+  line-height: 1.3;
+  word-break: break-word;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 1.75em;
+}
+
+.wn-link:hover .wn-name { color: #ff8888; }
+
+/* The author is the focus — gold chip, always visible */
+.wn-author {
+  font-size: 0.56rem;
+  letter-spacing: 1px;
+  color: #aa8866;
+  background: #221100;
+  border: 1px solid #665500;
+  padding: 1px 4px;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.wn-author b {
+  color: #ddcc88;
+  font-weight: bold;
+}
+
+.wn-author-none { color: #554433; border-color: #332200; background: #140a00; }
+
+.wn-meta {
+  margin-top: auto;
+  width: 100%;
+}
+
+/* Looks exactly like the tab buttons below; pinned to the bottom of the cell */
+.wn-badge {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  font-family: "IBM Plex Mono", "Courier New", Courier, monospace;
+  font-size: 0.56rem;
+  background: #330000;
+  border: 1px solid #552222;
+  color: #cc9999;
+  padding: 2px 3px;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.wn-empty {
+  color: #886666;
+  font-size: 0.78rem;
+  padding: 4px 0;
+}
+
+.wn-notice {
+  margin-top: 6px;
+  padding: 5px 10px;
+  border: 1px solid #665500;
+  background: #221100;
+  color: #ddcc88;
+  font-size: 0.72rem;
+  text-align: center;
+}
+
+/* GLOBAL SEARCH */
+.gsearch-wrap {
+  position: relative;
+  margin-bottom: 10px;
+}
+
+#gsearch {
+  font-family: "IBM Plex Mono", "Courier New", Courier, monospace;
+  width: 100%;
+  padding: 9px 12px;
+  font-size: 0.85rem;
+  background: #1a0000;
+  border: 2px inset #660000;
+  color: #ffcccc;
+}
+
+#gsearch:focus { outline: none; border-color: #aa4444; }
+
+#gsearch-results {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  background: #220000;
+  border: 2px ridge #660000;
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+.gs-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  text-align: left;
+  font-family: "IBM Plex Mono", "Courier New", Courier, monospace;
+  font-size: 0.8rem;
+  background: none;
+  border: none;
+  border-bottom: 1px solid #1f0a0a;
+  padding: 8px 12px;
+  cursor: pointer;
+  color: #ffcccc;
+}
+
+.gs-item:hover, .gs-item.active { background: #440000; }
+
+.gs-img {
+  width: 38px;
+  height: 38px;
+  object-fit: cover;
+  border: 1px solid #442222;
+  background: #1a0000;
+  flex-shrink: 0;
+  display: block;
+}
+
+.gs-img-none { border-color: transparent; background: transparent; }
+
+.gs-body {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+
+.gs-name { word-break: break-all; }
+
+.gs-name mark {
+  background: #884400;
+  color: #fff;
+  padding: 0 1px;
+}
+
+.gs-info {
+  font-size: 0.68rem;
+  color: #886666;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.gs-tab {
+  flex-shrink: 0;
+  font-size: 0.68rem;
+  color: #886666;
+  letter-spacing: 1px;
+}
+
+.gs-empty {
+  padding: 12px;
+  color: #886666;
+  font-size: 0.78rem;
+}
+
+/* BACK TO TOP — triangle button, bottom-right, appears after scrolling */
+#backTop {
+  display: none;
+  position: fixed;
+  right: 130px;
+  bottom: 18px;
+  z-index: 60;
+  width: 34px;
+  height: 34px;
+  border: 2px solid #aa4444;
+  background: #880000;
+  cursor: pointer;
+  clip-path: polygon(50% 8%, 96% 92%, 4% 92%);
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+#backTop:hover {
+  background: #aa4444;
+  border-color: #cc6666;
+}
+
 /* RESPONSIVE */
 @media (max-width: 768px) {
   header h1 { font-size: 1.2rem; }
   .tab-btn { font-size: 0.7rem; padding: 2px 5px; }
   .contributions-list { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 900px) {
+  /* Too narrow for 10 across: keep one row, but scroll instead of squishing */
+  .wn-list { display: flex; overflow-x: auto; }
+  .wn-item { flex: 0 0 auto; width: 104px; }
+}
+
+@media (max-width: 480px) {
+  .container { padding: 4px; }
+  header h1 { font-size: 1rem; }
+  .tab-section { font-size: 0.95rem; }
+  .whats-new { padding: 8px 10px; }
+  .gs-item { font-size: 0.75rem; padding: 7px 10px; }
 }
