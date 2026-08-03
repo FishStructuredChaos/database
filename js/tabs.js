@@ -1,6 +1,20 @@
 ﻿(function () {
   const ALLOWED_TAGS = ['ROSE_FISH', 'FISH'];
 
+  // Shared constants: gist raw URLs (by name, always latest), repo/worker
+  // bases, and the repeated UI strings.
+  const GIST_FISH_CONTRIB_URL = 'https://gist.githubusercontent.com/TheZiver/9b85c8b8b6c1b4caa17dda8d37dc18ac/raw';
+  const GIST_AVATARS_ECO_URL = 'https://gist.githubusercontent.com/TheZiver/bb99f9facb8d14fd607dbb79e9a99d83/raw';
+  const GIST_VRC_QUEUE_URL = 'https://gist.githubusercontent.com/FishStructuredChaos/56babd51194abfdffa87d11a481c3541/raw/database-pending-worlds-avatars-groups.json';
+  const GIST_PENDING_FILES_URL = 'https://gist.githubusercontent.com/FishStructuredChaos/7b0971c63dbb689847b81cdf84299c1f/raw/database-pending-files.json';
+  const GIST_GROUPS_ECO_URL = 'https://gist.githubusercontent.com/TheZiver/9fdd3f8c495098ffa0beceece373d382/raw/structured_chaos_community_ecosystem_groups.json';
+  const GIST_MEMBERS_URL = 'https://gist.githubusercontent.com/TheZiver/def41cbeb9b2e8eb071015f58bf8eb54/raw/48b6c7290489157d85e01f23d51915e4105c78dd/fish_community_members.txt';
+  const WORKER_BASE = 'https://rosefish-submit.ziver64.workers.dev';
+  const REPO_BASE = 'https://raw.githubusercontent.com/FishStructuredChaos/database/main/';
+  const DEFAULT_GROUP_ICON = 'https://assets.vrchat.com/www/groups/default_icon.png';
+  const MSG_EMPTY = 'Nothing archived here yet \u2014 be the first!';
+  const MSG_ERROR = 'Couldn\u2019t reach the archive \u2014 try again in a bit.';
+
   function esc(str) {
     if (str == null) return '';
     var d = document.createElement('div');
@@ -57,7 +71,7 @@
     var listEl = document.getElementById('rosefish-members-list');
     if (!listEl) return;
 
-    fetch('https://gist.githubusercontent.com/TheZiver/9b85c8b8b6c1b4caa17dda8d37dc18ac/raw')
+    fetch(GIST_FISH_CONTRIB_URL)
       .then(function (r) { return r.text(); })
       .then(function (rawText) {
         var lines = rawText.split('\n');
@@ -78,21 +92,15 @@
           }
         }
         if (members.length === 0) {
-          listEl.innerHTML = '<p class="empty-note">Nothing archived here yet \u2014 be the first!</p>';
+          listEl.innerHTML = '<p class="empty-note">' + MSG_EMPTY + '</p>';
         } else {
           listEl.innerHTML = members.map(function (m) {
-            function esc(str) {
-              if (str == null) return '';
-              var d = document.createElement('div');
-              d.textContent = str;
-              return d.innerHTML;
-            }
             return '<div class="member"><div class="member-name">' + esc(m.name) + '</div><div class="member-desc">' + esc(m.contribution) + '</div></div>';
           }).join('');
         }
       })
       .catch(function () {
-        listEl.innerHTML = '<p class="empty-note">Couldn\u2019t reach the archive \u2014 try again in a bit.</p>';
+        listEl.innerHTML = '<p class="empty-note">' + MSG_ERROR + '</p>';
       });
   }
 
@@ -100,7 +108,7 @@
     var grids = document.querySelectorAll('.card-grid[data-gist-key]');
     if (grids.length === 0) return;
 
-    fetch('https://gist.githubusercontent.com/TheZiver/bb99f9facb8d14fd607dbb79e9a99d83/raw')
+    fetch(GIST_AVATARS_ECO_URL)
       .then(function (r) { return r.json(); })
       .then(function (json) {
         grids.forEach(function (grid) {
@@ -122,7 +130,7 @@
           if (countEl) countEl.textContent = label;
 
           if (items.length === 0) {
-            grid.innerHTML = '<div class="empty-state">Nothing archived here yet \u2014 be the first!</div>';
+            grid.innerHTML = '<div class="empty-state">' + MSG_EMPTY + '</div>';
             return;
           }
 
@@ -185,7 +193,7 @@
       })
       .catch(function () {
         grids.forEach(function (grid) {
-          grid.innerHTML = '<div class="empty-state">Couldn\u2019t reach the archive \u2014 try again in a bit.</div>';
+          grid.innerHTML = '<div class="empty-state">' + MSG_ERROR + '</div>';
         });
       });
   }
@@ -205,21 +213,9 @@
       return -1;
     }
 
-    function imgUrl(val) {
-      if (!val || val.indexOf('http') === 0) return val;
-      if (val.indexOf('/images/') === 0 || val.indexOf('images/') === 0 || val.indexOf('/previews/') === 0 || val.indexOf('previews/') === 0) {
-        var clean = val.replace(/^\//, '');
-        return 'https://raw.githubusercontent.com/FishStructuredChaos/database/main/' + clean;
-      }
-      if (val.indexOf('/r2/') === 0) {
-        return 'https://rosefish-submit.ziver64.workers.dev' + val;
-      }
-      return val;
-    }
-
     grids.forEach(function (grid) {
       var fileId = grid.dataset.file;
-      var url = 'https://raw.githubusercontent.com/FishStructuredChaos/database/main/data/' + fileId + '.json';
+      var url = REPO_BASE + 'data/' + fileId + '.json';
 
       fetch(url)
         .then(function (r) { return r.json(); })
@@ -230,7 +226,7 @@
           if (countEl) countEl.textContent = rows.length + ' items';
 
           if (rows.length === 0) {
-            grid.innerHTML = '<div class="empty-state">Nothing archived here yet \u2014 be the first!</div>';
+            grid.innerHTML = '<div class="empty-state">' + MSG_EMPTY + '</div>';
             return;
           }
 
@@ -250,11 +246,11 @@
             var rowLabel = (btnIdx >= 0 && row[btnIdx]) ? row[btnIdx] : defaultLabel;
 
             if (isNoBtn && link) {
-              html += '<a href="' + esc(link.indexOf('/r2/') === 0 ? 'https://rosefish-submit.ziver64.workers.dev' + link : link) + '" target="_blank" class="data-card-link">';
+              html += '<a href="' + esc(link.indexOf('/r2/') === 0 ? WORKER_BASE + link : link) + '" target="_blank" class="data-card-link">';
             }
             html += '<div class="data-card">';
             if (img) {
-              html += '<div class="dc-img-wrap"><img class="table-img" src="' + esc(imgUrl(img)) + '" alt="' + esc(name) + '" loading="lazy" decoding="async"></div>';
+              html += '<div class="dc-img-wrap"><img class="table-img" src="' + esc(resolveImg(img)) + '" alt="' + esc(name) + '" loading="lazy" decoding="async"></div>';
             }
             html += '<div class="dc-body">';
             html += '<div class="dc-name">' + esc(name) + '</div>';
@@ -274,7 +270,7 @@
               html += '</div>';
             }
             if (!isNoBtn && link) {
-              html += '<div class="dc-link-out"><a href="' + esc(link.indexOf('/r2/') === 0 ? 'https://rosefish-submit.ziver64.workers.dev' + link : link) + '" target="_blank">' + esc(rowLabel) + '</a></div>';
+              html += '<div class="dc-link-out"><a href="' + esc(link.indexOf('/r2/') === 0 ? WORKER_BASE + link : link) + '" target="_blank">' + esc(rowLabel) + '</a></div>';
             }
             html += '</div></div>';
             if (isNoBtn && link) {
@@ -284,7 +280,7 @@
           grid.innerHTML = html;
         })
         .catch(function () {
-          grid.innerHTML = '<div class="empty-state">Couldn\u2019t reach the archive \u2014 try again in a bit.</div>';
+          grid.innerHTML = '<div class="empty-state">' + MSG_ERROR + '</div>';
         });
     });
   }
@@ -390,7 +386,7 @@
       avatar: { emoji: '\ud83c\udf39', label: 'PUBLIC-AVATARS', color: '#cc4488' },
       group: { emoji: '\ud83d\udc65', label: 'VRCHAT-GROUPS', color: '#44aa55' },
     };
-    var defaultGroupIcon = 'https://assets.vrchat.com/www/groups/default_icon.png';
+    var defaultGroupIcon = DEFAULT_GROUP_ICON;
     function fileLabel(f) { return f ? f.replace('.json', '').replace(/-/g, ' ').toUpperCase() : ''; }
     function show(items) {
       if (!items.length) { list.innerHTML = '<div class="wn-empty">Nothing new yet \u2014 check back soon!</div>'; return; }
@@ -482,10 +478,10 @@
         }
       });
     }
-    var vrcUrl = 'https://gist.githubusercontent.com/FishStructuredChaos/56babd51194abfdffa87d11a481c3541/raw/database-pending-worlds-avatars-groups.json';
-    var filesUrl = 'https://gist.githubusercontent.com/FishStructuredChaos/7b0971c63dbb689847b81cdf84299c1f/raw/database-pending-files.json';
-    var avatarsEcoUrl = 'https://gist.githubusercontent.com/TheZiver/bb99f9facb8d14fd607dbb79e9a99d83/raw';
-    var groupsEcoUrl = 'https://gist.githubusercontent.com/TheZiver/9fdd3f8c495098ffa0beceece373d382/raw/structured_chaos_community_ecosystem_groups.json';
+    var vrcUrl = GIST_VRC_QUEUE_URL;
+    var filesUrl = GIST_PENDING_FILES_URL;
+    var avatarsEcoUrl = GIST_AVATARS_ECO_URL;
+    var groupsEcoUrl = GIST_GROUPS_ECO_URL;
     Promise.all([
       fetch(vrcUrl).then(function (r) { return r.json(); }).catch(function () { return []; }),
       fetch(filesUrl).then(function (r) { return r.json(); }).catch(function () { return { submissions: [] }; }),
@@ -583,13 +579,16 @@
   // filters across all tabs. Clicking a result jumps to that tab.
   var gsIndex = null;
   var gsIndexing = null;
+  // Shared image resolver for data-file previews, WHAT IS NEW cards and
+  // search results: absolute URLs pass through; repo-relative paths map to
+  // raw.githubusercontent; /r2/ maps to the worker's public uploads.
   function resolveImg(val) {
     if (!val) return '';
     if (val.indexOf('http') === 0) return val;
     if (val.indexOf('/images/') === 0 || val.indexOf('images/') === 0 || val.indexOf('/previews/') === 0 || val.indexOf('previews/') === 0) {
-      return 'https://raw.githubusercontent.com/FishStructuredChaos/database/main/' + val.replace(/^\//, '');
+      return REPO_BASE + val.replace(/^\//, '');
     }
-    if (val.indexOf('/r2/') === 0) return 'https://rosefish-submit.ziver64.workers.dev' + val;
+    if (val.indexOf('/r2/') === 0) return WORKER_BASE + val;
     return '';
   }
   function buildGsIndex() {
@@ -599,7 +598,7 @@
       var index = [];
       var grids = document.querySelectorAll('.data-card-grid[data-file]');
       await Promise.all(Array.prototype.map.call(grids, function (grid) {
-        return fetch('https://raw.githubusercontent.com/FishStructuredChaos/database/main/data/' + grid.dataset.file + '.json')
+        return fetch(REPO_BASE + 'data/' + grid.dataset.file + '.json')
           .then(function (r) { return r.json(); })
           .then(function (d) {
             var headers = d.headers || [];
@@ -624,7 +623,7 @@
           })
           .catch(function () {});
       }));
-      await fetch('https://gist.githubusercontent.com/TheZiver/bb99f9facb8d14fd607dbb79e9a99d83/raw')
+      await fetch(GIST_AVATARS_ECO_URL)
         .then(function (r) { return r.json(); })
         .then(function (json) {
           Object.keys(json).forEach(function (key) {
@@ -645,7 +644,7 @@
           });
         })
         .catch(function () {});
-      await fetch('https://gist.githubusercontent.com/TheZiver/9fdd3f8c495098ffa0beceece373d382/raw/structured_chaos_community_ecosystem_groups.json')
+      await fetch(GIST_GROUPS_ECO_URL)
         .then(function (r) { return r.json(); })
         .then(function (json) {
           (json.community_groups || []).forEach(function (g) {
@@ -732,11 +731,6 @@
               + '<span class="gs-tab">' + esc(h.label) + '</span>'
               + '</button>';
           }).join('');
-          // Direct listeners on each result as well as delegation below — belt
-          // and suspenders, in case anything interferes with event bubbling.
-          results.querySelectorAll('.gs-item').forEach(function (b) {
-            b.addEventListener('click', function () { openResult(b); });
-          });
         }
         results.style.display = 'block';
         setActive(-1);
@@ -769,7 +763,7 @@
     var countEl = document.getElementById('count-vrchat-groups');
     function render(groups) {
       if (groups.length === 0) {
-        grid.innerHTML = '<div class="empty-state">Nothing archived here yet \u2014 be the first!</div>';
+        grid.innerHTML = '<div class="empty-state">' + MSG_EMPTY + '</div>';
         return;
       }
       if (countEl) countEl.textContent = groups.length + ' groups';
@@ -784,14 +778,14 @@
         '</div>';
       }).join('');
     }
-    fetch('https://gist.githubusercontent.com/TheZiver/9fdd3f8c495098ffa0beceece373d382/raw/structured_chaos_community_ecosystem_groups.json')
+    fetch(GIST_GROUPS_ECO_URL)
       .then(function (r) { return r.json(); })
       .then(function (json) {
         var groups = json.community_groups || [];
         // Approved groups from the review gist that aren't in the ecosystem
         // list yet still get displayed (default icon, id as name), so they are
         // findable on the site.
-        fetch('https://gist.githubusercontent.com/FishStructuredChaos/56babd51194abfdffa87d11a481c3541/raw/database-pending-worlds-avatars-groups.json')
+        fetch(GIST_VRC_QUEUE_URL)
           .then(function (r) { return r.json(); })
           .then(function (json2) {
             var all = Array.isArray(json2) ? json2 : ((json2 && json2.entries) || []);
@@ -800,14 +794,14 @@
             all.forEach(function (e) {
               if (!e || e.type !== 'group' || e.status !== 'approved' || !e.url || existing[e.url]) return;
               var idm = String(e.url).match(/grp_[a-f0-9]+/i);
-              groups.push({ group_name: idm ? idm[0] : 'NEW GROUP', group_link: e.url, icon_url: 'https://assets.vrchat.com/www/groups/default_icon.png' });
+              groups.push({ group_name: idm ? idm[0] : 'NEW GROUP', group_link: e.url, icon_url: DEFAULT_GROUP_ICON });
             });
             render(groups);
           })
           .catch(function () { render(groups); });
       })
       .catch(function () {
-        grid.innerHTML = '<div class="empty-state">Couldn\u2019t reach the archive \u2014 try again in a bit.</div>';
+        grid.innerHTML = '<div class="empty-state">' + MSG_ERROR + '</div>';
       });
   }
 
@@ -816,12 +810,12 @@
     if (!grid) return;
     var countEl = document.getElementById('count-fish-members');
 
-    fetch('https://gist.githubusercontent.com/TheZiver/def41cbeb9b2e8eb071015f58bf8eb54/raw/48b6c7290489157d85e01f23d51915e4105c78dd/fish_community_members.txt')
+    fetch(GIST_MEMBERS_URL)
       .then(function (r) { return r.text(); })
       .then(function (raw) {
         var names = raw.split(',').map(function (n) { return n.trim(); }).filter(function (n) { return n.length > 0; });
         if (names.length === 0) {
-          grid.innerHTML = '<div class="empty-state">Nothing archived here yet \u2014 be the first!</div>';
+          grid.innerHTML = '<div class="empty-state">' + MSG_EMPTY + '</div>';
           return;
         }
         if (countEl) countEl.textContent = names.length + ' members';
@@ -832,7 +826,7 @@
         }).join('') + '</div>';
       })
       .catch(function () {
-        grid.innerHTML = '<div class="empty-state">Couldn\u2019t reach the archive \u2014 try again in a bit.</div>';
+        grid.innerHTML = '<div class="empty-state">' + MSG_ERROR + '</div>';
       });
   }
 })();

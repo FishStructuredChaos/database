@@ -14,10 +14,6 @@ export default function (eleventyConfig) {
     port: 3456,
   });
 
-  const downloadTabs = new Set(['models-3d', 'avatar-prefabs', 'shaders']);
-  const noButtonTabs = new Set(['asset-websites', 'useful-things', 'luxury-trash', 'tools', 'web-apps', 'websites']);
-  const selectBtnTabs = new Set(['models-3d', 'avatar-prefabs', 'world-prefabs', 'shaders']);
-
   eleventyConfig.addGlobalData('tabs', [
     { id: 'information', label: '\u2753INFORMATION', type: 'info' },
     { id: 'websites', label: '\ud83c\udf10WEBSITES', type: 'data' },
@@ -53,45 +49,11 @@ export default function (eleventyConfig) {
     return map;
   });
 
-  eleventyConfig.addFilter('btnLabel', (tabId) => {
-    return downloadTabs.has(tabId) ? 'DOWNLOAD' : 'OPEN';
-  });
-
-  eleventyConfig.addGlobalData('noButtonTabs', [...noButtonTabs]);
-
-  eleventyConfig.addFilter('inList', (val, list) => {
-    return Array.isArray(list) && list.includes(val);
-  });
-
-  eleventyConfig.addFilter('findCol', (headers, pattern) => {
-    const re = new RegExp(pattern, 'i');
-    return headers.findIndex(h => re.test(h));
-  });
-
+  // Build-time filter for the 'external' tab type; the data tabs themselves
+  // render client-side (js/tabs.js), so only this filter is used by templates.
   eleventyConfig.addFilter('matchUrl', (text) => {
     const m = String(text).match(/(https?:\/\/[^\s]+)/);
     return { url: m ? m[1] : '#' };
-  });
-
-  eleventyConfig.addFilter('imgUrl', (val) => {
-    if (!val || val.startsWith('http')) return val;
-    if (val.startsWith('/images/') || val.startsWith('images/') || val.startsWith('/previews/') || val.startsWith('previews/')) {
-      const clean = val.replace(/^\//, '');
-      return `https://raw.githubusercontent.com/FishStructuredChaos/database/main/${clean}`;
-    }
-    if (val.startsWith('/r2/')) {
-      return `https://rosefish-submit.ziver64.workers.dev${val}`;
-    }
-    return val;
-  });
-
-  eleventyConfig.addFilter('priceClass', (val) => {
-    if (!val) return '';
-    return String(val).toLowerCase() === 'free' ? ' price free' : ' price';
-  });
-
-  eleventyConfig.addNunjucksFilter('skipCol', (ci, picIdx, linkIdx) => {
-    return ci === 0 || ci === picIdx || ci === linkIdx;
   });
 
   return {

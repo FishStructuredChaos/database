@@ -263,17 +263,17 @@ header p {
   line-height: 1.4;
 }
 
-/* CARD GRID — fixed flex layout; hover highlights without resizing or pushing neighbors */
+/* CARD GRID — grid layout keeps every card the same width. (Flex with
+   flex-grow used to stretch the last row's cards wider than the rest —
+   visible whenever a tab's item count doesn't fill the final row.) */
 .card-grid {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 280px));
   gap: 8px;
 }
 
 .card-grid > .card {
-  flex: 1 1 220px;
   min-width: 0;
-  max-width: 280px;
 }
 
 .card-grid > .card:hover {
