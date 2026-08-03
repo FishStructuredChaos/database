@@ -9,7 +9,7 @@
   const GIST_PENDING_FILES_URL = 'https://gist.githubusercontent.com/FishStructuredChaos/7b0971c63dbb689847b81cdf84299c1f/raw/database-pending-files.json';
   const GIST_GROUPS_ECO_URL = 'https://gist.githubusercontent.com/TheZiver/9fdd3f8c495098ffa0beceece373d382/raw/structured_chaos_community_ecosystem_groups.json';
   const GIST_MEMBERS_URL = 'https://gist.githubusercontent.com/TheZiver/def41cbeb9b2e8eb071015f58bf8eb54/raw/48b6c7290489157d85e01f23d51915e4105c78dd/fish_community_members.txt';
-  const WORKER_BASE = 'https://rosefish-submit.ziver64.workers.dev';
+  const WORKER_BASE = 'https://data.theziver.com';
   const REPO_BASE = 'https://raw.githubusercontent.com/FishStructuredChaos/database/main/';
   const DEFAULT_GROUP_ICON = 'https://assets.vrchat.com/www/groups/default_icon.png';
   const MSG_EMPTY = 'Nothing archived here yet \u2014 be the first!';

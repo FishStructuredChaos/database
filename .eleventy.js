@@ -9,6 +9,7 @@ export default function (eleventyConfig) {
   eleventyConfig.addPassthroughCopy('js');
   eleventyConfig.addPassthroughCopy('images');
   eleventyConfig.addPassthroughCopy('.nojekyll');
+  eleventyConfig.addPassthroughCopy('CNAME');
 
   eleventyConfig.setServerOptions({
     port: 3456,
