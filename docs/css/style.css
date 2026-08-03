@@ -898,7 +898,10 @@ header p {
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  min-height: 1.75em;
+  /* Fixed two-line slot: 2 x 1.3em = 2.6em. Equal name boxes on every card
+     keep the author chip and badge aligned at the same height across the row,
+     whether the name wraps to one line or two. */
+  min-height: 2.6em;
 }
 
 .wn-link:hover .wn-name { color: #ff8888; }
