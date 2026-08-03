@@ -433,10 +433,11 @@
         if (wnBtn) { wnBtn.textContent = '\u25B6'; wnBtn.classList.remove('playing'); wnBtn = null; }
       }
       function wnPlay(url, btn) {
-        if (wnAudio && wnAudio.src === url) { wnStop(); return; }
+        if (wnAudio && wnAudio.dataset.raw === url) { wnStop(); return; }
         wnStop();
         btn.textContent = '\u2026';
         var audio = new Audio(url);
+        audio.dataset.raw = url;
         wnAudio = audio;
         wnBtn = btn;
         audio.addEventListener('canplay', function () { btn.textContent = '\u23F8'; btn.classList.add('playing'); });
