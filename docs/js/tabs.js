@@ -569,7 +569,7 @@
         });
       });
       items.sort(function (a, b) { return String(b.date).localeCompare(String(a.date)); });
-      show(items.slice(0, 10));
+      show(items.slice(0, 20));
     }).catch(function () {
       list.innerHTML = '<div class="wn-empty">Couldn\u2019t load recent additions right now.</div>';
     });
