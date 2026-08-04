@@ -332,13 +332,22 @@
     }
     return card;
   }
+  var wnNoticeEl = null;
+  var wnNoticeTimer = null;
   function flashNotice(msg) {
+    if (wnNoticeEl && wnNoticeEl.parentNode) wnNoticeEl.parentNode.removeChild(wnNoticeEl);
+    if (wnNoticeTimer) clearTimeout(wnNoticeTimer);
     var el = document.createElement('div');
     el.className = 'wn-notice';
     el.textContent = msg;
     var anchor = document.getElementById('whatsNew') || document.querySelector('.container');
     if (anchor) anchor.appendChild(el);
-    setTimeout(function () { if (el.parentNode) el.parentNode.removeChild(el); }, 3200);
+    wnNoticeEl = el;
+    wnNoticeTimer = setTimeout(function () {
+      if (el.parentNode) el.parentNode.removeChild(el);
+      if (wnNoticeEl === el) wnNoticeEl = null;
+      wnNoticeTimer = null;
+    }, 3200);
   }
   function locateAndMark(tabId, kind, url, name) {
     if (tabId) switchTab(tabId);
