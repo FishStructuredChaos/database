@@ -8,22 +8,22 @@
   ],
   "rows": [
     [
+      "https://tinyjpg.com/",
+      "https://www.google.com/s2/favicons?domain=tinyjpg.com&sz=64",
+      "https://tinyjpg.com/",
+      "WebP, JPEG and PNG compression"
+    ],
+    [
       "Ezgif",
       "https://ezgif.com/images/ezgif-homepage.png",
       "https://ezgif.com/",
-      "image editor designed specifically for creating, editing, converting, and compressing animated GIFs"
+      "Ezgif.com is a simple, free online GIF maker and toolset for basic animated image editing.\nHere you can create, edit and convert GIF, APNG, WebP, MNG, JXL and AVIF animations."
     ],
     [
       "3dgifmaker",
       "https://www.3dgifmaker.com/og-image.jpg",
       "https://www.3dgifmaker.com/",
-      "Converts 2D images into animated 3D GIFs"
-    ],
-    [
-      "https://tinyjpg.com/",
-      "https://www.google.com/s2/favicons?domain=tinyjpg.com&sz=64",
-      "https://tinyjpg.com/",
-      "WebP, JPEG and PNG compression"
+      "Make Gifs From Images"
     ]
   ]
 }
