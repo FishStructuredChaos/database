@@ -231,7 +231,7 @@
           }
 
           var picIdx = findCol(headers, 'picture|preview|image');
-          var linkIdx = findCol(headers, 'link|website|download');
+          var linkIdx = findCol(headers, 'link');
           var priceIdx = findCol(headers, 'price');
           var btnIdx = findCol(headers, 'button');
           var isNoBtn = noButtonTabs.has(fileId);
