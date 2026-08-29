@@ -7,5 +7,13 @@
     "Info about website",
     "Author"
   ],
-  "rows": []
+  "rows": [
+    [
+      "Rusk-Shack-Archive",
+      "previews/1787952150302_only_rusk_logo_HQ-57279945fe967677.png",
+      "https://www.rusk-shack-archive.com",
+      "An archive of the old Rusk group \"Rusk Shack\".\nContains discord channels with media and messages from the beginning to end of the group.",
+      "Gabrielgsd CI"
+    ]
+  ]
 }
