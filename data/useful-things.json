@@ -175,6 +175,13 @@
       "https://data.theziver.com/r2/VRChat-Avatar-Rotator_4wxd.zip",
       "Automatically changes your VRChat avatar :D",
       "TheZiver"
+    ],
+    [
+      "Material Maker",
+      "https://repository-images.githubusercontent.com/141905920/177bc2b6-b69a-451a-81b3-bc9e1c5f46f8",
+      "https://github.com/RodZill4/material-maker/releases",
+      "make materials for avatars and worlds",
+      "RodZill4"
     ]
   ]
 }
